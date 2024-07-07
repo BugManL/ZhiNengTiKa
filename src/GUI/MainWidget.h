@@ -4,6 +4,7 @@
 #include "NavigationBarTabWidget.h"
 
 class SelectWidget;
+class ResourceFileWidget;
 class SettingWidget;
 
 class MainWidget : public NavigationBarTabWidget
@@ -16,11 +17,13 @@ public:
     enum TabIndex
     {
         SelectWidgetIndex = 0,
-        SettingWidgetIndex = 1
+        ResourceFileWidgetIndex,
+        SettingWidgetIndex
     };
 
 protected:
     SelectWidget *selectWidget = nullptr;
+    ResourceFileWidget *resourceFileWidget = nullptr;
     SettingWidget *settingWidget = nullptr;
 
     void closeEvent(QCloseEvent *event) override;

@@ -14,6 +14,7 @@ HEADERS += \
     src/GUI/PlusSignLabel.h \
     src/GUI/QRCodeScannerWidget.h \
     src/GUI/QuestionWidget.h \
+    src/GUI/ResourceFileWidget.h \
     src/GUI/SearchWidget.h \
     src/GUI/SelectWidget.h \
     src/GUI/SettingWidget.h \
@@ -32,6 +33,7 @@ SOURCES += \
     src/GUI/PlusSignLabel.cpp \
     src/GUI/QRCodeScannerWidget.cpp \
     src/GUI/QuestionWidget.cpp \
+    src/GUI/ResourceFileWidget.cpp \
     src/GUI/SearchWidget.cpp \
     src/GUI/SelectWidget.cpp \
     src/GUI/SettingWidget.cpp \
