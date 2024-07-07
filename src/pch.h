@@ -27,6 +27,6 @@
 #include <QVideoWidget>
 #include <QWebEngineView>
 
-#include "D:/Softwares/scr/Qt-AES/qaesencryption.h"
+#include "Qt-AES/qaesencryption.h"
 
 #endif // PCH_H

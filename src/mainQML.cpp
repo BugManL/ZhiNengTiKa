@@ -2,7 +2,6 @@
 #include "StaticClass/CallAndroidNativeComponent.h"
 #include "Singleton/Network.h"
 #include "Singleton/Settings.h"
-#include "Logic/AccountManager.h"
 #include "Logic/AnnouncementManager.h"
 #include "Logic/FileTreeModel.h"
 #include "Logic/ImageProvider.h"
@@ -22,6 +21,8 @@
 #include "QMLIntermediary/ZAccelerationToOpacityConverter.h"
 #include "QMLIntermediary/SettingOperator.h"
 #include "LibZXingCpp/ZXingResult.h"
+
+#if 0
 
 // TODO 记得删除
 bool newVersionLauncher = false;
@@ -45,6 +46,15 @@ extern "C" Q_DECL_EXPORT void setLauncherVersion(const char *version)
 extern "C" Q_DECL_EXPORT int run(QApplication *a)
 {
     QEventLoop libEventLoop;
+#else
+int main(int argc, char *argv[])
+{
+    // QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    QApplication libEventLoop(argc, argv);
+    QtWebView::initialize();
+    auto a = &libEventLoop;
+    auto newVersionLauncher = true;
+#endif
 
     AccelerometerSingleton::initOnce(&libEventLoop);
 
