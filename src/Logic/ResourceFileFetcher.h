@@ -11,9 +11,12 @@ public:
 
     ResourceFileModel *getModel() const;
 
-    Q_INVOKABLE QVariant getSubjectModel();
-    Q_INVOKABLE QVariant getEditionModel(const QString &subject);
-    Q_INVOKABLE QVariant getModuleModel(const QString &subject, const QString &edition);
+    QStringList getSubjectList() const;
+    QStringList getEditionList(const QString &subject) const;
+    QStringList getModuleList(const QString &subject, const QString &edition) const;
+    Q_INVOKABLE QVariant getSubjectModel() const;
+    Q_INVOKABLE QVariant getEditionModel(const QString &subject) const;
+    Q_INVOKABLE QVariant getModuleModel(const QString &subject, const QString &edition) const;
     Q_INVOKABLE bool haveNextPage() const;
 
 public slots:
@@ -40,8 +43,6 @@ protected:
     QHash<QNetworkReply *, QStringList> fileNameHash;
 
 protected slots:
-
-
     void onCatalogArrayReplyFinished();
     void onCatalogDetailReplyFinished();
     void onCatalogReplyFinished();

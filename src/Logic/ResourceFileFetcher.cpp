@@ -235,29 +235,29 @@ ResourceFileModel *ResourceFileFetcher::getModel() const
     return model;
 }
 
-QVariant ResourceFileFetcher::getSubjectModel()
+QStringList ResourceFileFetcher::getSubjectList() const
 {
     QStringList list;
     const auto categoryAttributeSubjectTrees(catalogDetail
-            .value(QStringLiteral("data")).toObject()
-            .value(QStringLiteral("categoryAttributeTreeList")).toArray()
-            .at(0).toObject()
-            .value(QStringLiteral("categoryAttributeTrees")).toArray());
+                                                 .value(QStringLiteral("data")).toObject()
+                                                 .value(QStringLiteral("categoryAttributeTreeList")).toArray()
+                                                 .at(0).toObject()
+                                                 .value(QStringLiteral("categoryAttributeTrees")).toArray());
     for(const auto &i : categoryAttributeSubjectTrees)
     {
         list.append(i.toObject().value(QStringLiteral("attributeValue")).toString());
     }
-    return QVariant::fromValue(list);
+    return list;
 }
 
-QVariant ResourceFileFetcher::getEditionModel(const QString &subject)
+QStringList ResourceFileFetcher::getEditionList(const QString &subject) const
 {
     QStringList list;
     const auto categoryAttributeSubjectTrees(catalogDetail
-            .value(QStringLiteral("data")).toObject()
-            .value(QStringLiteral("categoryAttributeTreeList")).toArray()
-            .at(0).toObject()
-            .value(QStringLiteral("categoryAttributeTrees")).toArray());
+                                                 .value(QStringLiteral("data")).toObject()
+                                                 .value(QStringLiteral("categoryAttributeTreeList")).toArray()
+                                                 .at(0).toObject()
+                                                 .value(QStringLiteral("categoryAttributeTrees")).toArray());
     for(const auto &i : categoryAttributeSubjectTrees)
     {
         const auto subjectObject(i.toObject());
@@ -270,17 +270,17 @@ QVariant ResourceFileFetcher::getEditionModel(const QString &subject)
             }
         }
     }
-    return QVariant::fromValue(list);
+    return list;
 }
 
-QVariant ResourceFileFetcher::getModuleModel(const QString &subject, const QString &edition)
+QStringList ResourceFileFetcher::getModuleList(const QString &subject, const QString &edition) const
 {
     QStringList list;
     const auto categoryAttributeSubjectTrees(catalogDetail
-            .value(QStringLiteral("data")).toObject()
-            .value(QStringLiteral("categoryAttributeTreeList")).toArray()
-            .at(0).toObject()
-            .value(QStringLiteral("categoryAttributeTrees")).toArray());
+                                                 .value(QStringLiteral("data")).toObject()
+                                                 .value(QStringLiteral("categoryAttributeTreeList")).toArray()
+                                                 .at(0).toObject()
+                                                 .value(QStringLiteral("categoryAttributeTrees")).toArray());
     // 什么嵌套天堂
     for(const auto &i : categoryAttributeSubjectTrees)
     {
@@ -302,7 +302,22 @@ QVariant ResourceFileFetcher::getModuleModel(const QString &subject, const QStri
             }
         }
     }
-    return QVariant::fromValue(list);
+    return list;
+}
+
+QVariant ResourceFileFetcher::getSubjectModel() const
+{
+    return QVariant::fromValue(getSubjectList());
+}
+
+QVariant ResourceFileFetcher::getEditionModel(const QString &subject) const
+{
+    return QVariant::fromValue(getEditionList(subject));
+}
+
+QVariant ResourceFileFetcher::getModuleModel(const QString &subject, const QString &edition) const
+{
+    return QVariant::fromValue(getModuleList(subject, edition));
 }
 
 bool ResourceFileFetcher::haveNextPage() const
@@ -360,6 +375,12 @@ void ResourceFileFetcher::onCatalogReplyFinished()
 
     const auto schoolIdIndex(rawData.indexOf(QByteArrayLiteral("100117")));
     const auto bookCatalogIdIndex(rawData.lastIndexOf(QByteArrayLiteral("bookCatalogId"), schoolIdIndex));
+    if(bookCatalogIdIndex == -1)
+    {
+        emit error(QString(rawData).prepend(QStringLiteral("返回数据未找到\"bookCatalogId\"\n"
+                                                           "原始数据:\n")));
+        return;
+    }
     const auto bookCatalogIdValBeginIndex(bookCatalogIdIndex + 16);
     const auto bookCatalogIdValEndIndex(rawData.indexOf(QByteArrayLiteral("\""), bookCatalogIdValBeginIndex));
     currentBookCatalogId = rawData.mid(bookCatalogIdValBeginIndex, bookCatalogIdValEndIndex - bookCatalogIdValBeginIndex);
