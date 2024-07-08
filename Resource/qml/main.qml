@@ -265,7 +265,7 @@ ApplicationWindow {
         onDepthChanged: {
             if(stackView.depth === 1)
             {
-                headerToolBar.height = 0
+                delayHideHeaderToolBar.start()
                 if((!waitingForTemplateDetailWidget) && imageRefreshTimer.needToRefresh)
                 {
                     refreshImage()
@@ -296,6 +296,14 @@ ApplicationWindow {
                 imageRefreshTimer.needToRefresh = true
                 imageRefreshTimer.stop()
             }
+        }
+    }
+
+    Timer {
+        id: delayHideHeaderToolBar
+        interval: 0
+        onTriggered: {
+            headerToolBar.height = 0
         }
     }
 
