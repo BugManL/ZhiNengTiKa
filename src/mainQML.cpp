@@ -49,9 +49,9 @@ extern "C" Q_DECL_EXPORT int run(QApplication *a)
 #else
 int main(int argc, char *argv[])
 {
-    // QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    QtWebEngineQuick::initialize();
     QApplication libEventLoop(argc, argv);
-    QtWebView::initialize();
     auto a = &libEventLoop;
     auto newVersionLauncher = true;
 #endif
