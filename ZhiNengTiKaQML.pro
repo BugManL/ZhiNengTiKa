@@ -2,7 +2,7 @@ include(./ZhiNengTiKaCore.pri)
 
 # TEMPLATE = lib
 
-QT += widgets gui quick quickcontrols2 webenginequick sensors
+QT += widgets gui quick quickcontrols2 webenginequick sensors pdf
 
 PRECOMPILED_HEADER = src/pchQML.h
 
