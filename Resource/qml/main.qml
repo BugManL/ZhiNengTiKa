@@ -451,6 +451,10 @@ ApplicationWindow {
                 {
                     stackView.push(pdfReader, {"source": "file:///" + filePath})
                 }
+                else
+                {
+                    QMLUtils.openLocalFile(filePath)
+                }
             }
         }
     }

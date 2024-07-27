@@ -1,10 +1,10 @@
 #include "QMLUtils.h"
+
 #include "../StaticClass/Global.h"
 
 QMLUtils::QMLUtils(QObject *parent)
-    : QObject{parent}
+    : QObject{ parent }
 {
-
 }
 
 QColor QMLUtils::generateRandomColor()
@@ -28,4 +28,9 @@ QColor QMLUtils::generateRandomBrightColor()
 QString QMLUtils::getResourceFilePath()
 {
     return Global::dataPath().append(QStringLiteral("/Resource"));
+}
+
+bool QMLUtils::openLocalFile(const QString &path)
+{
+    return QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
