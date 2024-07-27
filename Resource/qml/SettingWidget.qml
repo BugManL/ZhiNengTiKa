@@ -103,11 +103,13 @@ Item {
                 id: userIdTextField
                 Layout.fillWidth: true
                 placeholderText: "账号"
+                text: "jcgjzx"
             }
             TextField {
                 id: userPwTextField
                 Layout.fillWidth: true
                 placeholderText: "密码"
+                text: "abc123"
             }
         }
     }

@@ -2,6 +2,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
+import QtQuick.Pdf
 import TemplateFetcher
 import MultipleSubjectsTemplateListModelList
 import QMLUtils
@@ -264,7 +265,7 @@ ApplicationWindow {
         onDepthChanged: {
             if(stackView.depth === 1)
             {
-                headerToolBar.height = 0
+                delayHideHeaderToolBar.start()
                 if((!waitingForTemplateDetailWidget) && imageRefreshTimer.needToRefresh)
                 {
                     refreshImage()
@@ -295,6 +296,14 @@ ApplicationWindow {
                 imageRefreshTimer.needToRefresh = true
                 imageRefreshTimer.stop()
             }
+        }
+    }
+
+    Timer {
+        id: delayHideHeaderToolBar
+        interval: 0
+        onTriggered: {
+            headerToolBar.height = 0
         }
     }
 
@@ -442,20 +451,29 @@ ApplicationWindow {
                 {
                     stackView.push(pdfReader, {"source": "file:///" + filePath})
                 }
+                else
+                {
+                    QMLUtils.openLocalFile(filePath)
+                }
             }
         }
     }
 
     Component {
         id: pdfReader
-        Item {
+        PdfMultiPageView {
             property string source: ""
-            Text {
-                anchors.centerIn: parent
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                text: "pdf显示暂未实现"
-            }
+            document: PdfDocument { source: source }
         }
+
+        // Item {
+        //     property string source: ""
+        //     Text {
+        //         anchors.centerIn: parent
+        //         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        //         text: "pdf显示暂未实现"
+        //     }
+        // }
     }
 
     Component {

@@ -1,26 +1,26 @@
-#include "StaticClass/Global.h"
-#include "StaticClass/CallAndroidNativeComponent.h"
-#include "Singleton/Network.h"
-#include "Singleton/Settings.h"
+#include "LibZXingCpp/ZXingResult.h"
 #include "Logic/AnnouncementManager.h"
 #include "Logic/FileTreeModel.h"
 #include "Logic/ImageProvider.h"
 #include "Logic/QRCodeScanner.h"
 #include "Logic/ResourceFileFetcher.h"
-#include "Logic/Version.h"
-#include "Logic/TemplateSummary.h"
 #include "Logic/TemplateAnalysis.h"
 #include "Logic/TemplateFetcher.h"
-#include "Logic/TemplateSearcher.h"
 #include "Logic/TemplateListModel.h"
+#include "Logic/TemplateSearcher.h"
+#include "Logic/TemplateSummary.h"
 #include "Logic/UserData.h"
+#include "Logic/Version.h"
 #include "QMLIntermediary/AccelerometerSingleton.h"
 #include "QMLIntermediary/AnimeImageProvider.h"
 #include "QMLIntermediary/MultipleSubjectsTemplateListModelListSingleton.h"
 #include "QMLIntermediary/QMLUtils.h"
-#include "QMLIntermediary/ZAccelerationToOpacityConverter.h"
 #include "QMLIntermediary/SettingOperator.h"
-#include "LibZXingCpp/ZXingResult.h"
+#include "QMLIntermediary/ZAccelerationToOpacityConverter.h"
+#include "Singleton/Network.h"
+#include "Singleton/Settings.h"
+#include "StaticClass/CallAndroidNativeComponent.h"
+#include "StaticClass/Global.h"
 
 #if 0
 
@@ -49,9 +49,9 @@ extern "C" Q_DECL_EXPORT int run(QApplication *a)
 #else
 int main(int argc, char *argv[])
 {
-    // QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+    QtWebEngineQuick::initialize();
     QApplication libEventLoop(argc, argv);
-    QtWebView::initialize();
     auto a = &libEventLoop;
     auto newVersionLauncher = true;
 #endif
@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
     MultipleSubjectsTemplateListModelListSingleton::initOnce();
 
     QFont appFont;
-    if(settings->getFontPointSize() < 1 || settings->getFont().isEmpty())
+    if (settings->getFontPointSize() < 1 || settings->getFont().isEmpty())
     {
         settings->setFontPointSize(a->font().pointSize());
         settings->setFont(a->font().family());
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
     if (settings->getQmlStyle().isEmpty())
         settings->setQmlStyle(QQuickStyle::name());
 
-    if(!newVersionLauncher)
+    if (!newVersionLauncher)
     {
         QMessageBox msgb;
         msgb.setText(QStringLiteral("安装新版本中...\n稍安勿躁"));
@@ -143,26 +143,28 @@ int main(int argc, char *argv[])
     engine.addImageProvider(QStringLiteral("AnimeImageProvider"), animeImageProvider);
 
     QStringList builtInStyles = { QStringLiteral("Basic"), QStringLiteral("Fusion"),
-                                  QStringLiteral("Imagine"), QStringLiteral("Material"), QStringLiteral("Universal")
-                                };
+                                  QStringLiteral("Imagine"), QStringLiteral("Material"), QStringLiteral("Universal") };
 #if defined(Q_OS_MACOS)
     builtInStyles << QStringLiteral("macOS");
     builtInStyles << QStringLiteral("iOS");
 #elif defined(Q_OS_IOS)
-    builtInStyles << QStringLiteral("iOS");
+builtInStyles << QStringLiteral("iOS");
 #elif defined(Q_OS_WINDOWS)
-    builtInStyles << QStringLiteral("Windows");
+builtInStyles << QStringLiteral("Windows");
 #endif
 
-    engine.setInitialProperties({{ QStringLiteral("builtInStyles"), builtInStyles }});
+    engine.setInitialProperties({
+        {QStringLiteral("builtInStyles"), builtInStyles}
+    });
 
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &libEventLoop, [url, &libEventLoop](const QObject * obj, const QUrl & objUrl)
-    {
+    QObject::connect(
+        &engine, &QQmlApplicationEngine::objectCreated,
+        &libEventLoop, [url, &libEventLoop](const QObject *obj, const QUrl &objUrl)
+        {
         if (!obj && url == objUrl)
-            libEventLoop.exit(-1);
-    }, Qt::QueuedConnection);
+            libEventLoop.exit(-1); },
+        Qt::QueuedConnection);
     engine.load(url);
 
     return libEventLoop.exec();
