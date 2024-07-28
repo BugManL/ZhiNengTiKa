@@ -1,4 +1,5 @@
 #include "src/GUI/MainWidget.h"
+#include "src/Singleton/Network.h"
 #include "src/Singleton/Settings.h"
 #include "src/StaticClass/Global.h"
 
@@ -11,6 +12,8 @@ int main(int argc, char *argv[])
 
     a.setWindowIcon(QIcon(QStringLiteral(":/ico/xinjiaoyuico.png")));
     a.setApplicationDisplayName(QStringLiteral("智能题卡"));
+
+    Network::initOnce();
 
     auto settings(Settings::getSingletonSettings());
 

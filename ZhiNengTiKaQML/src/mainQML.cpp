@@ -1,4 +1,3 @@
-#include "QMLIntermediary/AccelerometerSingleton.h"
 #include "QMLIntermediary/AnimeImageProvider.h"
 #include "QMLIntermediary/MultipleSubjectsTemplateListModelListSingleton.h"
 #include "QMLIntermediary/QMLUtils.h"
@@ -15,68 +14,39 @@
 #include "src/Logic/TemplateSearcher.h"
 #include "src/Logic/TemplateSummary.h"
 #include "src/Logic/UserData.h"
-#include "src/Logic/Version.h"
 #include "src/Singleton/Network.h"
 #include "src/Singleton/Settings.h"
-#include "src/StaticClass/CallAndroidNativeComponent.h"
 #include "src/StaticClass/Global.h"
 
-#if 0
-
-// TODO 记得删除
-bool newVersionLauncher = false;
-
-extern "C" Q_DECL_EXPORT const char *getVersion()
-{
-    return APP_VERSION;
-}
-
-extern "C" Q_DECL_EXPORT void setLauncherVersion(const char *version)
-{
-    const QString launcherVersionStr(version);
-    Version launcherVersion(launcherVersionStr);
-    if(launcherVersionStr.isEmpty() || launcherVersion < Version(QStringLiteral("3.0.2")))
-        newVersionLauncher = false;
-    else
-        newVersionLauncher = true;
-    qDebug() << newVersionLauncher;
-}
-
-extern "C" Q_DECL_EXPORT int run(QApplication *a)
-{
-    QEventLoop libEventLoop;
-#else
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
     QtWebEngineQuick::initialize();
-    QApplication libEventLoop(argc, argv);
-    auto a = &libEventLoop;
-    auto newVersionLauncher = true;
-#endif
+    QApplication a(argc, argv);
 
     Global::initOnce();
     // 删除图片缓存
     Global::deleteDir(Global::dataPath().append(QStringLiteral("/Image")));
 
-    a->setWindowIcon(QIcon(QStringLiteral(":/ico/xinjiaoyuico.png")));
-    a->setApplicationDisplayName(QStringLiteral("智能题卡"));
+    a.setWindowIcon(QIcon(QStringLiteral(":/ico/xinjiaoyuico.png")));
+    a.setApplicationDisplayName(QStringLiteral("智能题卡"));
 
+    Network::initOnce();
     auto settings(Settings::getSingletonSettings());
     MultipleSubjectsTemplateListModelListSingleton::initOnce();
 
     QFont appFont;
     if (settings->getFontPointSize() < 1 || settings->getFont().isEmpty())
     {
-        settings->setFontPointSize(a->font().pointSize());
-        settings->setFont(a->font().family());
+        settings->setFontPointSize(a.font().pointSize());
+        settings->setFont(a.font().family());
         settings->saveToFile();
     }
     else
     {
         appFont.setFamily(settings->getFont());
         appFont.setPointSize(settings->getFontPointSize());
-        a->setFont(appFont);
+        a.setFont(appFont);
     }
 
     if (qEnvironmentVariableIsEmpty("QT_QUICK_CONTROLS_STYLE"))
@@ -88,28 +58,8 @@ int main(int argc, char *argv[])
     if (settings->getQmlStyle().isEmpty())
         settings->setQmlStyle(QQuickStyle::name());
 
-    if (!newVersionLauncher)
-    {
-        QMessageBox msgb;
-        msgb.setText(QStringLiteral("安装新版本中...\n稍安勿躁"));
-        msgb.show();
-        const QString saveFilePath(Global::tempPath().append(QStringLiteral("/newVersion.apk")));
-        auto newestVersion(Network::getGlobalNetworkManager()->getDataByStrUrl(Network::getGlobalNetworkManager()->getDataByStrUrl(QStringLiteral("getNewestVersionEncryption").prepend(QStringLiteral(DATABASE_DOMAIN)))));
-
-        newestVersion[4] = static_cast<char>(120);
-        newestVersion[5] = static_cast<char>(156);
-        QFile file(saveFilePath);
-        file.open(QFile::WriteOnly);
-        file.write(qUncompress(newestVersion));
-        file.close();
-
-#ifdef Q_OS_ANDROID
-        CallAndroidNativeComponent::installApk(saveFilePath);
-#endif // Q_OS_ANDROID
-    }
-
     auto animeImageProvider(new AnimeImageProvider);
-    auto qmlUtils(new QMLUtils(&libEventLoop));
+    auto qmlUtils(new QMLUtils(&a));
 
     qmlRegisterSingletonInstance("MultipleSubjectsTemplateListModelList", 1, 0,
                                  "MultipleSubjectsTemplateListModelList",
@@ -118,7 +68,6 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("AccountManager", 1, 0, "AccountManager", settings->getAccountManager());
     qmlRegisterSingletonInstance("QMLUtils", 1, 0, "QMLUtils", qmlUtils);
     qmlRegisterSingletonInstance("AnimeImageProvider", 1, 0, "AnimeImageProvider", animeImageProvider);
-    qmlRegisterSingletonInstance("LibEventLoop", 1, 0, "LibEventLoop", &libEventLoop);
     qRegisterMetaType<TemplateSummary>("TemplateSummary");
     qRegisterMetaType<TemplateAnalysis>("TemplateAnalysis");
     qRegisterMetaType<UserData>("UserData");
@@ -142,9 +91,9 @@ int main(int argc, char *argv[])
     builtInStyles << QStringLiteral("macOS");
     builtInStyles << QStringLiteral("iOS");
 #elif defined(Q_OS_IOS)
-builtInStyles << QStringLiteral("iOS");
+    builtInStyles << QStringLiteral("iOS");
 #elif defined(Q_OS_WINDOWS)
-builtInStyles << QStringLiteral("Windows");
+    builtInStyles << QStringLiteral("Windows");
 #endif
 
     engine.setInitialProperties({
@@ -154,12 +103,12 @@ builtInStyles << QStringLiteral("Windows");
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreated,
-        &libEventLoop, [url, &libEventLoop](const QObject *obj, const QUrl &objUrl)
+        &a, [url, &a](const QObject *obj, const QUrl &objUrl)
         {
         if (!obj && url == objUrl)
-            libEventLoop.exit(-1); },
+            a.exit(-1); },
         Qt::QueuedConnection);
     engine.load(url);
 
-    return libEventLoop.exec();
+    return a.exec();
 }

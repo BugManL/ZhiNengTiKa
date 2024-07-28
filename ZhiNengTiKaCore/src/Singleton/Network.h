@@ -6,6 +6,11 @@
 class ZHINENGTIKACORE_EXPORT Network
 {
 public:
-    Network() = delete;
+    static void initOnce();
+    static void resetNetworkManager();
     static NetworkAccessManagerBlockable *getGlobalNetworkManager();
+
+private:
+    Network() = default;
+    static NetworkAccessManagerBlockable *globalManager;
 };
