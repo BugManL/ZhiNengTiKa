@@ -1,11 +1,14 @@
 #ifndef USERDATA_H
 #define USERDATA_H
 
+#include "src/ZhiNengTiKaCore_global.h"
+
 class AccountManager;
 
-class UserData
+class ZHINENGTIKACORE_EXPORT UserData
 {
     Q_GADGET
+
 public:
     UserData() = default;
     UserData(const QByteArray &accessToken, const QByteArray &authorization,

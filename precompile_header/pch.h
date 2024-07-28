@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Qt-AES/qaesencryption.h"
-#include "zxing-cpp/ZXingReader.h"
-#include "zxing-cpp/ZXingResult.h"
+#include "src/ZxingCpp/ZXingReader.h"
+#include "src/ZxingCpp/ZXingResult.h"
 
 #ifdef QT_CORE_LIB
 #include <QtCore>
@@ -46,6 +46,17 @@
 
 #ifdef QT_PRINTSUPPORT_LIB
 #include <QtPrintSupport>
+#endif
+
+#ifdef ZHINENGTIKAQML
+#include <QAccelerometer>
+#include <QQuickStyle>
+#include <QtWebEngineQuick>
+#endif
+
+#ifdef ZHINENGTIKAWIDGETS
+#include <QVideoWidget>
+#include <QWebEngineView>
 #endif
 
 #ifdef Q_OS_ANDROID

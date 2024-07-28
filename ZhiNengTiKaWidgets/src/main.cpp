@@ -1,13 +1,10 @@
-#include "GUI/MainWidget.h"
-#include "StaticClass/Global.h"
-#include "Singleton/Settings.h"
-#include "Singleton/Network.h"
+#include "src/GUI/MainWidget.h"
+#include "src/Singleton/Settings.h"
+#include "src/StaticClass/Global.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-
-    Network::initOnce();
 
     Global::initOnce();
     Global::deleteDir(Global::dataPath().append(QStringLiteral("/Image")));
@@ -15,11 +12,10 @@ int main(int argc, char *argv[])
     a.setWindowIcon(QIcon(QStringLiteral(":/ico/xinjiaoyuico.png")));
     a.setApplicationDisplayName(QStringLiteral("智能题卡"));
 
-    Settings::initOnce();
     auto settings(Settings::getSingletonSettings());
 
     QFont appFont;
-    if(settings->getFontPointSize() < 1 || settings->getFont().isEmpty())
+    if (settings->getFontPointSize() < 1 || settings->getFont().isEmpty())
     {
         settings->setFontPointSize(a.font().pointSize());
         settings->setFont(a.font().family());

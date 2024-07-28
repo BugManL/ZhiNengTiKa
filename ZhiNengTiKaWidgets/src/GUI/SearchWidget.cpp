@@ -1,6 +1,6 @@
 #include "SearchWidget.h"
 #include "TemplateListView.h"
-#include "../Logic/TemplateListModel.h"
+#include "src/Logic/TemplateListModel.h"
 
 SearchWidget::SearchWidget(QWidget *parent)
     : QWidget{parent},

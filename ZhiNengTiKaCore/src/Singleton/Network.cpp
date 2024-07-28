@@ -1,17 +1,5 @@
 #include "Network.h"
-
-NetworkAccessManagerBlockable *Network::globalManager;
-
-void Network::initOnce()
-{
-    Network::globalManager = new NetworkAccessManagerBlockable;
-}
-
-void Network::resetNetworkManager()
-{
-    globalManager->deleteLater();
-    initOnce();
-}
+Q_GLOBAL_STATIC(NetworkAccessManagerBlockable, globalManager)
 
 NetworkAccessManagerBlockable *Network::getGlobalNetworkManager()
 {

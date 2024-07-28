@@ -1,5 +1,5 @@
 #include "TemplateSearcher.h"
-#include "../StaticClass/Global.h"
+#include "src/StaticClass/Global.h"
 
 TemplateSearcher::TemplateSearcher(QObject *parent)
     : QThread{parent}

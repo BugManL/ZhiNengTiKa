@@ -4,7 +4,9 @@
 #include <QObject>
 #include <QPoint>
 
-class ZXingPosition
+#include "src/ZhiNengTiKaCore_global.h"
+
+class ZHINENGTIKACORE_EXPORT ZXingPosition
 {
     Q_GADGET
 public:

@@ -2,10 +2,12 @@
 #define TEMPLATEFETCHER_H
 
 #include "TemplateAnalysis.h"
+#include "src/ZhiNengTiKaCore_global.h"
 
-class TemplateFetcher : public QObject
+class ZHINENGTIKACORE_EXPORT TemplateFetcher : public QObject
 {
     Q_OBJECT
+
 public:
     explicit TemplateFetcher(QObject *parent = nullptr);
 public slots:
@@ -13,8 +15,9 @@ public slots:
     void handleTemplateRequestByCode(const QString &templateCode);
     void handleTemplateRequestNetwork(const TemplateSummary &templateSummary);
     void handleTemplateRequestByCodeNetwork(const QString &templateCode);
+
 protected:
-    QHash<QNetworkReply*, TemplateAnalysis> hash;
+    QHash<QNetworkReply *, TemplateAnalysis> hash;
 protected slots:
     void onHandleTemplateReplyFinished();
 signals:

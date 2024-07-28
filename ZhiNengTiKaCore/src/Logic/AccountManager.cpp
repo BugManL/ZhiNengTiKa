@@ -1,10 +1,11 @@
 #include "AccountManager.h"
-#include "../Singleton/Network.h"
-#include "../StaticClass/XinjiaoyuEncryptioner.h"
-#include "../StaticClass/XinjiaoyuNetwork.h"
+
+#include "src/Singleton/Network.h"
+#include "src/StaticClass/XinjiaoyuEncryptioner.h"
+#include "src/StaticClass/XinjiaoyuNetwork.h"
 
 AccountManager::AccountManager(QObject *parent)
-    : QObject{parent},
+    : QObject{ parent },
       publicUserData(UserData())
 {
     publicUserData.publicUserData = true;
@@ -25,7 +26,7 @@ void AccountManager::loginUtf8(const QByteArray &username, const QByteArray &pas
 
 void AccountManager::relogin(qsizetype index)
 {
-    const auto userData(this->at(index));
+    const auto userData(userDatas.at(index));
     auto reply(getLoginReplyUtf8(userData.getUsername(), userData.getPassword()));
     connect(reply, &QNetworkReply::finished, this, &AccountManager::onReloginReplyFinished);
     reloginHash.insert(reply, userData);
@@ -33,35 +34,35 @@ void AccountManager::relogin(qsizetype index)
 
 void AccountManager::checkCurrentAccountValid()
 {
-    auto request{XinjiaoyuNetwork::setRequest(QStringLiteral("https://www.xinjiaoyu.com/api/v3/server_system/member/user/vip"), this->getCurrentUserData())};
-    const auto reply{Network::getGlobalNetworkManager()->get(request)};
+    auto request{ XinjiaoyuNetwork::setRequest(QStringLiteral("https://www.xinjiaoyu.com/api/v3/server_system/member/user/vip"), this->getCurrentUserData()) };
+    const auto reply{ Network::getGlobalNetworkManager()->get(request) };
     connect(reply, &QNetworkReply::finished, this, &AccountManager::onCheckCurrentAccountValidReplyFinished);
 }
 
 void AccountManager::initPublicUserData()
 {
-    auto reply { Network::getGlobalNetworkManager()->get(QNetworkRequest(QUrl(QStringLiteral("PublicUserData/").prepend(DATABASE_DOMAIN).append(QStringLiteral("publicUserData"))))) };
+    auto reply{ Network::getGlobalNetworkManager()->get(QNetworkRequest(QUrl(QStringLiteral("PublicUserData/").prepend(DATABASE_DOMAIN).append(QStringLiteral("publicUserData"))))) };
     QObject::connect(reply, &QNetworkReply::finished, this, &AccountManager::onPublicUserDataReplyFinished);
 }
 
 void AccountManager::toFirst(qsizetype i)
 {
-    const auto currentUserData{ this->at(i) };
+    const auto currentUserData{ userDatas.at(i) };
     for (; i > 0; --i)
     {
-        this->begin()[i] = this->at(i - 1);
+        userDatas.begin()[i] = userDatas.at(i - 1);
     }
-    this->begin()[0] = currentUserData;
-}
-
-void AccountManager::removeFirst()
-{
-    this->QList::removeFirst();
+    userDatas.begin()[0] = currentUserData;
 }
 
 void AccountManager::logout()
 {
-    removeFirst();
+    userDatas.removeFirst();
+}
+
+void AccountManager::userDatasAppend(const UserData &newUserData)
+{
+    userDatas.append(newUserData);
 }
 
 QNetworkReply *AccountManager::getLoginReply(const QString &username, const QString &password)
@@ -73,16 +74,16 @@ QNetworkReply *AccountManager::getLoginReply(const QString &username, const QStr
 
 QNetworkReply *AccountManager::getLoginReplyUtf8(const QByteArray &username, const QByteArray &password)
 {
-    const auto encodedUsername{XinjiaoyuEncryptioner::xinjiaoyuEncryption(username)};
-    const auto encodedPassword{XinjiaoyuEncryptioner::xinjiaoyuEncryption(password)};
+    const auto encodedUsername{ XinjiaoyuEncryptioner::xinjiaoyuEncryption(username) };
+    const auto encodedPassword{ XinjiaoyuEncryptioner::xinjiaoyuEncryption(password) };
     const auto loginData(QStringLiteral("{\"password\":\"%0\",\"t\":%1,\"username\":\"%2\"}").arg(encodedPassword, QString::number(QDateTime::currentMSecsSinceEpoch()), encodedUsername).toUtf8());
     QNetworkRequest loginRequest(QStringLiteral("https://www.xinjiaoyu.com/api/v3/server_system/auth/login"));
     loginRequest.setHeader(QNetworkRequest::ContentLengthHeader, loginData.size());
     loginRequest.setHeader(QNetworkRequest::ContentTypeHeader, QStringLiteral("application/json; charset=UTF-8"));
 
-    const auto tVal{QString::number(QDateTime::currentMSecsSinceEpoch()).toUtf8()};
-    const auto clientSessionVal{QUuid::createUuid().toString(QUuid::WithoutBraces).toUtf8()};
-    const auto encryptVal{XinjiaoyuEncryptioner::getXinjiaoyuMD5(tVal, clientSessionVal)};
+    const auto tVal{ QString::number(QDateTime::currentMSecsSinceEpoch()).toUtf8() };
+    const auto clientSessionVal{ QUuid::createUuid().toString(QUuid::WithoutBraces).toUtf8() };
+    const auto encryptVal{ XinjiaoyuEncryptioner::getXinjiaoyuMD5(tVal, clientSessionVal) };
     loginRequest.setRawHeader(QByteArrayLiteral("Accept-Encoding"), QByteArrayLiteral("gzip"));
     loginRequest.setRawHeader(QByteArrayLiteral("app"), QByteArrayLiteral("student"));
     loginRequest.setRawHeader(QByteArrayLiteral("Authorization"), QByteArrayLiteral("JBY"));
@@ -99,6 +100,11 @@ QNetworkReply *AccountManager::getLoginReplyUtf8(const QByteArray &username, con
     return reply;
 }
 
+QList<UserData> AccountManager::getUserDatas() const
+{
+    return userDatas;
+}
+
 UserData AccountManager::getPublicUserData() const
 {
     return publicUserData;
@@ -106,23 +112,23 @@ UserData AccountManager::getPublicUserData() const
 
 UserData AccountManager::getCurrentUserData() const
 {
-    if(isLoggedin())
-        return this->at(0);
+    if (isLoggedin())
+        return userDatas.at(0);
     else
         return getPublicUserData();
 }
 
 bool AccountManager::isLoggedin() const
 {
-    return (!this->isEmpty());
+    return (!userDatas.isEmpty());
 }
 
 QVariant AccountManager::getDescriptionOfUserDatas() const
 {
     QStringList descriptionList;
-    if(isLoggedin())
+    if (isLoggedin())
     {
-        for(const auto &i : *this)
+        for (const auto &i : userDatas)
         {
             descriptionList.append(i.getDescription());
         }
@@ -137,13 +143,13 @@ QVariant AccountManager::getDescriptionOfUserDatas() const
 void AccountManager::onLoginReplyFinished()
 {
     auto reply(qobject_cast<QNetworkReply *>(sender()));
-    const auto returnData{reply->readAll()};
+    const auto returnData{ reply->readAll() };
     reply->deleteLater();
     auto list(loginHash.take(reply));
-    if(returnData.startsWith("{\"code\":200,"))
+    if (returnData.startsWith("{\"code\":200,"))
     {
-        const auto rootObject{QJsonDocument::fromJson(returnData).object()};
-        auto dataObject{rootObject.value(QStringLiteral("data")).toObject()};
+        const auto rootObject{ QJsonDocument::fromJson(returnData).object() };
+        auto dataObject{ rootObject.value(QStringLiteral("data")).toObject() };
         const auto userDataJsonObject = dataObject.value(QStringLiteral("info")).toObject();
         const auto userSchoolDataJsonObject = userDataJsonObject.value(QStringLiteral("school")).toObject();
         UserData userData(
@@ -154,28 +160,29 @@ void AccountManager::onLoginReplyFinished()
             userDataJsonObject, list.at(1),
             userSchoolDataJsonObject.value(QStringLiteral("schoolId")).toString().toUtf8(),
             list.at(0));
-        this->prepend(userData);
+        userDatas.prepend(userData);
         emit loginFinished(true, userData);
     }
     else
     {
         emit loginFinished(false, UserData());
         emit error(QStringLiteral("登录失败\n"
-                                  "服务器返回信息:\n").append(returnData));
+                                  "服务器返回信息:\n")
+                       .append(returnData));
     }
 }
 
 void AccountManager::onReloginReplyFinished()
 {
     auto reply(qobject_cast<QNetworkReply *>(sender()));
-    const auto returnData{reply->readAll()};
+    const auto returnData{ reply->readAll() };
     reply->deleteLater();
     auto list(loginHash.take(reply));
     auto userData(reloginHash.take(reply));
-    if(returnData.startsWith("{\"code\":200,"))
+    if (returnData.startsWith("{\"code\":200,"))
     {
-        const auto rootObject{QJsonDocument::fromJson(returnData).object()};
-        auto dataObject{rootObject.value(QStringLiteral("data")).toObject()};
+        const auto rootObject{ QJsonDocument::fromJson(returnData).object() };
+        auto dataObject{ rootObject.value(QStringLiteral("data")).toObject() };
         const auto userDataJsonObject = dataObject.value(QStringLiteral("info")).toObject();
         const auto userSchoolDataJsonObject = userDataJsonObject.value(QStringLiteral("school")).toObject();
         userData.setAccessToken(dataObject.value(QStringLiteral("accessToken")).toString().toUtf8());
@@ -192,7 +199,8 @@ void AccountManager::onReloginReplyFinished()
     {
         emit reloginFinished(false, UserData());
         emit error(QStringLiteral("重新登录失败\n"
-                                  "服务器返回信息:\n").append(returnData));
+                                  "服务器返回信息:\n")
+                       .append(returnData));
     }
 }
 
@@ -208,7 +216,7 @@ void AccountManager::onCheckCurrentAccountValidReplyFinished()
 void AccountManager::onPublicUserDataReplyFinished()
 {
     auto reply(qobject_cast<QNetworkReply *>(sender()));
-    if(reply->error() != QNetworkReply::NoError)
+    if (reply->error() != QNetworkReply::NoError)
     {
         reply->deleteLater();
         return;

@@ -1,7 +1,9 @@
 #ifndef QRCODEREADER_H
 #define QRCODEREADER_H
 
-class QRCodeReader : public QObject
+#include "src/ZhiNengTiKaCore_global.h"
+
+class ZHINENGTIKACORE_EXPORT QRCodeReader : public QObject
 {
     Q_OBJECT
 

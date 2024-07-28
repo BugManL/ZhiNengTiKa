@@ -1,6 +1,7 @@
 #include "AnimeImageProvider.h"
-#include "../Singleton/Network.h"
-#include "../Singleton/Settings.h"
+
+#include "src/Singleton/Network.h"
+#include "src/Singleton/Settings.h"
 
 AnimeImageProvider::AnimeImageProvider()
     : QQuickImageProvider(QQuickImageProvider::Image),
@@ -14,9 +15,9 @@ QImage AnimeImageProvider::requestImage(const QString &id, QSize *size, const QS
 {
     Q_UNUSED(id);
     QImage image;
-    for(auto i(0); i < cacheList.size(); ++i)
+    for (auto i(0); i < cacheList.size(); ++i)
     {
-        if(cacheList.at(i).second)
+        if (cacheList.at(i).second)
         {
             --currentCacheSize;
             emit cacheProgress(currentCacheSize, totalCacheSize);
@@ -26,7 +27,7 @@ QImage AnimeImageProvider::requestImage(const QString &id, QSize *size, const QS
             break;
         }
     }
-    if(image.isNull())
+    if (image.isNull())
     {
         image = QImage(requestedSize.width() > 0 ? requestedSize.width() : 100,
                        requestedSize.height() > 0 ? requestedSize.height() : 100,
@@ -49,7 +50,7 @@ void AnimeImageProvider::fillCache(int index)
     // 无论是copy还是啥的, 都无法避免
 #if 1
     const auto url(replaceRandomNumbers(Settings::getSingletonSettings()->getAnimeImageUrl()));
-    if(url == QStringLiteral("^SpecialRule-kkloli^"))
+    if (url == QStringLiteral("^SpecialRule-kkloli^"))
     {
         auto reply(Network::getGlobalNetworkManager()->getByStrUrl(QStringLiteral("https://www.ttloli.com/2nd-love.html")));
         fillCacheHash.insert(reply, index);
@@ -69,9 +70,9 @@ void AnimeImageProvider::fillCache(int index)
 
 void AnimeImageProvider::fillCacheList()
 {
-    for(auto i(0); i < cacheList.size(); ++i)
+    for (auto i(0); i < cacheList.size(); ++i)
     {
-        if(cacheList.at(i).second)
+        if (cacheList.at(i).second)
             continue;
         fillCache(i);
     }
@@ -81,7 +82,7 @@ void AnimeImageProvider::onFillCacheReplyFinished()
 {
     auto reply(qobject_cast<QNetworkReply *>(sender()));
     auto index(fillCacheHash.take(reply));
-    if(reply->error() != QNetworkReply::NoError)
+    if (reply->error() != QNetworkReply::NoError)
     {
         qWarning() << Q_FUNC_INFO << QStringLiteral("reply->error() != QNetworkReply::NoError") << reply->errorString() << reply->readAll();
         reply->deleteLater();

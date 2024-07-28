@@ -1,6 +1,6 @@
 #include "FileTreeModel.h"
 #include "FileTreeItem.h"
-#include "../StaticClass/Global.h"
+#include "src/StaticClass/Global.h"
 
 FileTreeModel::FileTreeModel(QObject *parent)
     : QAbstractItemModel{parent},

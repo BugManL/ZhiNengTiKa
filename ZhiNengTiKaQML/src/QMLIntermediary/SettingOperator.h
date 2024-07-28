@@ -4,6 +4,7 @@
 class SettingOperator : public QObject
 {
     Q_OBJECT
+
 public:
     explicit SettingOperator(QObject *parent = nullptr);
 

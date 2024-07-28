@@ -1,11 +1,14 @@
 #ifndef ANNOUNCEMENTMODEL_H
 #define ANNOUNCEMENTMODEL_H
 
+#include "src/ZhiNengTiKaCore_global.h"
+
 class AnnouncementManager;
 
-class AnnouncementModel : public QAbstractListModel
+class ZHINENGTIKACORE_EXPORT AnnouncementModel : public QAbstractListModel
 {
     Q_OBJECT
+
 public:
     explicit AnnouncementModel(QObject *parent = nullptr);
     enum DataRoles
@@ -16,6 +19,7 @@ public:
     };
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+
 protected:
     friend class AnnouncementManager;
     QHash<int, QByteArray> roleNames() const override;

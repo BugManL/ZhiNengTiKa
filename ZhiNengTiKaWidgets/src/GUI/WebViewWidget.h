@@ -1,7 +1,7 @@
 #ifndef WEBVIEWWIDGET_H
 #define WEBVIEWWIDGET_H
 
-#include "../Logic/TemplateAnalysis.h"
+#include "src/Logic/TemplateAnalysis.h"
 
 class WebView: public QWebEngineView
 {

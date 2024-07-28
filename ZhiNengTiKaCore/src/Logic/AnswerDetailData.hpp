@@ -1,14 +1,16 @@
 #ifndef ANSWERDETAILDATA_H
 #define ANSWERDETAILDATA_H
 
-class AnswerDetailData
+#include "src/ZhiNengTiKaCore_global.h"
+
+class ZHINENGTIKACORE_EXPORT AnswerDetailData
 {
 public:
     AnswerDetailData(const QString &count, const QByteArray &questionId, const bool isAChoiceQuestion, const QBitArray &answer = QBitArray())
         : count(count), questionId(questionId), choiceQuestion(isAChoiceQuestion), answer(answer)
     {
-        const auto trueCount{answer.count(true)};
-        if(trueCount > 1)
+        const auto trueCount{ answer.count(true) };
+        if (trueCount > 1)
         {
             multipleChoiceQuestion = true;
         }
@@ -41,6 +43,7 @@ public:
     {
         return multipleChoiceQuestion;
     }
+
 protected:
     const QString count;
     const QByteArray questionId;

@@ -9,6 +9,7 @@ public:
     static void initOnce();
     static void resetMultipleSubjectsTemplateListModelList();
     static MultipleSubjectsTemplateListModelList *getMultipleSubjectsTemplateListModelList();
+
 private:
     MultipleSubjectsTemplateListModelListSingleton() = default;
     static MultipleSubjectsTemplateListModelList *multipleSubjectsTemplateListModelList;

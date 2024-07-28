@@ -1,7 +1,7 @@
 #ifndef SEARCHWIDGET_H
 #define SEARCHWIDGET_H
 
-#include "../Logic/TemplateSearcher.h"
+#include "src/Logic/TemplateSearcher.h"
 class TemplateListView;
 class TemplateListModel;
 

@@ -2,10 +2,14 @@
 #define QRCODESCANNER_H
 
 #include "QRCodeReader.h"
+#include "src/ZhiNengTiKaCore_global.h"
 
-class QRCodeScanner : public QThread
+class QVideoSink;
+
+class ZHINENGTIKACORE_EXPORT QRCodeScanner : public QThread
 {
     Q_OBJECT
+
 public:
     explicit QRCodeScanner(QObject *parent = nullptr);
     ~QRCodeScanner();
@@ -22,6 +26,7 @@ public slots:
 
     void pauseScanning();
     void startScanning();
+
 protected:
     QRCodeReader *qrCodeReader = nullptr;
     QVideoSink *videoSink = nullptr;

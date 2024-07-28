@@ -2,14 +2,16 @@
 #define TEMPLATELISTMODEL_H
 
 #include "TemplateSummary.h"
+#include "src/ZhiNengTiKaCore_global.h"
 
-class TemplateListModel : public QAbstractListModel
+class ZHINENGTIKACORE_EXPORT TemplateListModel : public QAbstractListModel
 {
     Q_OBJECT
+
 public:
     using QAbstractListModel::QAbstractListModel;
     explicit TemplateListModel(const QList<TemplateSummary> &templateList, QObject *parent = nullptr)
-        : QAbstractListModel{parent}, templateList(templateList) {}
+        : QAbstractListModel{ parent }, templateList(templateList) {}
     explicit TemplateListModel(const QList<QString> &templateNameList, const QList<QString> &templateCodeList, QObject *parent = nullptr);
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -28,6 +30,7 @@ public:
 public slots:
     void clear();
     void addNewTemplate(const TemplateSummary &templateSummary);
+
 protected:
     QList<TemplateSummary> templateList;
 };

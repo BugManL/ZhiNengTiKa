@@ -1,38 +1,16 @@
-include($$PWD/../precompile_header/precompile_header.pri)
-
 VERSION = 3.0.2
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
+include($$PWD/../precompile_header/precompile_header.pri)
+include($$PWD/../ZhiNengTiKaCommon.pri)
 
 TEMPLATE = lib
 
-QT += core network multimedia core5compat
-
-android{
-QT += core-private
-
-include($$PWD/3rd/android_openssl/openssl.pri)
-
-}
-win32{
-
-RC_ICONS = Resource/img/xinjiaoyuico.ico
-
-QMAKE_TARGET_PRODUCT = "ZhiNengTiKa"
-
-QMAKE_TARGET_COPYRIGHT = "Copyright © 2022 - 2023 LFWQSP2641.All Rights Reserved."
-
-RC_LANG = 0x0004
-
-}
+QT += core network multimedia
 
 #DEFINES += LIMITED
 
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-
-DEFINES += DATABASE_DOMAIN=\\\"https://gitee.com/LFWQSP2641/zhinengtika_database/raw/master/\\\"
-
-DEFINES *= QT_USE_QSTRINGBUILDER
-
-CONFIG += c++17
+DEFINES += ZHINENGTIKACORE_LIBRARY
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -63,6 +41,8 @@ CONFIG(debug, debug|release) {
     }
 }
 
+INCLUDEPATH += $$PWD/../3rd/zxing-cpp/core/src
+
 HEADERS += \
     $$PWD/src/Logic/AccountManager.h \
     $$PWD/src/Logic/AnnouncementManager.h \
@@ -89,7 +69,12 @@ HEADERS += \
     $$PWD/src/StaticClass/CallAndroidNativeComponent.h \
     $$PWD/src/StaticClass/Global.h \
     $$PWD/src/StaticClass/XinjiaoyuEncryptioner.h \
-    $$PWD/src/StaticClass/XinjiaoyuNetwork.h
+    $$PWD/src/StaticClass/XinjiaoyuNetwork.h \
+    $$PWD/src/ZhiNengTiKaCore_global.h \
+    $$PWD/src/ZhiNengTiKaCoreVersion.h \
+    $$PWD/src/ZxingCpp/ZXingPosition.h \
+    $$PWD/src/ZxingCpp/ZXingReader.h \
+    $$PWD/src/ZxingCpp/ZXingResult.h
 
 SOURCES += \
     $$PWD/src/Logic/AccountManager.cpp \
@@ -116,7 +101,11 @@ SOURCES += \
     $$PWD/src/StaticClass/CallAndroidNativeComponent.cpp \
     $$PWD/src/StaticClass/Global.cpp \
     $$PWD/src/StaticClass/XinjiaoyuEncryptioner.cpp \
-    $$PWD/src/StaticClass/XinjiaoyuNetwork.cpp
+    $$PWD/src/StaticClass/XinjiaoyuNetwork.cpp \
+    $$PWD/src/ZhiNengTiKaCoreVersion.cpp \
+    $$PWD/src/ZxingCpp/ZXingPosition.cpp \
+    $$PWD/src/ZxingCpp/ZXingReader.cpp \
+    $$PWD/src/ZxingCpp/ZXingResult.cpp
 
 RESOURCES += \
     $$PWD/Resource/Resource.qrc \

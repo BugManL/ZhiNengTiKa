@@ -1,7 +1,7 @@
 #ifndef UPLOADWIDGET_H
 #define UPLOADWIDGET_H
 
-#include "../Logic/TemplateAnalysis.h"
+#include "src/Logic/TemplateAnalysis.h"
 
 class UploadChildWidget;
 class UserData;

@@ -1,11 +1,12 @@
 #include "SelectWidget.h"
-#include "../Logic/TemplateFetcher.h"
-#include "../GUI/TemplateDetailWidget.h"
-#include "../GUI/SearchWidget.h"
-#include "../GUI/MultipleSubjectsTemplateListView.h"
-#include "../GUI/QRCodeScannerWidget.h"
-#include "../GUI/TemplateListView.h"
-#include "LibZXingCpp/ZXingResult.h"
+
+#include "src/GUI/MultipleSubjectsTemplateListView.h"
+#include "src/GUI/QRCodeScannerWidget.h"
+#include "src/GUI/SearchWidget.h"
+#include "src/GUI/TemplateDetailWidget.h"
+#include "src/GUI/TemplateListView.h"
+#include "src/Logic/TemplateFetcher.h"
+#include "src/ZXingCpp/ZXingResult.h"
 
 SelectWidget::SelectWidget(QWidget *parent)
     : QWidget{ parent }
@@ -23,13 +24,13 @@ SelectWidget::SelectWidget(QWidget *parent)
     templateCodeLineEdit->setPlaceholderText(QStringLiteral("题卡编号"));
     OKButton->setEnabled(false);
 
-    auto addHBoxLayoutWithTwoWidget{[](QWidget * widget1, QWidget * widget2)
-    {
-        auto layout{new QHBoxLayout};
-        layout->addWidget(widget1);
-        layout->addWidget(widget2);
-        return layout;
-    }};
+    auto addHBoxLayoutWithTwoWidget{ [](QWidget *widget1, QWidget *widget2)
+                                     {
+                                         auto layout{ new QHBoxLayout };
+                                         layout->addWidget(widget1);
+                                         layout->addWidget(widget2);
+                                         return layout;
+                                     } };
     mainLayout->addLayout(addHBoxLayoutWithTwoWidget(scanQRCodeButton, searchButton));
     mainLayout->addWidget(multipleSubjectsTemplateListView);
     mainLayout->addWidget(templateCodeLineEdit);
@@ -39,58 +40,53 @@ SelectWidget::SelectWidget(QWidget *parent)
     connect(searchButton, &QPushButton::clicked, this, &SelectWidget::onSearchButtonPush);
     connect(scanQRCodeButton, &QPushButton::clicked, this, &SelectWidget::onScanQRCodeButtonPush);
     connect(templateCodeLineEdit, &QLineEdit::textEdited, [this]
-    {
+            {
         currentListViewTemplateSummary = TemplateSummary();
-        this->OKButton->setEnabled(true);
-    });
-    connect(this->multipleSubjectsTemplateListView, &MultipleSubjectsTemplateListView::templateNameClicked, [this](const TemplateSummary & templateSummary)
-    {
+        this->OKButton->setEnabled(true); });
+    connect(this->multipleSubjectsTemplateListView, &MultipleSubjectsTemplateListView::templateNameClicked, [this](const TemplateSummary &templateSummary)
+            {
         currentListViewTemplateSummary = templateSummary;
         this->templateCodeLineEdit->setText(templateSummary.getTemplateCode());
-        this->OKButton->setEnabled(true);
-    });
+        this->OKButton->setEnabled(true); });
     connect(fetcher, &TemplateFetcher::templateAnalysisReady, this, &SelectWidget::showTemplateDetailWidget);
-    connect(fetcher, &TemplateFetcher::error, this, [this](const QString & msg)
-    {
+    connect(fetcher, &TemplateFetcher::error, this, [this](const QString &msg)
+            {
         obtainTemplateFromNetworkMessageBox->close();
-        QMessageBox::warning(this, QStringLiteral("获取题卡信息错误"), msg);
-    });
+        QMessageBox::warning(this, QStringLiteral("获取题卡信息错误"), msg); });
     connect(fetcher, &TemplateFetcher::obtainTemplateFromNetwork, obtainTemplateFromNetworkMessageBox, &QMessageBox::show);
 }
 
 void SelectWidget::onSearchButtonPush()
 {
-    auto searchWidget{new SearchWidget};
+    auto searchWidget{ new SearchWidget };
     searchWidget->setAttribute(Qt::WA_DeleteOnClose);
     searchWidget->setAttribute(Qt::WA_QuitOnClose, false);
-    connect(searchWidget, &SearchWidget::searchFinished, [this, searchWidget](const TemplateSummary & templateSummary)
-    {
+    connect(searchWidget, &SearchWidget::searchFinished, [this, searchWidget](const TemplateSummary &templateSummary)
+            {
         searchWidget->close();
-        fetcher->handleTemplateRequest(templateSummary);
-    });
+        fetcher->handleTemplateRequest(templateSummary); });
     searchWidget->show();
 }
 
 void SelectWidget::onScanQRCodeButtonPush()
 {
-    auto scannerWidget{new QRCodeScannerWidget};
+    auto scannerWidget{ new QRCodeScannerWidget };
     scannerWidget->setAttribute(Qt::WA_DeleteOnClose);
     scannerWidget->setAttribute(Qt::WA_QuitOnClose, false);
-    connect(scannerWidget, &QRCodeScannerWidget::scanningFinished, [this, scannerWidget](bool success, const ZXingResult & result)
-    {
+    connect(scannerWidget, &QRCodeScannerWidget::scanningFinished, [this, scannerWidget](bool success, const ZXingResult &result)
+            {
         if(success)
         {
             scannerWidget->close();
             fetcher->handleTemplateRequestByCode(result.getText());
-        }
-    });
+        } });
     scannerWidget->resize(this->size());
     scannerWidget->show();
 }
 
 void SelectWidget::onOKButtonPush()
 {
-    if(!currentListViewTemplateSummary.isEmpty())
+    if (!currentListViewTemplateSummary.isEmpty())
     {
         fetcher->handleTemplateRequest(currentListViewTemplateSummary);
     }
@@ -102,7 +98,7 @@ void SelectWidget::onOKButtonPush()
 
 void SelectWidget::showTemplateDetailWidget(const TemplateAnalysis &templateAnalysis)
 {
-    if(templateAnalysis.isEmpty())
+    if (templateAnalysis.isEmpty())
     {
         return;
     }
@@ -116,5 +112,4 @@ void SelectWidget::showTemplateDetailWidget(const TemplateAnalysis &templateAnal
     templateDetailWidget->setAttribute(Qt::WA_QuitOnClose, false);
     templateDetailWidget->resize(this->size());
     templateDetailWidget->show();
-
 }

@@ -1,10 +1,10 @@
 #include "UploadWidget.h"
 #include "UploadChildWidget.h"
-#include "../Logic/TemplateAnalysis.h"
-#include "../Logic/TemplateFetcher.h"
-#include "../Singleton/Settings.h"
-#include "../Singleton/Network.h"
-#include "../StaticClass/XinjiaoyuNetwork.h"
+#include "src/Logic/TemplateAnalysis.h"
+#include "src/Logic/TemplateFetcher.h"
+#include "src/Singleton/Settings.h"
+#include "src/Singleton/Network.h"
+#include "src/StaticClass/XinjiaoyuNetwork.h"
 
 UploadWidget::UploadWidget(const TemplateAnalysis &templateAnalysis, QWidget *parent)
     : QWidget{parent}, templateAnalysis(templateAnalysis)

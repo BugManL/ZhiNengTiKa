@@ -1,11 +1,13 @@
 #ifndef ANNOUNCEMENTMANAGER_H
 #define ANNOUNCEMENTMANAGER_H
 
-#include "../Logic/AnnouncementModel.h"
+#include "src/Logic/AnnouncementModel.h"
+#include "src/ZhiNengTiKaCore_global.h"
 
-class AnnouncementManager : public QObject
+class ZHINENGTIKACORE_EXPORT AnnouncementManager : public QObject
 {
     Q_OBJECT
+
 public:
     explicit AnnouncementManager(QObject *parent = nullptr);
     AnnouncementModel *getAnnouncementModel() const;
@@ -24,6 +26,7 @@ protected slots:
 signals:
     void obtainFinished(int newCount);
     void error(const QString &msg);
+
 private:
     Q_PROPERTY(AnnouncementModel *announcementModel READ getAnnouncementModel CONSTANT FINAL)
 };

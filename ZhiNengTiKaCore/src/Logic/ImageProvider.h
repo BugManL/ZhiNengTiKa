@@ -1,11 +1,14 @@
 #ifndef IMAGEPROVIDER_H
 #define IMAGEPROVIDER_H
 
+#include "src/ZhiNengTiKaCore_global.h"
+
 // (Widgets)提供显示网络图片支持
 // (Quick)加快加载速度
-class ImageProvider : public QObject
+class ZHINENGTIKACORE_EXPORT ImageProvider : public QObject
 {
     Q_OBJECT
+
 public:
     explicit ImageProvider(QObject *parent = nullptr);
     Q_INVOKABLE QString loadHtml(QString html);
@@ -21,6 +24,7 @@ protected slots:
 signals:
     void finished();
     void cacheModeChanged();
+
 private:
     Q_PROPERTY(bool cacheMode READ getCacheMode WRITE setCacheMode RESET resetCacheMode NOTIFY cacheModeChanged)
 };

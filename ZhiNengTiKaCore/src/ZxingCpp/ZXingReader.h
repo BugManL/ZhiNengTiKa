@@ -1,12 +1,13 @@
 #ifndef ZXINGREADER_H
 #define ZXINGREADER_H
 
-#include "ZXingResult.h"
-
 #include <QImage>
 #include <QtMultimedia/QVideoFrame>
 
-class ZXingReader
+#include "ZXingResult.h"
+#include "src/ZhiNengTiKaCore_global.h"
+
+class ZHINENGTIKACORE_EXPORT ZXingReader
 {
 public:
     static ZXingResult decodeImage(const QImage &image, int maxWidth = -1, int maxHeight = -1, bool smoothTransformation = false);

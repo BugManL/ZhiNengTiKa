@@ -6,6 +6,7 @@
 class ZAccelerationToOpacityConverter : public QThread
 {
     Q_OBJECT
+
 public:
     explicit ZAccelerationToOpacityConverter(QObject *parent = nullptr);
 
@@ -31,6 +32,7 @@ protected:
     volatile bool canRun = true;
     void run() override;
     static qreal convertZAccelerationToOpacity(qreal zAcceleration);
+
 private:
     Q_PROPERTY(int interval READ getInterval WRITE setInterval NOTIFY intervalChanged FINAL)
 };

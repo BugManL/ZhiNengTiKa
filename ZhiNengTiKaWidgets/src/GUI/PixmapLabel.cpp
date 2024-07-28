@@ -1,8 +1,9 @@
 #include "PixmapLabel.h"
-#include "../StaticClass/XinjiaoyuNetwork.h"
+
+#include "src/StaticClass/XinjiaoyuNetwork.h"
 
 PixmapLabel::PixmapLabel(QWidget *parent)
-    : ClickableLabel{parent},
+    : ClickableLabel{ parent },
       menu(new QMenu(this)),
       copyAction(new QAction(QStringLiteral("复制"), this)),
       removeAction(new QAction(QStringLiteral("删除"), this)),
@@ -22,13 +23,13 @@ PixmapLabel::PixmapLabel(QWidget *parent)
 }
 
 PixmapLabel::PixmapLabel(const QPixmap &pixmap, QWidget *parent)
-    : PixmapLabel{parent}
+    : PixmapLabel{ parent }
 {
     this->setPixmap(pixmap);
 }
 
 PixmapLabel::PixmapLabel(const QPixmap &pixmap, const QString &pixmapUrl, QWidget *parent)
-    : PixmapLabel{parent}
+    : PixmapLabel{ parent }
 {
     this->setPixmap(pixmap, pixmapUrl);
 }
@@ -40,7 +41,7 @@ void PixmapLabel::setPixmap(const QPixmap &pixmap)
 
 void PixmapLabel::setPixmap(const QPixmap &pixmap, const QString &pixmapUrl)
 {
-    if(pixmapUrl.contains(QStringLiteral("xinjiaoyu.com")))
+    if (pixmapUrl.contains(QStringLiteral("xinjiaoyu.com")))
     {
         this->rawPixmap = pixmap;
         this->ClickableLabel::setPixmap(pixmap.scaled(this->size(), Qt::KeepAspectRatio));
@@ -65,9 +66,9 @@ void PixmapLabel::uploadPixmap(const QPixmap &pixmap)
     QBuffer buffer(&bytes);
     buffer.open(QIODevice::WriteOnly);
     pixmap.save(&buffer, "JPG");
-    auto reply{XinjiaoyuNetwork::uploadFileReply(bytes, QStringLiteral("image.jpg"))};
+    auto reply{ XinjiaoyuNetwork::uploadFileReply(bytes, QStringLiteral("image.jpg")) };
     connect(reply, &QNetworkReply::finished, [this, reply, pixmap]
-    {
+            {
         QString infoStr;
         infoStr = XinjiaoyuNetwork::getUploadFileReplyUrl(reply);
         if(infoStr.first(4) == QStringLiteral("上传失败"))
@@ -79,8 +80,7 @@ void PixmapLabel::uploadPixmap(const QPixmap &pixmap)
         this->url = infoStr;
         this->rawPixmap = pixmap;
         this->ClickableLabel::setPixmap(pixmap.scaled(this->size(), Qt::KeepAspectRatio));
-        this->setEnabled(true);
-    });
+        this->setEnabled(true); });
 }
 
 void PixmapLabel::contextMenuEvent(QContextMenuEvent *event)
@@ -90,8 +90,8 @@ void PixmapLabel::contextMenuEvent(QContextMenuEvent *event)
 
 void PixmapLabel::copyPixmap()
 {
-    auto pixmap{this->rawPixmap};
-    if(pixmap.isNull())
+    auto pixmap{ this->rawPixmap };
+    if (pixmap.isNull())
     {
         return;
     }
@@ -106,10 +106,10 @@ void PixmapLabel::removePixmap()
 
 void PixmapLabel::previewPixmap()
 {
-    auto lable{new QLabel};
+    auto lable{ new QLabel };
     lable->setAttribute(Qt::WA_DeleteOnClose);
     lable->setPixmap(this->rawPixmap);
-    auto scrollArea{new QScrollArea};
+    auto scrollArea{ new QScrollArea };
     scrollArea->setAttribute(Qt::WA_DeleteOnClose);
     scrollArea->setWidget(lable);
     QScroller::grabGesture(scrollArea->viewport(), QScroller::TouchGesture);

@@ -2,7 +2,7 @@
 #define TEMPLATEDETAILWIDGET_H
 
 #include "NavigationBarTabWidget.h"
-#include "../Logic/TemplateAnalysis.h"
+#include "src/Logic/TemplateAnalysis.h"
 
 class AnswerAndAnalysisWidget;
 class QuestionWidget;

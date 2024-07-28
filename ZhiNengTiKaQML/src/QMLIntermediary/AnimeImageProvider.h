@@ -4,6 +4,7 @@
 class AnimeImageProvider : public QQuickImageProvider
 {
     Q_OBJECT
+
 public:
     AnimeImageProvider();
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override;
@@ -23,6 +24,7 @@ signals:
 protected slots:
     void onFillCacheReplyFinished();
     void onttloliPageReplyFinished();
+
 protected:
     int totalCacheSize = 8;
     int currentCacheSize = 0;
@@ -31,6 +33,7 @@ protected:
     QHash<QNetworkReply *, int> fillCacheHash;
 
     static QString replaceRandomNumbers(const QString &input);
+
 private:
     Q_PROPERTY(int totalCacheSize READ getTotalCacheSize WRITE setTotalCacheSize NOTIFY totalCacheSizeChanged FINAL)
     Q_PROPERTY(int currentCacheSize READ getCurrentCacheSize CONSTANT FINAL)

@@ -2,10 +2,12 @@
 #define TEMPLATESEARCHER_H
 
 #include "TemplateSummary.h"
+#include "src/ZhiNengTiKaCore_global.h"
 
-class TemplateSearcher : public QThread
+class ZHINENGTIKACORE_EXPORT TemplateSearcher : public QThread
 {
     Q_OBJECT
+
 public:
     explicit TemplateSearcher(QObject *parent = nullptr);
 

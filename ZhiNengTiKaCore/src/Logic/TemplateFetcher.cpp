@@ -1,6 +1,6 @@
 #include "TemplateFetcher.h"
-#include "../StaticClass/Global.h"
-#include "../StaticClass/XinjiaoyuNetwork.h"
+#include "src/StaticClass/Global.h"
+#include "src/StaticClass/XinjiaoyuNetwork.h"
 
 TemplateFetcher::TemplateFetcher(QObject *parent)
     : QObject{parent}

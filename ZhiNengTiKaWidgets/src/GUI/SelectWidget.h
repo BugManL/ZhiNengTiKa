@@ -1,7 +1,7 @@
 #ifndef SEARCHDIALOG_H
 #define SEARCHDIALOG_H
 
-#include "../Logic/TemplateAnalysis.h"
+#include "src/Logic/TemplateAnalysis.h"
 class MultipleSubjectsTemplateListView;
 
 class SelectWidget : public QWidget

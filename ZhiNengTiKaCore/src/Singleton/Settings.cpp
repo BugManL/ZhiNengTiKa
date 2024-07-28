@@ -1,12 +1,13 @@
 #include "Settings.h"
-#include "../StaticClass/CallAndroidNativeComponent.h"
-#include "../StaticClass/Global.h"
+
+#include "src/StaticClass/CallAndroidNativeComponent.h"
+#include "src/StaticClass/Global.h"
 #include "src/Logic/UserData.h"
 
-Settings *Settings::singletonSettings = nullptr;
+Q_GLOBAL_STATIC(Settings, singletonSettings)
 
 Settings::Settings(QObject *parent)
-    : QObject{parent},
+    : QObject{ parent },
       accountManager(new AccountManager(this))
 {
     QByteArray fileData;
@@ -22,26 +23,26 @@ Settings::Settings(QObject *parent)
     }
     file.close();
 
-    const auto settingJsonObject{QJsonDocument::fromJson(fileData).object()};
-    const auto accountsJsonArray{settingJsonObject.value("accounts").toArray()};
+    const auto settingJsonObject{ QJsonDocument::fromJson(fileData).object() };
+    const auto accountsJsonArray{ settingJsonObject.value("accounts").toArray() };
 
-    for(const auto &i : accountsJsonArray)
+    for (const auto &i : accountsJsonArray)
     {
-        const auto jsonObject{i.toObject()};
-        //只有authorization不能空(虽然别的空了也不行...)
-        if(!jsonObject.contains(QStringLiteral("authorization")))
+        const auto jsonObject{ i.toObject() };
+        // 只有authorization不能空(虽然别的空了也不行...)
+        if (!jsonObject.contains(QStringLiteral("authorization")))
         {
             continue;
         }
-        accountManager->append(UserData(
-                                   jsonObject.value(QStringLiteral("accessToken")).toString().toUtf8(),
-                                   jsonObject.value(QStringLiteral("authorization")).toString().toUtf8(),
-                                   jsonObject.value(QStringLiteral("clientSession")).toString(QUuid::createUuid().toString(QUuid::WithoutBraces)).toUtf8(),
-                                   jsonObject.value(QStringLiteral("studentId")).toString().toUtf8(),
-                                   QJsonDocument::fromJson(QByteArray::fromBase64(jsonObject.value(QStringLiteral("detailData")).toString().toUtf8())).object(),
-                                   jsonObject.value(QStringLiteral("password")).toString().toUtf8(),
-                                   jsonObject.value(QStringLiteral("schoolId")).toString().toUtf8(),
-                                   jsonObject.value(QStringLiteral("username")).toString().toUtf8()));
+        accountManager->userDatasAppend(UserData(
+            jsonObject.value(QStringLiteral("accessToken")).toString().toUtf8(),
+            jsonObject.value(QStringLiteral("authorization")).toString().toUtf8(),
+            jsonObject.value(QStringLiteral("clientSession")).toString(QUuid::createUuid().toString(QUuid::WithoutBraces)).toUtf8(),
+            jsonObject.value(QStringLiteral("studentId")).toString().toUtf8(),
+            QJsonDocument::fromJson(QByteArray::fromBase64(jsonObject.value(QStringLiteral("detailData")).toString().toUtf8())).object(),
+            jsonObject.value(QStringLiteral("password")).toString().toUtf8(),
+            jsonObject.value(QStringLiteral("schoolId")).toString().toUtf8(),
+            jsonObject.value(QStringLiteral("username")).toString().toUtf8()));
     }
 
     fontPointSize = settingJsonObject.value(QStringLiteral("fontPointSize")).toInt();
@@ -49,12 +50,12 @@ Settings::Settings(QObject *parent)
     qmlStyle = settingJsonObject.value(QStringLiteral("qmlStyle")).toString();
 
     uuid = settingJsonObject.value(QStringLiteral("uuid")).toString();
-    if(uuid.isEmpty())
+    if (uuid.isEmpty())
     {
         resetUuid();
     }
 
-    animeImageUrl =  settingJsonObject.value(QStringLiteral("animeImageUrl")).toString(animeImageUrlList.at(0).second);
+    animeImageUrl = settingJsonObject.value(QStringLiteral("animeImageUrl")).toString(animeImageUrlList.at(0).second);
 }
 
 AccountManager *Settings::getAccountManager() const
@@ -80,20 +81,9 @@ void Settings::resetAnimeImageUrl()
     setAnimeImageUrl(animeImageUrlList.at(0).second);
 }
 
-QList<QPair<QString, QString> > Settings::getAnimeImageUrlList() const
+QList<QPair<QString, QString>> Settings::getAnimeImageUrlList() const
 {
     return animeImageUrlList;
-}
-
-void Settings::initOnce()
-{
-    Settings::singletonSettings = new Settings();
-}
-
-void Settings::resetSingletonSettings()
-{
-    singletonSettings->deleteLater();
-    initOnce();
 }
 
 Settings *Settings::getSingletonSettings()
@@ -174,15 +164,15 @@ void Settings::resetUuid()
     const auto androidId(CallAndroidNativeComponent::getAndroidId());
     const auto bootUniqueId(QSysInfo::bootUniqueId());
     QString uniqueId;
-    if(!androidId.isEmpty() && androidId != QStringLiteral("9774d56d682e549c"))
+    if (!androidId.isEmpty() && androidId != QStringLiteral("9774d56d682e549c"))
     {
         uniqueId = androidId;
     }
-    else if(!bootUniqueId.isEmpty())
+    else if (!bootUniqueId.isEmpty())
     {
         uniqueId = bootUniqueId;
     }
-    if(!uniqueId.isEmpty())
+    if (!uniqueId.isEmpty())
     {
         setUuid(QUuid::createUuidV5(QUuid(), uniqueId).toString(QUuid::WithoutBraces));
     }
@@ -190,7 +180,7 @@ void Settings::resetUuid()
     {
         setUuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
     }
-#else // Q_OS_ANDROID
+#else  // Q_OS_ANDROID
     setUuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
 #endif // Q_OS_ANDROID
 }
@@ -199,7 +189,7 @@ void Settings::saveToFile() const
 {
     QJsonObject settingJsonObject;
     QJsonArray accountsJsonArray;
-    for(const auto &i : *accountManager)
+    for (const auto &i : accountManager->getUserDatas())
     {
         QJsonObject jsonObject;
         jsonObject.insert(QStringLiteral("accessToken"), QString(i.getAccessToken()));

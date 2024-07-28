@@ -2,8 +2,9 @@
 #define RESOURCEFILEFETCHER_H
 
 #include "ResourceFileModel.h"
+#include "src/ZhiNengTiKaCore_global.h"
 
-class ResourceFileFetcher : public QObject
+class ZHINENGTIKACORE_EXPORT ResourceFileFetcher : public QObject
 {
     Q_OBJECT
 

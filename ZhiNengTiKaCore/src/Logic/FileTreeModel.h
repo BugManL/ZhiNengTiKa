@@ -1,28 +1,31 @@
 #ifndef FILETREEMODEL_H
 #define FILETREEMODEL_H
 
+#include "src/ZhiNengTiKaCore_global.h"
+
 class FileTreeItem;
 
-class FileTreeModel : public QAbstractItemModel
+class ZHINENGTIKACORE_EXPORT FileTreeModel : public QAbstractItemModel
 {
     Q_OBJECT
+
 public:
     explicit FileTreeModel(QObject *parent = nullptr);
     ~FileTreeModel();
     enum SortFlag
     {
-        Name        = 0x00,
-        Time        = 0x01,
-        Size        = 0x02,
-        Unsorted    = 0x03,
-        SortByMask  = 0x03,
+        Name = 0x00,
+        Time = 0x01,
+        Size = 0x02,
+        Unsorted = 0x03,
+        SortByMask = 0x03,
 
-        DirsFirst   = 0x04,
-        Reversed    = 0x08,
-        IgnoreCase  = 0x10,
-        DirsLast    = 0x20,
+        DirsFirst = 0x04,
+        Reversed = 0x08,
+        IgnoreCase = 0x10,
+        DirsLast = 0x20,
         LocaleAware = 0x40,
-        Type        = 0x80,
+        Type = 0x80,
         NoSort = -1
     };
     enum DataRoles
@@ -60,6 +63,7 @@ protected:
     QHash<int, QByteArray> roleNames() const override;
 protected slots:
     void appendChildItem(FileTreeItem *parentItem, QDir dir);
+
 private:
     Q_PROPERTY(QString rootPath READ getRootPath WRITE setRootPath NOTIFY rootPathChanged FINAL)
     Q_PROPERTY(SortFlag sortFlag READ getSortFlag WRITE setSortFlag NOTIFY sortFlagChanged FINAL)

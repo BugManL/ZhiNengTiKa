@@ -1,5 +1,5 @@
 #include "WebViewWidget.h"
-#include "../StaticClass/Global.h"
+#include "src/StaticClass/Global.h"
 
 WebViewWidget::WebViewWidget(const TemplateAnalysis &templateAnalysis, QWidget *parent)
     : QWidget{parent}, templateAnalysis(templateAnalysis)

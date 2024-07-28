@@ -1,26 +1,8 @@
 #include "AccelerometerSingleton.h"
 
-AccelerometerSingleton *AccelerometerSingleton::accelerometerSingleton = nullptr;
+Q_GLOBAL_STATIC(QAccelerometer, accelerometerSingleton)
 
-void AccelerometerSingleton::initOnce(QObject *parent)
-{
-    accelerometerSingleton = new AccelerometerSingleton(parent);
-}
-
-void AccelerometerSingleton::resetAccelerometerSingleton(QObject *parent)
-{
-    if(accelerometerSingleton != nullptr)
-        accelerometerSingleton->deleteLater();
-    initOnce(parent);
-}
-
-AccelerometerSingleton *AccelerometerSingleton::getAccelerometerSingleton()
+QAccelerometer *AccelerometerSingleton::getAccelerometerSingleton()
 {
     return accelerometerSingleton;
-}
-
-AccelerometerSingleton::AccelerometerSingleton(QObject *parent)
-    : QAccelerometer{parent}
-{
-    setActive(true);
 }

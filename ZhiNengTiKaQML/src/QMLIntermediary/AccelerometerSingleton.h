@@ -1,16 +1,11 @@
 #ifndef ACCELEROMETERSINGLETON_H
 #define ACCELEROMETERSINGLETON_H
 
-class AccelerometerSingleton : public QAccelerometer
+class AccelerometerSingleton
 {
-    Q_OBJECT
 public:
-    static void initOnce(QObject *parent = nullptr);
-    static void resetAccelerometerSingleton(QObject *parent = nullptr);
-    static AccelerometerSingleton *getAccelerometerSingleton();
-protected:
-    AccelerometerSingleton(QObject *parent = nullptr);
-    static AccelerometerSingleton *accelerometerSingleton;
+    AccelerometerSingleton() = delete;
+    static QAccelerometer *getAccelerometerSingleton();
 };
 
 #endif // ACCELEROMETERSINGLETON_H

@@ -1,9 +1,9 @@
 #include "MainWidget.h"
 
-#include "../Singleton/Settings.h"
-#include "SelectWidget.h"
 #include "ResourceFileWidget.h"
+#include "SelectWidget.h"
 #include "SettingWidget.h"
+#include "src/Singleton/Settings.h"
 
 MainWidget::MainWidget(QWidget *parent)
     : NavigationBarTabWidget{ parent },

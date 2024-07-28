@@ -1,6 +1,6 @@
 #include "ImageProvider.h"
-#include "../StaticClass/Global.h"
-#include "../Singleton/Network.h"
+#include "src/StaticClass/Global.h"
+#include "src/Singleton/Network.h"
 
 ImageProvider::ImageProvider(QObject *parent)
     : QObject{parent}

@@ -1,46 +1,58 @@
+VERSION = 3.0.2
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
+include($$PWD/../precompile_header/precompile_header.pri)
+include($$PWD/../ZhiNengTiKaCommon.pri)
+
 QT       += widgets gui multimedia multimediawidgets webenginewidgets
 
-TEMPLATE = lib
+TEMPLATE = app
 
-PRECOMPILED_HEADER = src/pch.h
+DEFINES += ZHINENGTIKAWIDGETS
 
 HEADERS += \
-    src/GUI/AnswerAndAnalysisWidget.h \
-    src/GUI/ClickableLabel.hpp \
-    src/GUI/MainWidget.h \
-    src/GUI/MultipleSubjectsTemplateListView.h \
-    src/GUI/NavigationBarTabWidget.h \
-    src/GUI/PixmapLabel.h \
-    src/GUI/PlusSignLabel.h \
-    src/GUI/QRCodeScannerWidget.h \
-    src/GUI/QuestionWidget.h \
-    src/GUI/ResourceFileWidget.h \
-    src/GUI/SearchWidget.h \
-    src/GUI/SelectWidget.h \
-    src/GUI/SettingWidget.h \
-    src/GUI/TemplateDetailWidget.h \
-    src/GUI/TemplateListView.h \
-    src/GUI/UploadChildWidget.h \
-    src/GUI/UploadWidget.h \
-    src/GUI/WebViewWidget.h \
+    $$PWD/src/GUI/AnswerAndAnalysisWidget.h \
+    $$PWD/src/GUI/ClickableLabel.hpp \
+    $$PWD/src/GUI/MainWidget.h \
+    $$PWD/src/GUI/MultipleSubjectsTemplateListView.h \
+    $$PWD/src/GUI/NavigationBarTabWidget.h \
+    $$PWD/src/GUI/PixmapLabel.h \
+    $$PWD/src/GUI/PlusSignLabel.h \
+    $$PWD/src/GUI/QRCodeScannerWidget.h \
+    $$PWD/src/GUI/QuestionWidget.h \
+    $$PWD/src/GUI/ResourceFileWidget.h \
+    $$PWD/src/GUI/SearchWidget.h \
+    $$PWD/src/GUI/SelectWidget.h \
+    $$PWD/src/GUI/SettingWidget.h \
+    $$PWD/src/GUI/TemplateDetailWidget.h \
+    $$PWD/src/GUI/TemplateListView.h \
+    $$PWD/src/GUI/UploadChildWidget.h \
+    $$PWD/src/GUI/UploadWidget.h \
+    $$PWD/src/GUI/WebViewWidget.h
 
 SOURCES += \
-    src/GUI/AnswerAndAnalysisWidget.cpp \
-    src/GUI/MainWidget.cpp \
-    src/GUI/MultipleSubjectsTemplateListView.cpp \
-    src/GUI/NavigationBarTabWidget.cpp \
-    src/GUI/PixmapLabel.cpp \
-    src/GUI/PlusSignLabel.cpp \
-    src/GUI/QRCodeScannerWidget.cpp \
-    src/GUI/QuestionWidget.cpp \
-    src/GUI/ResourceFileWidget.cpp \
-    src/GUI/SearchWidget.cpp \
-    src/GUI/SelectWidget.cpp \
-    src/GUI/SettingWidget.cpp \
-    src/GUI/TemplateDetailWidget.cpp \
-    src/GUI/TemplateListView.cpp \
-    src/GUI/UploadChildWidget.cpp \
-    src/GUI/UploadWidget.cpp \
-    src/GUI/WebViewWidget.cpp \
-    src/main.cpp \
-    src/pch.h.cpp
+    $$PWD/src/GUI/AnswerAndAnalysisWidget.cpp \
+    $$PWD/src/GUI/MainWidget.cpp \
+    $$PWD/src/GUI/MultipleSubjectsTemplateListView.cpp \
+    $$PWD/src/GUI/NavigationBarTabWidget.cpp \
+    $$PWD/src/GUI/PixmapLabel.cpp \
+    $$PWD/src/GUI/PlusSignLabel.cpp \
+    $$PWD/src/GUI/QRCodeScannerWidget.cpp \
+    $$PWD/src/GUI/QuestionWidget.cpp \
+    $$PWD/src/GUI/ResourceFileWidget.cpp \
+    $$PWD/src/GUI/SearchWidget.cpp \
+    $$PWD/src/GUI/SelectWidget.cpp \
+    $$PWD/src/GUI/SettingWidget.cpp \
+    $$PWD/src/GUI/TemplateDetailWidget.cpp \
+    $$PWD/src/GUI/TemplateListView.cpp \
+    $$PWD/src/GUI/UploadChildWidget.cpp \
+    $$PWD/src/GUI/UploadWidget.cpp \
+    $$PWD/src/GUI/WebViewWidget.cpp \
+    $$PWD/src/main.cpp
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ZhiNengTiKaCore/release/ -lZhiNengTiKaCore
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ZhiNengTiKaCore/debug/ -lZhiNengTiKaCore
+else:unix: LIBS += -L$$OUT_PWD/../ZhiNengTiKaCore/ -lZhiNengTiKaCore
+
+INCLUDEPATH += $$PWD/../ZhiNengTiKaCore
+DEPENDPATH += $$PWD/../ZhiNengTiKaCore

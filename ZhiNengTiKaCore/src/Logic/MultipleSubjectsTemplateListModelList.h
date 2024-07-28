@@ -2,10 +2,12 @@
 #define MULTIPLESUBJECTSTEMPLATELISTMODELLIST_H
 
 #include "TemplateListModel.h"
+#include "src/ZhiNengTiKaCore_global.h"
 
-class MultipleSubjectsTemplateListModelList : public QObject
+class ZHINENGTIKACORE_EXPORT MultipleSubjectsTemplateListModelList : public QObject
 {
     Q_OBJECT
+
 public:
     explicit MultipleSubjectsTemplateListModelList(QObject *parent = nullptr);
     ~MultipleSubjectsTemplateListModelList();
@@ -27,8 +29,9 @@ public slots:
     void addNewTemplate(const TemplateSummary &templateSummary);
     void addNewTemplate(const QString &templateName, const QString &templateCode);
     void writeUserHistoryToFile() const;
+
 protected:
-    QList<TemplateListModel*> templateListModelList;
+    QList<TemplateListModel *> templateListModelList;
 protected slots:
     void importTemplateList(const QString &filePath, bool split = true);
 };

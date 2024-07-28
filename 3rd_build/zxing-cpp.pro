@@ -10,9 +10,6 @@ DEFINES += ZXING_READERS
 INCLUDEPATH += $$PWD/src/zxing-cpp
 
 HEADERS += \
-    src/zxing-cpp/ZXingPosition.h \
-    src/zxing-cpp/ZXingReader.h \
-    src/zxing-cpp/ZXingResult.h \
     $$PWD/../3rd/zxing-cpp/core/src/Barcode.h \
     $$PWD/../3rd/zxing-cpp/core/src/BarcodeFormat.h \
     $$PWD/../3rd/zxing-cpp/core/src/BinaryBitmap.h \
@@ -172,9 +169,6 @@ HEADERS += \
     $$PWD/../3rd/zxing-cpp/core/src/pdf417/ZXNullable.h
 
 SOURCES += \
-    src/zxing-cpp/ZXingPosition.cpp \
-    src/zxing-cpp/ZXingReader.cpp \
-    src/zxing-cpp/ZXingResult.cpp \
     $$PWD/../3rd/zxing-cpp/core/src/Barcode.cpp \
     $$PWD/../3rd/zxing-cpp/core/src/BarcodeFormat.cpp \
     $$PWD/../3rd/zxing-cpp/core/src/BinaryBitmap.cpp \

@@ -2,9 +2,11 @@
 #define ZXINGRESULT_H
 
 #include <QObject>
-#include "ZXingPosition.h"
 
-class ZXingResult
+#include "ZXingPosition.h"
+#include "src/ZhiNengTiKaCore_global.h"
+
+class ZHINENGTIKACORE_EXPORT ZXingResult
 {
     Q_GADGET
 public:

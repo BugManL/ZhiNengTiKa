@@ -1,9 +1,12 @@
 #ifndef NETWORKACCESSMANAGERBLOCKABLE_H
 #define NETWORKACCESSMANAGERBLOCKABLE_H
 
-class NetworkAccessManagerBlockable : public QNetworkAccessManager
+#include "src/ZhiNengTiKaCore_global.h"
+
+class ZHINENGTIKACORE_EXPORT NetworkAccessManagerBlockable : public QNetworkAccessManager
 {
     Q_OBJECT
+
 public:
     using QNetworkAccessManager::QNetworkAccessManager;
 
@@ -33,7 +36,6 @@ public:
     QByteArray postData(const QNetworkRequest &request, QIODevice *data);
     QByteArray postData(const QNetworkRequest &request, const QByteArray &data);
     QByteArray postData(const QNetworkRequest &request, QHttpMultiPart *multiPart);
-
 };
 
 #endif // NETWORKACCESSMANAGERBLOCKABLE_H

@@ -1,6 +1,6 @@
 #include "QMLUtils.h"
 
-#include "../StaticClass/Global.h"
+#include "src/StaticClass/Global.h"
 
 QMLUtils::QMLUtils(QObject *parent)
     : QObject{ parent }

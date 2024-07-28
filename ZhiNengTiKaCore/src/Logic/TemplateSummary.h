@@ -1,12 +1,15 @@
 #ifndef TEMPLATESUMMARY_H
 #define TEMPLATESUMMARY_H
 
+#include "src/ZhiNengTiKaCore_global.h"
+
 class TemplateFetcher;
 
-class TemplateSummary
+class ZHINENGTIKACORE_EXPORT TemplateSummary
 {
     Q_GADGET
     friend class TemplateFetcher;
+
 public:
     explicit TemplateSummary() = default;
     TemplateSummary(const QString &templateName, const QString &templateCode,
@@ -36,6 +39,7 @@ protected:
     QString templateCode;
     QString volume;
     QString subject;
+
 private:
     Q_PROPERTY(QString templateName READ getTemplateName WRITE setTemplateName FINAL)
     Q_PROPERTY(QString templateCode READ getTemplateCode WRITE setTemplateCode FINAL)
@@ -44,6 +48,6 @@ private:
 };
 
 Q_DECLARE_METATYPE(TemplateSummary)
-QDebug operator<<(QDebug dbg, const TemplateSummary &templateSummary);
+QDebug ZHINENGTIKACORE_EXPORT operator<<(QDebug dbg, const TemplateSummary &templateSummary);
 
 #endif // TEMPLATESUMMARY_H

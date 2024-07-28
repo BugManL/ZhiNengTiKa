@@ -1,7 +1,7 @@
 #include "AnnouncementManager.h"
 
-#include "../Singleton/Network.h"
-#include "../StaticClass/Global.h"
+#include "src/Singleton/Network.h"
+#include "src/StaticClass/Global.h"
 #include "AnnouncementModel.h"
 
 AnnouncementManager::AnnouncementManager(QObject *parent)

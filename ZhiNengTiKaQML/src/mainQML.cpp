@@ -1,26 +1,25 @@
-#include "LibZXingCpp/ZXingResult.h"
-#include "Logic/AnnouncementManager.h"
-#include "Logic/FileTreeModel.h"
-#include "Logic/ImageProvider.h"
-#include "Logic/QRCodeScanner.h"
-#include "Logic/ResourceFileFetcher.h"
-#include "Logic/TemplateAnalysis.h"
-#include "Logic/TemplateFetcher.h"
-#include "Logic/TemplateListModel.h"
-#include "Logic/TemplateSearcher.h"
-#include "Logic/TemplateSummary.h"
-#include "Logic/UserData.h"
-#include "Logic/Version.h"
 #include "QMLIntermediary/AccelerometerSingleton.h"
 #include "QMLIntermediary/AnimeImageProvider.h"
 #include "QMLIntermediary/MultipleSubjectsTemplateListModelListSingleton.h"
 #include "QMLIntermediary/QMLUtils.h"
 #include "QMLIntermediary/SettingOperator.h"
 #include "QMLIntermediary/ZAccelerationToOpacityConverter.h"
-#include "Singleton/Network.h"
-#include "Singleton/Settings.h"
-#include "StaticClass/CallAndroidNativeComponent.h"
-#include "StaticClass/Global.h"
+#include "src/Logic/AnnouncementManager.h"
+#include "src/Logic/FileTreeModel.h"
+#include "src/Logic/ImageProvider.h"
+#include "src/Logic/QRCodeScanner.h"
+#include "src/Logic/ResourceFileFetcher.h"
+#include "src/Logic/TemplateAnalysis.h"
+#include "src/Logic/TemplateFetcher.h"
+#include "src/Logic/TemplateListModel.h"
+#include "src/Logic/TemplateSearcher.h"
+#include "src/Logic/TemplateSummary.h"
+#include "src/Logic/UserData.h"
+#include "src/Logic/Version.h"
+#include "src/Singleton/Network.h"
+#include "src/Singleton/Settings.h"
+#include "src/StaticClass/CallAndroidNativeComponent.h"
+#include "src/StaticClass/Global.h"
 
 #if 0
 
@@ -56,10 +55,6 @@ int main(int argc, char *argv[])
     auto newVersionLauncher = true;
 #endif
 
-    AccelerometerSingleton::initOnce(&libEventLoop);
-
-    Network::initOnce();
-
     Global::initOnce();
     // 删除图片缓存
     Global::deleteDir(Global::dataPath().append(QStringLiteral("/Image")));
@@ -67,7 +62,6 @@ int main(int argc, char *argv[])
     a->setWindowIcon(QIcon(QStringLiteral(":/ico/xinjiaoyuico.png")));
     a->setApplicationDisplayName(QStringLiteral("智能题卡"));
 
-    Settings::initOnce();
     auto settings(Settings::getSingletonSettings());
     MultipleSubjectsTemplateListModelListSingleton::initOnce();
 

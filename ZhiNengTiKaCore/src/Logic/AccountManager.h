@@ -2,8 +2,9 @@
 #define ACCOUNTMANAGER_H
 
 #include "UserData.h"
+#include "src/ZhiNengTiKaCore_global.h"
 
-class AccountManager : public QObject, public QList<UserData>
+class ZHINENGTIKACORE_EXPORT AccountManager : public QObject
 {
     Q_OBJECT
 
@@ -16,6 +17,8 @@ public:
     Q_INVOKABLE bool isLoggedin() const;
     Q_INVOKABLE QVariant getDescriptionOfUserDatas() const;
 
+    QList<UserData> getUserDatas() const;
+
 public slots:
     void login(const QString &username, const QString &password);
     void loginUtf8(const QByteArray &username, const QByteArray &password);
@@ -24,8 +27,9 @@ public slots:
     void initPublicUserData();
 
     void toFirst(qsizetype i);
-    void removeFirst();
     void logout();
+
+    void userDatasAppend(const UserData &newUserData);
 
 protected:
     QNetworkReply *getLoginReply(const QString &username, const QString &password);
@@ -34,6 +38,7 @@ protected:
     QHash<QNetworkReply *, UserData> reloginHash;
 
     UserData publicUserData;
+    QList<UserData> userDatas;
 
 protected slots:
     void onLoginReplyFinished();
@@ -50,6 +55,7 @@ signals:
 
 private:
     Q_PROPERTY(UserData publicUserData READ getPublicUserData CONSTANT FINAL)
+    Q_PROPERTY(QList<UserData> userDatas READ getUserDatas CONSTANT FINAL)
 };
 
 #endif // ACCOUNTMANAGER_H

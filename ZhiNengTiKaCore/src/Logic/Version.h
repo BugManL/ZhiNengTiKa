@@ -1,8 +1,9 @@
 #ifndef VERSION_H
 #define VERSION_H
 
+#include "src/ZhiNengTiKaCore_global.h"
 
-class Version
+class ZHINENGTIKACORE_EXPORT Version
 {
 public:
     Version();
@@ -18,11 +19,12 @@ public:
     bool operator>=(const Version &other) const;
     bool operator==(const Version &other) const;
     bool operator!=(const Version &other) const;
+
 protected:
     QStringList versionData;
 };
 
 Q_DECLARE_METATYPE(Version);
-QDebug operator<<(QDebug dbg, const Version &version);
+QDebug ZHINENGTIKACORE_EXPORT operator<<(QDebug dbg, const Version &version);
 
 #endif // VERSION_H

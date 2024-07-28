@@ -2,7 +2,7 @@
 #include "AnswerAndAnalysisWidget.h"
 #include "QuestionWidget.h"
 #include "UploadWidget.h"
-#include "../Singleton/Settings.h"
+#include "src/Singleton/Settings.h"
 
 TemplateDetailWidget::TemplateDetailWidget(const TemplateAnalysis &templateAnalysis, QWidget *parent)
     : NavigationBarTabWidget{parent}

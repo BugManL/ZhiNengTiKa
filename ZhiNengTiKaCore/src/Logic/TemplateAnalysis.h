@@ -1,13 +1,15 @@
 #ifndef TEMPLATEANALYSIS_H
 #define TEMPLATEANALYSIS_H
 
-#include "TemplateSummary.h"
 #include "AnswerDetailData.hpp"
+#include "TemplateSummary.h"
+#include "src/ZhiNengTiKaCore_global.h"
 
-class TemplateAnalysis : public TemplateSummary
+class ZHINENGTIKACORE_EXPORT TemplateAnalysis : public TemplateSummary
 {
     Q_GADGET
     friend class TemplateFetcher;
+
 public:
     explicit TemplateAnalysis() = default;
 
@@ -42,10 +44,10 @@ protected:
     bool valid = false;
 
 private:
-    template<typename f>
+    template <typename f>
     static void callFunc(const QJsonArray &jsonArray, const qsizetype index, f func);
 
-    template<typename f1, typename f2>
+    template <typename f1, typename f2>
     static void callFunc(const QJsonArray &jsonArray, const qsizetype index, f1 func1, f2 func2);
     Q_PROPERTY(bool local READ getLocal CONSTANT FINAL)
     Q_PROPERTY(bool network READ getNetwork CONSTANT FINAL)

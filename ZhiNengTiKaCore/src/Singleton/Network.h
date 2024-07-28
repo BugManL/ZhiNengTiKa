@@ -1,14 +1,11 @@
 #pragma once
 
-#include "../Logic/NetworkAccessManagerBlockable.h"
+#include "src/Logic/NetworkAccessManagerBlockable.h"
+#include "src/ZhiNengTiKaCore_global.h"
 
-class Network
+class ZHINENGTIKACORE_EXPORT Network
 {
 public:
-    static void initOnce();
-    static void resetNetworkManager();
+    Network() = delete;
     static NetworkAccessManagerBlockable *getGlobalNetworkManager();
-private:
-    Network() = default;
-    static NetworkAccessManagerBlockable *globalManager;
 };

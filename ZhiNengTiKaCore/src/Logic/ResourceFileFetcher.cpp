@@ -1,8 +1,8 @@
 #include "ResourceFileFetcher.h"
 
-#include "../Singleton/Network.h"
-#include "../StaticClass/Global.h"
-#include "../StaticClass/XinjiaoyuEncryptioner.h"
+#include "src/Singleton/Network.h"
+#include "src/StaticClass/Global.h"
+#include "src/StaticClass/XinjiaoyuEncryptioner.h"
 
 const QString ResourceFileFetcher::resourcePath = Global::dataPath().append(QStringLiteral("/Resource"));
 

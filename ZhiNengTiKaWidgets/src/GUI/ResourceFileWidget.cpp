@@ -1,5 +1,5 @@
 #include "ResourceFileWidget.h"
-#include "../Logic/ResourceFileFetcher.h"
+#include "src/Logic/ResourceFileFetcher.h"
 
 ResourceFileWidget::ResourceFileWidget(QWidget *parent)
     : QWidget{ parent },

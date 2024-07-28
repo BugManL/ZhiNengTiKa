@@ -1,6 +1,6 @@
 #include "MultipleSubjectsTemplateListModelList.h"
 
-#include "../StaticClass/Global.h"
+#include "src/StaticClass/Global.h"
 
 MultipleSubjectsTemplateListModelList::MultipleSubjectsTemplateListModelList(QObject *parent)
     : QObject{ parent }

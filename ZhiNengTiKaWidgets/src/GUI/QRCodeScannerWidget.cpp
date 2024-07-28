@@ -1,5 +1,5 @@
 #include "QRCodeScannerWidget.h"
-#include "../Logic/QRCodeScanner.h"
+#include "src/Logic/QRCodeScanner.h"
 
 QRCodeScannerWidget::QRCodeScannerWidget(QWidget *parent)
     : QWidget{parent},

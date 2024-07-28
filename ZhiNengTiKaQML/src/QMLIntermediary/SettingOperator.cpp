@@ -1,18 +1,18 @@
 #include "SettingOperator.h"
+
 #include "MultipleSubjectsTemplateListModelListSingleton.h"
-#include "../StaticClass/Global.h"
-#include "../Singleton/Settings.h"
+#include "src/Singleton/Settings.h"
+#include "src/StaticClass/Global.h"
 
 SettingOperator::SettingOperator(QObject *parent)
-    : QObject{parent}
+    : QObject{ parent }
 {
-
 }
 
 QVariant SettingOperator::getAnimeImageNameList() const
 {
     QStringList animeImageNameList;
-    for(const auto &i : Settings::getSingletonSettings()->getAnimeImageUrlList())
+    for (const auto &i : Settings::getSingletonSettings()->getAnimeImageUrlList())
     {
         animeImageNameList.append(i.first);
     }
@@ -31,9 +31,9 @@ QString SettingOperator::getAnimeImageUrl(qsizetype index) const
 
 qsizetype SettingOperator::getCurrentAnimeImageNameIndex() const
 {
-    for(auto i(0); i < Settings::getSingletonSettings()->getAnimeImageUrlList().size(); ++i)
+    for (auto i(0); i < Settings::getSingletonSettings()->getAnimeImageUrlList().size(); ++i)
     {
-        if(Settings::getSingletonSettings()->getAnimeImageUrlList().at(i).second == Settings::getSingletonSettings()->getAnimeImageUrl())
+        if (Settings::getSingletonSettings()->getAnimeImageUrlList().at(i).second == Settings::getSingletonSettings()->getAnimeImageUrl())
             return i;
     }
     return -1;

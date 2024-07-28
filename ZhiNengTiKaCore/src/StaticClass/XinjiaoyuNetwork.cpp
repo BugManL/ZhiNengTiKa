@@ -1,8 +1,8 @@
 #include "XinjiaoyuNetwork.h"
-#include "../Singleton/Settings.h"
-#include "../Singleton/Network.h"
+#include "src/Singleton/Settings.h"
+#include "src/Singleton/Network.h"
 #include "XinjiaoyuEncryptioner.h"
-#include "../Logic/UserData.h"
+#include "src/Logic/UserData.h"
 
 QNetworkRequest XinjiaoyuNetwork::setRequest(const QUrl &url, const UserData &userData)
 {

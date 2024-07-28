@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Logic/AnswerDetailData.hpp"
+#include "src/Logic/AnswerDetailData.hpp"
 class PixmapLabel;
 class PlusSignLabel;
 
