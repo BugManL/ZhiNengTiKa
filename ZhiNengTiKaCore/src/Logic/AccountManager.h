@@ -6,6 +6,7 @@
 class AccountManager : public QObject, public QList<UserData>
 {
     Q_OBJECT
+
 public:
     explicit AccountManager(QObject *parent = nullptr);
 
@@ -46,6 +47,7 @@ signals:
     void checkCurrentAccountValidFinished(bool valid);
     void initPublicUserDataFinished(UserData object);
     void error(const QString &msg);
+
 private:
     Q_PROPERTY(UserData publicUserData READ getPublicUserData CONSTANT FINAL)
 };

@@ -3,6 +3,4 @@ debug/*
 release/*
 build/*
 .qmake.stash
-android/assets
-ZhiNengTiKa.pro.user
-ZhiNengTiKaQML.pro.user
+*/build/*

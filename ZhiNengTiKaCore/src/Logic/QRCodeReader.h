@@ -1,11 +1,10 @@
 #ifndef QRCODEREADER_H
 #define QRCODEREADER_H
 
-#include "LibZXingCpp/ZXingResult.h"
-
 class QRCodeReader : public QObject
 {
     Q_OBJECT
+
 public:
     explicit QRCodeReader(QObject *parent = nullptr);
 

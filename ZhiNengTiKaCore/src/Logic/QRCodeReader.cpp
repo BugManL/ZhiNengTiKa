@@ -1,14 +1,13 @@
 #include "QRCodeReader.h"
-#include "LibZXingCpp/ZXingReader.h"
 
 QRCodeReader::QRCodeReader(QObject *parent)
-    : QObject{parent}
+    : QObject{ parent }
 {
 }
 
 ZXingResult QRCodeReader::decodeImage(const QImage &image)
 {
-    if(image.isNull())
+    if (image.isNull())
     {
         warning(QStringLiteral("图片为空"));
         return {};
@@ -19,12 +18,12 @@ ZXingResult QRCodeReader::decodeImage(const QImage &image)
         emit decodingFinished(!result.getText().isEmpty(), result);
         return result;
     }
-    catch(const std::exception& e)
+    catch (const std::exception &e)
     {
         warning(QString::fromStdString(e.what()));
         return {};
     }
-    catch(...)
+    catch (...)
     {
         warning(QStringLiteral("未知错误"));
         return {};
@@ -33,7 +32,7 @@ ZXingResult QRCodeReader::decodeImage(const QImage &image)
 
 ZXingResult QRCodeReader::decodeFrame(const QVideoFrame &frame)
 {
-    if(!frame.isValid())
+    if (!frame.isValid())
     {
         frameErrorWarning(QStringLiteral("帧不可用"));
         return {};
@@ -44,12 +43,12 @@ ZXingResult QRCodeReader::decodeFrame(const QVideoFrame &frame)
         emit decodingFinished(!result.getText().isEmpty(), result);
         return result;
     }
-    catch(const std::exception& e)
+    catch (const std::exception &e)
     {
         frameErrorWarning(QString::fromStdString(e.what()));
         return {};
     }
-    catch(...)
+    catch (...)
     {
         frameErrorWarning(QStringLiteral("未知错误"));
         return {};
@@ -91,7 +90,7 @@ void QRCodeReader::resetSmoothTransformation()
 ZXingResult QRCodeReader::decodeImageByPath(const QUrl &imagePath)
 {
     auto readablePath(imagePath.toString());
-    if(readablePath.startsWith(QStringLiteral("file:///")))
+    if (readablePath.startsWith(QStringLiteral("file:///")))
         readablePath = readablePath.right(readablePath.size() - 8);
     return decodeImage(QImage(readablePath));
 }

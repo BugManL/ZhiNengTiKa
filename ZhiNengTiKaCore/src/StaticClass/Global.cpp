@@ -7,9 +7,9 @@ QString Global::appTempPath;
 void Global::initOnce()
 {
 #ifdef Q_OS_WINDOWS
-    Global::appConfigPath = QApplication::applicationDirPath().append(QStringLiteral("/Config"));
-    Global::appDataPath = QApplication::applicationDirPath().append(QStringLiteral("/Data"));
-    Global::appTempPath = QApplication::applicationDirPath().append(QStringLiteral("/Temp"));
+    Global::appConfigPath = QCoreApplication::applicationDirPath().append(QStringLiteral("/Config"));
+    Global::appDataPath = QCoreApplication::applicationDirPath().append(QStringLiteral("/Data"));
+    Global::appTempPath = QCoreApplication::applicationDirPath().append(QStringLiteral("/Temp"));
 #else
     Global::appConfigPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
     Global::appDataPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
@@ -24,7 +24,7 @@ void Global::initOnce()
     dir.mkpath(Global::tempPath());
 
     QFile fileUserHistory(Global::dataPath().append(QStringLiteral("/templateList_undefined")));
-    if(fileUserHistory.exists())
+    if (fileUserHistory.exists())
         fileUserHistory.rename(QStringLiteral("templateList_UserHistory"));
 }
 
@@ -54,11 +54,11 @@ bool Global::deleteDir(const QString &path)
     {
         return true;
     }
-    dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot); //设置过滤
-    QFileInfoList fileList = dir.entryInfoList(); // 获取所有的文件信息
-    foreach(QFileInfo file, fileList)
+    dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot); // 设置过滤
+    QFileInfoList fileList = dir.entryInfoList();           // 获取所有的文件信息
+    foreach (QFileInfo file, fileList)
     {
-        //遍历文件信息
+        // 遍历文件信息
         if (file.isFile())
         {
             // 是文件，删除
@@ -91,16 +91,12 @@ qint64 Global::getDirSize(const QString &filePath)
         size += getDirSize(QString(filePath).append(QStringLiteral("/")).append(subDir)); //递归进行  统计所有子目录
     }
 #endif
-    auto filesInfoList { tmpDir.entryInfoList(QDir::Files) };
-    size = std::accumulate(filesInfoList.cbegin(), filesInfoList.cend(), size, [](qint64 value, const QFileInfo & fileInfo)
-    {
-        return fileInfo.size() + value;
-    });
+    auto filesInfoList{ tmpDir.entryInfoList(QDir::Files) };
+    size = std::accumulate(filesInfoList.cbegin(), filesInfoList.cend(), size, [](qint64 value, const QFileInfo &fileInfo)
+                           { return fileInfo.size() + value; });
     auto dirsList{ tmpDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot) };
-    size = std::accumulate(dirsList.cbegin(), dirsList.cend(), size, [&filePath](qint64 value, const QString & subDir)
-    {
-        return getDirSize(QString(filePath).append(QStringLiteral("/")).append(subDir)) + value;
-    });
+    size = std::accumulate(dirsList.cbegin(), dirsList.cend(), size, [&filePath](qint64 value, const QString &subDir)
+                           { return getDirSize(QString(filePath).append(QStringLiteral("/")).append(subDir)) + value; });
 
     return size;
 }
