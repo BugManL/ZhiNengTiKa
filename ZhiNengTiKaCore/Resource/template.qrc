@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>templateList/templateList_biography</file>
+        <file>templateList/templateList_chemistry</file>
+        <file>templateList/templateList_chinese</file>
+        <file>templateList/templateList_english</file>
+        <file>templateList/templateList_mathematics</file>
+        <file>templateList/templateList_physics</file>
+    </qresource>
+</RCC>
