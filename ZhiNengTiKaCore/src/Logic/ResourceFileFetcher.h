@@ -6,6 +6,7 @@
 class ResourceFileFetcher : public QObject
 {
     Q_OBJECT
+
 public:
     explicit ResourceFileFetcher(QObject *parent = nullptr);
 
@@ -30,7 +31,9 @@ protected:
     static QString getResourcePath();
     static QNetworkRequest setRequest(const QUrl &url);
     static QString generateRandomString(qsizetype size = 1);
+#if 0
     static QString findCommonPath(const QStringList &pathList);
+#endif
 
     QJsonObject catalogDetail;
 
@@ -56,6 +59,7 @@ signals:
     void resetModelFinished();
     void continueLoadModelFinished();
     void downloadResourceFileFinished(const QString &path);
+
 private:
     Q_PROPERTY(ResourceFileModel *model READ getModel CONSTANT FINAL)
 };

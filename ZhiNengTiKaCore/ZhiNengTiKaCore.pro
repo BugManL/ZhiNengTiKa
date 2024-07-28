@@ -46,23 +46,19 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 CONFIG(debug, debug|release) {
     win32 {
         LIBS += -L$$PWD/../3rd_build/build/qt_aes/Windows_MSVC2019_64bit/Debug -lqt_aes
-        LIBS += -L$$PWD/../3rd_build/build/quazip/Windows_MSVC2019_64bit/Debug -lquazip1-qt6d
         LIBS += -L$$PWD/../3rd_build/build/zxing/Windows_MSVC2019_64bit/Debug -lzxing
     }
     android {
         LIBS += -L$$PWD/../3rd_build/build/qt_aes/Android_arm64_v8a/Debug -lqt_aes_arm64-v8a
-        LIBS += -L$$PWD/../3rd_build/build/quazip/Android_arm64_v8a/Debug -lquazip1-qt6d
         LIBS += -L$$PWD/../3rd_build/build/zxing/Android_arm64_v8a/Debug -lzxing_arm64-v8a
     }
 } else {
     win32 {
         LIBS += -L$$PWD/../3rd_build/build/qt_aes/Windows_MSVC2019_64bit/Release -lqt_aes
-        LIBS += -L$$PWD/../3rd_build/build/quazip/Windows_MSVC2019_64bit/Release -lquazip1-qt6
         LIBS += -L$$PWD/../3rd_build/build/zxing/Windows_MSVC2019_64bit/Release -lzxing
     }
     android {
         LIBS += -L$$PWD/../3rd_build/build/qt_aes/Android_arm64_v8a/Release -lqt_aes_arm64-v8a
-        LIBS += -L$$PWD/../3rd_build/build/quazip/Android_arm64_v8a/Release -lquazip1-qt6
         LIBS += -L$$PWD/../3rd_build/build/zxing/Android_arm64_v8a/Release -lzxing_arm64-v8a
     }
 }

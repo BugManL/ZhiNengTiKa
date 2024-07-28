@@ -1,16 +1,15 @@
 #include "ResourceFileFetcher.h"
-#include "../StaticClass/XinjiaoyuEncryptioner.h"
+
 #include "../Singleton/Network.h"
 #include "../StaticClass/Global.h"
-#include "JlCompress.h"
+#include "../StaticClass/XinjiaoyuEncryptioner.h"
 
 const QString ResourceFileFetcher::resourcePath = Global::dataPath().append(QStringLiteral("/Resource"));
 
 ResourceFileFetcher::ResourceFileFetcher(QObject *parent)
-    : QObject{parent},
+    : QObject{ parent },
       model(new ResourceFileModel(this))
 {
-
 }
 
 void ResourceFileFetcher::init()
@@ -21,7 +20,7 @@ void ResourceFileFetcher::init()
 
 void ResourceFileFetcher::continueLoadModel()
 {
-    if(currentPage >= maxPage)
+    if (currentPage >= maxPage)
     {
         emit error(QStringLiteral("尝试加载页数超过最大值"));
         emit continueLoadModelFinished();
@@ -38,33 +37,37 @@ void ResourceFileFetcher::resetModel(const QString &subject, const QString &edit
     currentPage = 1;
     maxPage = 1;
     const auto categoryAttributeTreeList(catalogDetail
-                                         .value(QStringLiteral("data")).toObject()
-                                         .value(QStringLiteral("categoryAttributeTreeList")).toArray());
+                                             .value(QStringLiteral("data"))
+                                             .toObject()
+                                             .value(QStringLiteral("categoryAttributeTreeList"))
+                                             .toArray());
     const auto categoryAttributeSubjectTrees(categoryAttributeTreeList
-            .at(0).toObject()
-            .value(QStringLiteral("categoryAttributeTrees")).toArray());
+                                                 .at(0)
+                                                 .toObject()
+                                                 .value(QStringLiteral("categoryAttributeTrees"))
+                                                 .toArray());
     QString subjectId;
     QString editionId;
     QString moduleId;
     // 什么嵌套天堂
-    for(const auto &i : categoryAttributeSubjectTrees)
+    for (const auto &i : categoryAttributeSubjectTrees)
     {
         const auto subjectObject(i.toObject());
-        if(subjectObject.value(QStringLiteral("attributeValue")).toString() == subject)
+        if (subjectObject.value(QStringLiteral("attributeValue")).toString() == subject)
         {
             subjectId = subjectObject.value(QStringLiteral("attributeId")).toString();
             const auto categoryAttributeEditionTrees(subjectObject.value(QStringLiteral("categoryAttributeTrees")).toArray());
-            for(const auto &j : categoryAttributeEditionTrees)
+            for (const auto &j : categoryAttributeEditionTrees)
             {
                 const auto editionObject(j.toObject());
-                if(editionObject.value(QStringLiteral("attributeValue")).toString() == edition)
+                if (editionObject.value(QStringLiteral("attributeValue")).toString() == edition)
                 {
                     editionId = editionObject.value(QStringLiteral("attributeId")).toString();
                     const auto categoryAttributeModuleTrees(editionObject.value(QStringLiteral("categoryAttributeTrees")).toArray());
-                    for(const auto &k : categoryAttributeModuleTrees)
+                    for (const auto &k : categoryAttributeModuleTrees)
                     {
                         const auto moduleObject(k.toObject());
-                        if(moduleObject.value(QStringLiteral("attributeValue")).toString() == module)
+                        if (moduleObject.value(QStringLiteral("attributeValue")).toString() == module)
                         {
                             moduleId = moduleObject.value(QStringLiteral("attributeId")).toString();
                         }
@@ -75,28 +78,30 @@ void ResourceFileFetcher::resetModel(const QString &subject, const QString &edit
     }
 
     const auto categoryAttributeList(catalogDetail
-                                     .value(QStringLiteral("data")).toObject()
-                                     .value(QStringLiteral("categoryAttributeList")).toArray());
+                                         .value(QStringLiteral("data"))
+                                         .toObject()
+                                         .value(QStringLiteral("categoryAttributeList"))
+                                         .toArray());
     QJsonArray bookCatalogDetailList;
-    for(const auto &i : categoryAttributeList)
+    for (const auto &i : categoryAttributeList)
     {
         const auto object(i.toObject());
         QJsonObject pObject;
         pObject.insert(QStringLiteral("categoryAttributeId"), object.value(QStringLiteral("attributeNameId")).toString());
         const auto attributeName(object.value(QStringLiteral("attributeName")).toString());
-        if(attributeName == QStringLiteral("学段"))
+        if (attributeName == QStringLiteral("学段"))
         {
             pObject.insert(QStringLiteral("attributeValueId"), categoryAttributeTreeList.at(0).toObject().value(QStringLiteral("attributeId")).toString());
         }
-        else if(attributeName == QStringLiteral("学科"))
+        else if (attributeName == QStringLiteral("学科"))
         {
             pObject.insert(QStringLiteral("attributeValueId"), subjectId);
         }
-        else if(attributeName == QStringLiteral("版次"))
+        else if (attributeName == QStringLiteral("版次"))
         {
             pObject.insert(QStringLiteral("attributeValueId"), editionId);
         }
-        else if(attributeName == QStringLiteral("模块"))
+        else if (attributeName == QStringLiteral("模块"))
         {
             pObject.insert(QStringLiteral("attributeValueId"), moduleId);
         }
@@ -137,12 +142,12 @@ QNetworkRequest ResourceFileFetcher::setRequest(const QUrl &url)
     requestInfo.setRawHeader(QByteArrayLiteral("Authorization"), generateRandomString(976).toUtf8());
     requestInfo.setRawHeader(QByteArrayLiteral("accessToken"), generateRandomString(32).toUtf8());
 
-    const auto tVal{QString::number(QDateTime::currentMSecsSinceEpoch()).toUtf8()};
+    const auto tVal{ QString::number(QDateTime::currentMSecsSinceEpoch()).toUtf8() };
     requestInfo.setRawHeader(QByteArrayLiteral("t"), tVal);
 
     const auto clientSession(generateRandomString(10).toUtf8().prepend(tVal));
     requestInfo.setRawHeader(QByteArrayLiteral("clientSession"), clientSession);
-    const auto encryptVal{XinjiaoyuEncryptioner::getXinjiaoyuMD5(tVal, clientSession)};
+    const auto encryptVal{ XinjiaoyuEncryptioner::getXinjiaoyuMD5(tVal, clientSession) };
     requestInfo.setRawHeader(QByteArrayLiteral("encrypt"), encryptVal);
     return requestInfo;
 }
@@ -150,14 +155,14 @@ QNetworkRequest ResourceFileFetcher::setRequest(const QUrl &url)
 QString ResourceFileFetcher::generateRandomString(qsizetype size)
 {
     QString randomString;
-    for(auto i(0); i < size; ++i)
+    for (auto i(0); i < size; ++i)
     {
         const auto randomInt{ QRandomGenerator::global()->bounded(62) };
-        if(randomInt < 10)
+        if (randomInt < 10)
         {
             randomString.append(QString::number(randomInt));
         }
-        else if(randomInt < 36)
+        else if (randomInt < 36)
         {
             randomString.append(static_cast<char>(55 + randomInt));
         }
@@ -169,6 +174,7 @@ QString ResourceFileFetcher::generateRandomString(qsizetype size)
     return randomString;
 }
 
+#if 0
 QString ResourceFileFetcher::findCommonPath(const QStringList &pathList)
 {
     if (pathList.isEmpty())
@@ -229,6 +235,7 @@ QString ResourceFileFetcher::findCommonPath(const QStringList &pathList)
 
     return commonPath;
 }
+#endif
 
 ResourceFileModel *ResourceFileFetcher::getModel() const
 {
@@ -239,11 +246,15 @@ QStringList ResourceFileFetcher::getSubjectList() const
 {
     QStringList list;
     const auto categoryAttributeSubjectTrees(catalogDetail
-                                                 .value(QStringLiteral("data")).toObject()
-                                                 .value(QStringLiteral("categoryAttributeTreeList")).toArray()
-                                                 .at(0).toObject()
-                                                 .value(QStringLiteral("categoryAttributeTrees")).toArray());
-    for(const auto &i : categoryAttributeSubjectTrees)
+                                                 .value(QStringLiteral("data"))
+                                                 .toObject()
+                                                 .value(QStringLiteral("categoryAttributeTreeList"))
+                                                 .toArray()
+                                                 .at(0)
+                                                 .toObject()
+                                                 .value(QStringLiteral("categoryAttributeTrees"))
+                                                 .toArray());
+    for (const auto &i : categoryAttributeSubjectTrees)
     {
         list.append(i.toObject().value(QStringLiteral("attributeValue")).toString());
     }
@@ -254,17 +265,21 @@ QStringList ResourceFileFetcher::getEditionList(const QString &subject) const
 {
     QStringList list;
     const auto categoryAttributeSubjectTrees(catalogDetail
-                                                 .value(QStringLiteral("data")).toObject()
-                                                 .value(QStringLiteral("categoryAttributeTreeList")).toArray()
-                                                 .at(0).toObject()
-                                                 .value(QStringLiteral("categoryAttributeTrees")).toArray());
-    for(const auto &i : categoryAttributeSubjectTrees)
+                                                 .value(QStringLiteral("data"))
+                                                 .toObject()
+                                                 .value(QStringLiteral("categoryAttributeTreeList"))
+                                                 .toArray()
+                                                 .at(0)
+                                                 .toObject()
+                                                 .value(QStringLiteral("categoryAttributeTrees"))
+                                                 .toArray());
+    for (const auto &i : categoryAttributeSubjectTrees)
     {
         const auto subjectObject(i.toObject());
-        if(subjectObject.value(QStringLiteral("attributeValue")).toString() == subject)
+        if (subjectObject.value(QStringLiteral("attributeValue")).toString() == subject)
         {
             const auto categoryAttributeEditionTrees(subjectObject.value(QStringLiteral("categoryAttributeTrees")).toArray());
-            for(const auto &j : categoryAttributeEditionTrees)
+            for (const auto &j : categoryAttributeEditionTrees)
             {
                 list.append(j.toObject().value(QStringLiteral("attributeValue")).toString());
             }
@@ -277,24 +292,28 @@ QStringList ResourceFileFetcher::getModuleList(const QString &subject, const QSt
 {
     QStringList list;
     const auto categoryAttributeSubjectTrees(catalogDetail
-                                                 .value(QStringLiteral("data")).toObject()
-                                                 .value(QStringLiteral("categoryAttributeTreeList")).toArray()
-                                                 .at(0).toObject()
-                                                 .value(QStringLiteral("categoryAttributeTrees")).toArray());
+                                                 .value(QStringLiteral("data"))
+                                                 .toObject()
+                                                 .value(QStringLiteral("categoryAttributeTreeList"))
+                                                 .toArray()
+                                                 .at(0)
+                                                 .toObject()
+                                                 .value(QStringLiteral("categoryAttributeTrees"))
+                                                 .toArray());
     // 什么嵌套天堂
-    for(const auto &i : categoryAttributeSubjectTrees)
+    for (const auto &i : categoryAttributeSubjectTrees)
     {
         const auto subjectObject(i.toObject());
-        if(subjectObject.value(QStringLiteral("attributeValue")).toString() == subject)
+        if (subjectObject.value(QStringLiteral("attributeValue")).toString() == subject)
         {
             const auto categoryAttributeEditionTrees(subjectObject.value(QStringLiteral("categoryAttributeTrees")).toArray());
-            for(const auto &j : categoryAttributeEditionTrees)
+            for (const auto &j : categoryAttributeEditionTrees)
             {
                 const auto editionObject(j.toObject());
-                if(editionObject.value(QStringLiteral("attributeValue")).toString() == edition)
+                if (editionObject.value(QStringLiteral("attributeValue")).toString() == edition)
                 {
                     const auto categoryAttributeModuleTrees(editionObject.value(QStringLiteral("categoryAttributeTrees")).toArray());
-                    for(const auto &k : categoryAttributeModuleTrees)
+                    for (const auto &k : categoryAttributeModuleTrees)
                     {
                         list.append(k.toObject().value(QStringLiteral("attributeValue")).toString());
                     }
@@ -330,7 +349,7 @@ void ResourceFileFetcher::onCatalogArrayReplyFinished()
     auto reply(qobject_cast<QNetworkReply *>(sender()));
     auto rawData(reply->readAll());
     auto jsonObject(QJsonDocument::fromJson(rawData).object());
-    if(jsonObject.value(QStringLiteral("code")).toInt() != 200)
+    if (jsonObject.value(QStringLiteral("code")).toInt() != 200)
     {
         emit error(reply->request().url().toString().append(rawData));
         reply->deleteLater();
@@ -351,7 +370,7 @@ void ResourceFileFetcher::onCatalogDetailReplyFinished()
     auto reply(qobject_cast<QNetworkReply *>(sender()));
     auto rawData(reply->readAll());
     catalogDetail = QJsonDocument::fromJson(rawData).object();
-    if(catalogDetail.value(QStringLiteral("code")).toInt() != 200)
+    if (catalogDetail.value(QStringLiteral("code")).toInt() != 200)
     {
         emit error(reply->request().url().toString().append(rawData));
         reply->deleteLater();
@@ -365,7 +384,7 @@ void ResourceFileFetcher::onCatalogReplyFinished()
 {
     auto reply(qobject_cast<QNetworkReply *>(sender()));
     auto rawData(reply->readAll());
-    if(reply->error() != QNetworkReply::NoError)
+    if (reply->error() != QNetworkReply::NoError)
     {
         emit error(reply->request().url().toString().append(rawData));
         reply->deleteLater();
@@ -375,7 +394,7 @@ void ResourceFileFetcher::onCatalogReplyFinished()
 
     const auto schoolIdIndex(rawData.indexOf(QByteArrayLiteral("100117")));
     const auto bookCatalogIdIndex(rawData.lastIndexOf(QByteArrayLiteral("bookCatalogId"), schoolIdIndex));
-    if(bookCatalogIdIndex == -1)
+    if (bookCatalogIdIndex == -1)
     {
         emit error(QString(rawData).prepend(QStringLiteral("返回数据未找到\"bookCatalogId\"\n"
                                                            "原始数据:\n")));
@@ -396,7 +415,7 @@ void ResourceFileFetcher::onResourceReplyFinished()
     auto reply(qobject_cast<QNetworkReply *>(sender()));
     auto rawData(reply->readAll());
     auto jsonObject(QJsonDocument::fromJson(rawData).object());
-    if(jsonObject.value(QStringLiteral("code")).toInt() != 200)
+    if (jsonObject.value(QStringLiteral("code")).toInt() != 200)
     {
         emit error(reply->request().url().toString().append(rawData));
         reply->deleteLater();
@@ -408,13 +427,13 @@ void ResourceFileFetcher::onResourceReplyFinished()
 
     QJsonArray newRecords(jsonObject.value(QStringLiteral("data")).toObject().value(QStringLiteral("records")).toArray());
 
-    if(!model->records.isEmpty())
+    if (!model->records.isEmpty())
     {
         model->beginRemoveRows(QModelIndex(), 0, model->records.size() - 1);
         model->records = QJsonArray();
         model->endRemoveRows();
     }
-    if(!newRecords.isEmpty())
+    if (!newRecords.isEmpty())
     {
         model->beginInsertRows(QModelIndex(), 0, newRecords.size() - 1);
         model->records = std::move(newRecords);
@@ -429,7 +448,7 @@ void ResourceFileFetcher::onContinueLoadResourceReplyFinished()
     auto reply(qobject_cast<QNetworkReply *>(sender()));
     auto rawData(reply->readAll());
     auto jsonObject(QJsonDocument::fromJson(rawData).object());
-    if(jsonObject.value(QStringLiteral("code")).toInt() != 200)
+    if (jsonObject.value(QStringLiteral("code")).toInt() != 200)
     {
         emit error(reply->request().url().toString().append(rawData));
         reply->deleteLater();
@@ -440,7 +459,7 @@ void ResourceFileFetcher::onContinueLoadResourceReplyFinished()
     QJsonArray newRecords(jsonObject.value(QStringLiteral("data")).toObject().value(QStringLiteral("records")).toArray());
 
     model->beginInsertRows(QModelIndex(), model->records.size(), model->records.size() + newRecords.size() - 1);
-    for(const auto &i : newRecords)
+    for (const auto &i : newRecords)
         model->records.append(i.toObject());
     model->endInsertRows();
 
@@ -452,7 +471,7 @@ void ResourceFileFetcher::onDownloadFinished()
     qDebug() << Q_FUNC_INFO;
     auto reply(qobject_cast<QNetworkReply *>(sender()));
     auto rawData(reply->readAll());
-    if(reply->error() != QNetworkReply::NoError)
+    if (reply->error() != QNetworkReply::NoError)
     {
         emit error(reply->request().url().toString().append(rawData));
         fileNameHash.remove(reply);
@@ -460,21 +479,21 @@ void ResourceFileFetcher::onDownloadFinished()
         return;
     }
 
-    QBuffer buffer(&rawData);
-    buffer.open(QBuffer::ReadOnly);
-
     auto savePath(getResourcePath());
-    for(const auto &i : fileNameHash.take(reply))
+    for (const auto &i : fileNameHash.take(reply))
     {
-        if(!i.isEmpty())
+        if (!i.isEmpty())
         {
             savePath.append(QStringLiteral("/"));
             savePath.append(i);
         }
     }
-    auto result(JlCompress::extractDir(&buffer, QTextCodec::codecForName("gbk"), savePath));
-    auto commonPath(findCommonPath(result));
-    qDebug() << commonPath;
-    emit downloadResourceFileFinished(commonPath);
+    savePath.append(QStringLiteral(".zip"));
+    QFile file(savePath);
+    file.open(QFile::WriteOnly);
+    file.write(rawData);
+    file.close();
+
+    emit downloadResourceFileFinished(savePath);
     reply->deleteLater();
 }

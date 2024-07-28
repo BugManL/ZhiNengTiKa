@@ -1,4 +1,4 @@
-QT += widgets gui quick quickcontrols2 webenginequick sensors pdf
+QT += widgets gui quick quickcontrols2 webenginequick sensors
 
 TEMPLATE = lib
 

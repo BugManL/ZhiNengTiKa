@@ -7,9 +7,3 @@
 [submodule "3rd/zxing-cpp"]
 	path = 3rd/zxing-cpp
 	url = git@github.com:zxing-cpp/zxing-cpp.git
-[submodule "3rd/zlib"]
-	path = 3rd/zlib
-	url = git@github.com:madler/zlib.git
-[submodule "3rd/quazip"]
-	path = 3rd/quazip
-	url = git@github.com:stachenov/quazip.git

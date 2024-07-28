@@ -2,7 +2,6 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Dialogs
-import QtQuick.Pdf
 import TemplateFetcher
 import MultipleSubjectsTemplateListModelList
 import QMLUtils
@@ -447,33 +446,9 @@ ApplicationWindow {
         FileTreeList {
             onFileClicked: function(filePath) {
                 console.log(filePath)
-                if(filePath.endsWith("pdf"))
-                {
-                    stackView.push(pdfReader, {"source": "file:///" + filePath})
-                }
-                else
-                {
-                    QMLUtils.openLocalFile(filePath)
-                }
+                QMLUtils.openLocalFile(filePath)
             }
         }
-    }
-
-    Component {
-        id: pdfReader
-        PdfMultiPageView {
-            property string source: ""
-            document: PdfDocument { source: source }
-        }
-
-        // Item {
-        //     property string source: ""
-        //     Text {
-        //         anchors.centerIn: parent
-        //         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-        //         text: "pdf显示暂未实现"
-        //     }
-        // }
     }
 
     Component {

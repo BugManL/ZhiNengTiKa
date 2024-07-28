@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 13.0.2, 2024-07-28T16:44:14. -->
+<!-- Written by QtCreator 13.0.2, 2024-07-28T17:15:58. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -456,7 +456,7 @@
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="bool" key="PE.EnvironmentAspect.PrintOnRun">false</value>
     <value type="QString" key="PerfRecordArgsId">-e cpu-cycles --call-graph &quot;dwarf,4096&quot; -F 250</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">ZhiNengTiKaLauncher</value>
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.AndroidRunConfiguration:D:/Users/LFWQSP2641/Documents/source/Qt/ZhiNengTiKa/ZhiNengTiKaLauncher/ZhiNengTiKaLauncher.pro</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/Users/LFWQSP2641/Documents/source/Qt/ZhiNengTiKa/ZhiNengTiKaLauncher/ZhiNengTiKaLauncher.pro</value>
     <value type="bool" key="ProjectExplorer.RunConfiguration.Customized">false</value>
