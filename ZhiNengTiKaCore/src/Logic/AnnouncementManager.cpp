@@ -1,20 +1,20 @@
 #include "AnnouncementManager.h"
-#include "AnnouncementModel.h"
+
 #include "../Singleton/Network.h"
 #include "../StaticClass/Global.h"
+#include "AnnouncementModel.h"
 
 AnnouncementManager::AnnouncementManager(QObject *parent)
-    : QObject{parent},
+    : QObject{ parent },
       announcementModel(new AnnouncementModel(this))
 {
-
 }
 
 void AnnouncementManager::obtainAnnouncement()
 {
     auto reply(Network::getGlobalNetworkManager()->getByStrUrl(QStringLiteral("Announcement").prepend(DATABASE_DOMAIN)));
     connect(reply, &QNetworkReply::finished, this, [this, reply]
-    {
+            {
         if(reply->error() != QNetworkReply::NoError)
         {
             emit error(reply->errorString());
@@ -22,13 +22,12 @@ void AnnouncementManager::obtainAnnouncement()
             return;
         }
         analysisRawData(reply->readAll());
-        reply->deleteLater();
-    });
+        reply->deleteLater(); });
 }
 
 void AnnouncementManager::markAnnouncementAsRead(int index)
 {
-    if(announcementModel->readList[index] == true)
+    if (announcementModel->readList[index] == true)
         return;
     announcementModel->readList[index] = true;
     const auto title(announcementModel->titleList.at(index));
@@ -47,8 +46,8 @@ AnnouncementModel *AnnouncementManager::getAnnouncementModel() const
 
 void AnnouncementManager::analysisRawData(const QByteArray &data)
 {
-    auto compareVersion([](const QString & version1, const QString & version2)
-    {
+    auto compareVersion([](const QString &version1, const QString &version2)
+                        {
         QStringList list1 = version1.split(".");
         QStringList list2 = version2.split(".");
         if(list1.size() >= 3 && list2.size() >= 3)
@@ -64,17 +63,16 @@ void AnnouncementManager::analysisRawData(const QByteArray &data)
                 return -1;
             }
         }
-        return 0;
-    });
+        return 0; });
 
     QJsonParseError ok;
     const auto jsonDocument(QJsonDocument::fromJson(data, &ok));
-    if(ok.error != QJsonParseError::NoError)
+    if (ok.error != QJsonParseError::NoError)
     {
         emit error(ok.errorString());
         return;
     }
-    if(!jsonDocument.isArray())
+    if (!jsonDocument.isArray())
     {
         emit error(QStringLiteral("源数据不为JsonArray"));
         return;
@@ -84,11 +82,11 @@ void AnnouncementManager::analysisRawData(const QByteArray &data)
     QList<bool> readList;
     QStringList announcementHashList;
     jsonArray = jsonDocument.array();
-    for(const auto &i : qAsConst(jsonArray))
+    for (const auto &i : std::as_const(jsonArray))
     {
         const auto jsonObject(i.toObject());
         const auto platform(jsonObject.value(QStringLiteral("platform")).toString().toLower());
-        if(platform != QSysInfo::productType().toLower() && platform != QStringLiteral("all") && (!platform.isEmpty()))
+        if (platform != QSysInfo::productType().toLower() && platform != QStringLiteral("all") && (!platform.isEmpty()))
         {
             continue;
         }
@@ -98,7 +96,7 @@ void AnnouncementManager::analysisRawData(const QByteArray &data)
         bool pass((result == 0 && versionComparisonMethod.contains(QStringLiteral("="))) ||
                   (result < 0 && versionComparisonMethod.contains(QStringLiteral("<"))) ||
                   (result > 0 && versionComparisonMethod.contains(QStringLiteral(">"))));
-        if(!pass)
+        if (!pass)
         {
             continue;
         }
@@ -111,13 +109,13 @@ void AnnouncementManager::analysisRawData(const QByteArray &data)
 
     QStringList localAnnouncementAsReadHashList;
     QFile file(Global::configPath().append(QStringLiteral("/AnnouncementAsRead")));
-    if(file.size() > 0)
+    if (file.size() > 0)
     {
         file.open(QFile::ReadOnly);
         while (!file.atEnd())
         {
             auto hash(file.readLine());
-            if(hash.endsWith(QByteArrayLiteral("\n")))
+            if (hash.endsWith(QByteArrayLiteral("\n")))
                 hash.resize(hash.size() - 1);
             localAnnouncementAsReadHashList.append(hash);
         }
@@ -125,9 +123,9 @@ void AnnouncementManager::analysisRawData(const QByteArray &data)
     }
 
     QStringList announcementAsReadHashList;
-    for(const auto &i : announcementHashList)
+    for (const auto &i : announcementHashList)
     {
-        if(localAnnouncementAsReadHashList.contains(i))
+        if (localAnnouncementAsReadHashList.contains(i))
         {
             readList.append(true);
             announcementAsReadHashList.append(i);
@@ -139,7 +137,7 @@ void AnnouncementManager::analysisRawData(const QByteArray &data)
     }
 
     file.open(QFile::WriteOnly);
-    for(const auto &i : announcementAsReadHashList)
+    for (const auto &i : announcementAsReadHashList)
     {
         file.write(i.toUtf8());
         file.write(QByteArrayLiteral("\n"));
@@ -148,13 +146,13 @@ void AnnouncementManager::analysisRawData(const QByteArray &data)
 
     int newCount(0);
 
-    for(const auto &i : readList)
+    for (const auto &i : readList)
     {
-        if(!i)
+        if (!i)
             ++newCount;
     }
 
-    if(!announcementModel->titleList.isEmpty())
+    if (!announcementModel->titleList.isEmpty())
     {
         announcementModel->beginRemoveRows(QModelIndex(), 0, announcementModel->titleList.size() - 1);
         announcementModel->titleList.clear();
@@ -162,7 +160,7 @@ void AnnouncementManager::analysisRawData(const QByteArray &data)
         announcementModel->readList.clear();
         announcementModel->endRemoveRows();
     }
-    if(!titleList.isEmpty())
+    if (!titleList.isEmpty())
     {
         announcementModel->beginInsertRows(QModelIndex(), 0, titleList.size() - 1);
         announcementModel->titleList = std::move(titleList);
