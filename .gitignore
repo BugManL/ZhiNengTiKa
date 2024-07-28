@@ -3,4 +3,4 @@ debug/*
 release/*
 build/*
 .qmake.stash
-*/build/*
+*.user
