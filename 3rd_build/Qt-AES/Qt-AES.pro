@@ -14,14 +14,14 @@ CONFIG += c++17
 
 # DEFINES += QtAES_EXPORTS
 
-INCLUDEPATH += $$PWD/src/Qt-AES
+INCLUDEPATH += $$PWD/src
 
 HEADERS += \
-    $$PWD/../3rd/Qt-AES/qaesencryption.h \
-    # $$PWD/src/Qt-AES/qtaes_export.h
+    $$PWD/../../3rd/Qt-AES/qaesencryption.h \
+    # $$PWD/src/qtaes_export.h
 
 SOURCES += \
-    $$PWD/../3rd/Qt-AES/qaesencryption.cpp
+    $$PWD/../../3rd/Qt-AES/qaesencryption.cpp
 
 # Default rules for deployment.
 unix {

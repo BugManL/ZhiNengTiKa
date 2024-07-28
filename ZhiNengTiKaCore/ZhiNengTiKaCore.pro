@@ -110,3 +110,29 @@ SOURCES += \
 RESOURCES += \
     $$PWD/Resource/Resource.qrc \
     $$PWD/Resource/Template.qrc
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../3rd_build/Qt-AES/release/ -lqt_aes
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../3rd_build/Qt-AES/debug/ -lqt_aes
+else:unix: LIBS += -L$$OUT_PWD/../3rd_build/Qt-AES/ -lqt_aes
+
+INCLUDEPATH += $$PWD/../3rd_build/Qt-AES
+DEPENDPATH += $$PWD/../3rd_build/Qt-AES
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/Qt-AES/release/libqt_aes.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/Qt-AES/debug/libqt_aes.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/Qt-AES/release/qt_aes.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/Qt-AES/debug/qt_aes.lib
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/Qt-AES/libqt_aes.a
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../3rd_build/zxing-cpp/release/ -lzxing
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../3rd_build/zxing-cpp/debug/ -lzxing
+else:unix: LIBS += -L$$OUT_PWD/../3rd_build/zxing-cpp/ -lzxing
+
+INCLUDEPATH += $$PWD/../3rd_build/zxing-cpp
+DEPENDPATH += $$PWD/../3rd_build/zxing-cpp
+
+win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/zxing-cpp/release/libzxing.a
+else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/zxing-cpp/debug/libzxing.a
+else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/zxing-cpp/release/zxing.lib
+else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/zxing-cpp/debug/zxing.lib
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/zxing-cpp/libzxing.a
