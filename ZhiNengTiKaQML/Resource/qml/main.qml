@@ -174,7 +174,7 @@ ApplicationWindow {
                         widgetSizeRatio: 0.5
                         iconSource: "qrc:/svg/icon/qrcode.svg"
                         buttonText: "扫码"
-                        backgroundColor: QMLUtils.generateRandomBrightColor()
+                        backgroundColor: QMLUtils.generateRandomPastelColor()
                         onClickedLeft: {
                             QMLUtils.requestCameraPermission()
                             stackView.push(qrCodeScannerWidgetComponent)
@@ -191,7 +191,7 @@ ApplicationWindow {
                             widgetSizeRatio: 0.5
                             iconSource: "qrc:/svg/icon/list.svg"
                             buttonText: "列表"
-                            backgroundColor: QMLUtils.generateRandomBrightColor()
+                            backgroundColor: QMLUtils.generateRandomPastelColor()
                             onClickedLeft: {
                                 stackView.push(selectWidgetComponent)
                             }
@@ -203,7 +203,7 @@ ApplicationWindow {
                             widgetSizeRatio: 0.5
                             iconSource: "qrc:/svg/icon/document.svg"
                             buttonText: "资源"
-                            backgroundColor: QMLUtils.generateRandomBrightColor()
+                            backgroundColor: QMLUtils.generateRandomPastelColor()
                             onClickedLeft: stackView.push(resourceFileWidgetComponent)
                         }
                         IconButton {
@@ -213,7 +213,7 @@ ApplicationWindow {
                             widgetSizeRatio: 0.5
                             iconSource: "qrc:/svg/icon/search.svg"
                             buttonText: "搜素"
-                            backgroundColor: QMLUtils.generateRandomBrightColor()
+                            backgroundColor: QMLUtils.generateRandomPastelColor()
                             onClickedLeft: {
                                 stackView.push(searchWidgetComponent)
                             }
@@ -234,7 +234,7 @@ ApplicationWindow {
                             widgetSizeRatio: 0.5
                             iconSource: "qrc:/svg/icon/megaphone.svg"
                             buttonText: "公告"
-                            backgroundColor: QMLUtils.generateRandomBrightColor()
+                            backgroundColor: QMLUtils.generateRandomPastelColor()
                             onClickedLeft: {
                                 stackView.push(announcementListView)
                             }
@@ -246,7 +246,7 @@ ApplicationWindow {
                             widgetSizeRatio: 0.5
                             iconSource: "qrc:/svg/icon/settings.svg"
                             buttonText: "设置"
-                            backgroundColor: QMLUtils.generateRandomBrightColor()
+                            backgroundColor: QMLUtils.generateRandomPastelColor()
                             onClickedLeft: {
                                 enabled = false
                                 stackView.push("qrc:/qml/SettingWidget.qml", {builtInStyles: applicationWindow.builtInStyles})

@@ -20,13 +20,16 @@ QColor QMLUtils::generateRandomColor()
     return QColor(red, green, blue);
 }
 
-QColor QMLUtils::generateRandomBrightColor()
+QColor QMLUtils::generateRandomPastelColor()
 {
-    int red = QRandomGenerator::global()->bounded(128, 256);
-    int green = QRandomGenerator::global()->bounded(128, 256);
-    int blue = QRandomGenerator::global()->bounded(128, 256);
+    int h = QRandomGenerator::global()->bounded(360);
+    int s = QRandomGenerator::global()->bounded(25, 96);
+    int l = QRandomGenerator::global()->bounded(85, 96);
 
-    return QColor(red, green, blue);
+    QColor color;
+    color.setHsl(h, s, l);
+
+    return color;
 }
 
 QString QMLUtils::getResourceFilePath()

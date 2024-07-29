@@ -8,7 +8,7 @@ class QMLUtils : public QObject
 public:
     explicit QMLUtils(QObject *parent = nullptr);
     Q_INVOKABLE QColor generateRandomColor();
-    Q_INVOKABLE QColor generateRandomBrightColor();
+    Q_INVOKABLE QColor generateRandomPastelColor();
     Q_INVOKABLE QString getResourceFilePath();
     Q_INVOKABLE bool openLocalFile(const QString &path);
     Q_INVOKABLE bool requestCameraPermission();
