@@ -1,8 +1,9 @@
 #include "AnnouncementManager.h"
 
+#include "AnnouncementModel.h"
+#include "src/Logic/Version.h"
 #include "src/Singleton/Network.h"
 #include "src/StaticClass/Global.h"
-#include "AnnouncementModel.h"
 
 AnnouncementManager::AnnouncementManager(QObject *parent)
     : QObject{ parent },
@@ -48,22 +49,14 @@ void AnnouncementManager::analysisRawData(const QByteArray &data)
 {
     auto compareVersion([](const QString &version1, const QString &version2)
                         {
-        QStringList list1 = version1.split(".");
-        QStringList list2 = version2.split(".");
-        if(list1.size() >= 3 && list2.size() >= 3)
-        {
-            qint32 ver1 = (list1.at(0).toInt() << 16) | (list1.at(1).toInt() << 8) | list1.at(2).toInt();
-            qint32 ver2 = (list2.at(0).toInt() << 16) | (list2.at(1).toInt() << 8) | list2.at(2).toInt();
+        Version ver1(version1);
+        Version ver2(version2);
             if(ver1 > ver2)
-            {
                 return 1;
-            }
             else if(ver1 < ver2)
-            {
                 return -1;
-            }
-        }
-        return 0; });
+            else
+                return 0; });
 
     QJsonParseError ok;
     const auto jsonDocument(QJsonDocument::fromJson(data, &ok));

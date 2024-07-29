@@ -50,7 +50,6 @@ HEADERS += \
     $$PWD/src/StaticClass/XinjiaoyuEncryptioner.h \
     $$PWD/src/StaticClass/XinjiaoyuNetwork.h \
     $$PWD/src/ZhiNengTiKaCore_global.h \
-    $$PWD/src/ZhiNengTiKaCoreVersion.h \
     $$PWD/src/ZxingCpp/ZXingPosition.h \
     $$PWD/src/ZxingCpp/ZXingReader.h \
     $$PWD/src/ZxingCpp/ZXingResult.h
@@ -81,7 +80,6 @@ SOURCES += \
     $$PWD/src/StaticClass/Global.cpp \
     $$PWD/src/StaticClass/XinjiaoyuEncryptioner.cpp \
     $$PWD/src/StaticClass/XinjiaoyuNetwork.cpp \
-    $$PWD/src/ZhiNengTiKaCoreVersion.cpp \
     $$PWD/src/ZxingCpp/ZXingPosition.cpp \
     $$PWD/src/ZxingCpp/ZXingReader.cpp \
     $$PWD/src/ZxingCpp/ZXingResult.cpp
