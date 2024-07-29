@@ -1,10 +1,10 @@
 #include "ZAccelerationToOpacityConverter.h"
-#include "AccelerometerSingleton.h"
+
+#include <QAccelerometer>
 
 ZAccelerationToOpacityConverter::ZAccelerationToOpacityConverter(QObject *parent)
-    : QThread{parent}
+    : QThread{ parent }
 {
-
 }
 
 void ZAccelerationToOpacityConverter::start(Priority priority)
@@ -38,12 +38,13 @@ void ZAccelerationToOpacityConverter::setInterval(int newInterval)
 
 void ZAccelerationToOpacityConverter::run()
 {
-    while(canRun)
+    QAccelerometer accelerometer;
+    while (canRun)
     {
-        if(this->interval > 0)
+        if (this->interval > 0)
             QThread::msleep(this->interval);
-        const auto reading(AccelerometerSingleton::getAccelerometerSingleton()->reading());
-        if(reading != nullptr)
+        const auto reading(accelerometer.reading());
+        if (reading != nullptr)
         {
             const auto opacity(convertZAccelerationToOpacity(reading->z()));
             emit opacityChanged(opacity);
@@ -51,7 +52,7 @@ void ZAccelerationToOpacityConverter::run()
         else
         {
             ++tryCount;
-            if(tryCount > maxTryCount)
+            if (tryCount > maxTryCount)
             {
                 qDebug() << Q_FUNC_INFO << QStringLiteral("reading != nullptr & tryCount > maxTryCount, stop thread");
                 canRun = false;

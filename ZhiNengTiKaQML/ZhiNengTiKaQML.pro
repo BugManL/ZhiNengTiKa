@@ -11,7 +11,6 @@ TEMPLATE = app
 DEFINES += ZHINENGTIKAQML
 
 HEADERS += \
-    $$PWD/src/QMLIntermediary/AccelerometerSingleton.h \
     $$PWD/src/QMLIntermediary/AnimeImageProvider.h \
     $$PWD/src/QMLIntermediary/MultipleSubjectsTemplateListModelListSingleton.h \
     $$PWD/src/QMLIntermediary/QMLUtils.h \
@@ -19,7 +18,6 @@ HEADERS += \
     $$PWD/src/QMLIntermediary/ZAccelerationToOpacityConverter.h
 
 SOURCES += \
-    $$PWD/src/QMLIntermediary/AccelerometerSingleton.cpp \
     $$PWD/src/QMLIntermediary/AnimeImageProvider.cpp \
     $$PWD/src/QMLIntermediary/MultipleSubjectsTemplateListModelListSingleton.cpp \
     $$PWD/src/QMLIntermediary/QMLUtils.cpp \

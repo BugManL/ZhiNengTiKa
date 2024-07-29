@@ -50,7 +50,11 @@ void AnimeImageProvider::fillCache(int index)
     // 无论是copy还是啥的, 都无法避免
 #if 1
     const auto url(replaceRandomNumbers(Settings::getSingletonSettings()->getAnimeImageUrl()));
-    if (url == QStringLiteral("^SpecialRule-kkloli^"))
+    if (url.isEmpty())
+    {
+        return;
+    }
+    else if (url == QStringLiteral("^SpecialRule-kkloli^"))
     {
         auto reply(Network::getGlobalNetworkManager()->getByStrUrl(QStringLiteral("https://www.ttloli.com/2nd-love.html")));
         fillCacheHash.insert(reply, index);

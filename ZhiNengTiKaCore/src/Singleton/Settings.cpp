@@ -1,8 +1,8 @@
 #include "Settings.h"
 
+#include "src/Logic/UserData.h"
 #include "src/StaticClass/CallAndroidNativeComponent.h"
 #include "src/StaticClass/Global.h"
-#include "src/Logic/UserData.h"
 
 Q_GLOBAL_STATIC(Settings, singletonSettings)
 
@@ -49,13 +49,7 @@ Settings::Settings(QObject *parent)
     font = settingJsonObject.value(QStringLiteral("font")).toString();
     qmlStyle = settingJsonObject.value(QStringLiteral("qmlStyle")).toString();
 
-    uuid = settingJsonObject.value(QStringLiteral("uuid")).toString();
-    if (uuid.isEmpty())
-    {
-        resetUuid();
-    }
-
-    animeImageUrl = settingJsonObject.value(QStringLiteral("animeImageUrl")).toString(animeImageUrlList.at(0).second);
+    animeImageUrl = settingJsonObject.value(QStringLiteral("animeImageUrl")).toString();
 }
 
 AccountManager *Settings::getAccountManager() const
@@ -145,46 +139,6 @@ void Settings::resetQmlStyle()
     setQmlStyle(QString{});
 }
 
-QString Settings::getUuid() const
-{
-    return uuid;
-}
-
-void Settings::setUuid(const QString &newUuid)
-{
-    if (uuid == newUuid)
-        return;
-    uuid = newUuid;
-    emit uuidChanged();
-}
-
-void Settings::resetUuid()
-{
-#ifdef Q_OS_ANDROID
-    const auto androidId(CallAndroidNativeComponent::getAndroidId());
-    const auto bootUniqueId(QSysInfo::bootUniqueId());
-    QString uniqueId;
-    if (!androidId.isEmpty() && androidId != QStringLiteral("9774d56d682e549c"))
-    {
-        uniqueId = androidId;
-    }
-    else if (!bootUniqueId.isEmpty())
-    {
-        uniqueId = bootUniqueId;
-    }
-    if (!uniqueId.isEmpty())
-    {
-        setUuid(QUuid::createUuidV5(QUuid(), uniqueId).toString(QUuid::WithoutBraces));
-    }
-    else
-    {
-        setUuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
-    }
-#else  // Q_OS_ANDROID
-    setUuid(QUuid::createUuid().toString(QUuid::WithoutBraces));
-#endif // Q_OS_ANDROID
-}
-
 void Settings::saveToFile() const
 {
     QJsonObject settingJsonObject;
@@ -209,8 +163,6 @@ void Settings::saveToFile() const
     settingJsonObject.insert(QStringLiteral("font"), font);
 
     settingJsonObject.insert(QStringLiteral("qmlStyle"), qmlStyle);
-
-    settingJsonObject.insert(QStringLiteral("uuid"), uuid);
 
     settingJsonObject.insert(QStringLiteral("animeImageUrl"), animeImageUrl);
 
