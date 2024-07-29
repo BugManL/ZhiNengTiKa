@@ -16,6 +16,8 @@
         <file>qml/DownloadResourceFileWidget.qml</file>
         <file>qml/FileTreeList.qml</file>
         <file>qml/NormalMessageDialog.qml</file>
+        <file>qml/+android/CompatibleWebView.qml</file>
+        <file>qml/CompatibleWebView.qml</file>
     </qresource>
     <qresource prefix="/svg">
         <file>icon/barcode-scan.svg</file>

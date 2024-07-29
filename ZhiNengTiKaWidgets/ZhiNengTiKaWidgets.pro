@@ -1,6 +1,3 @@
-VERSION = 3.0.2
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-
 include($$PWD/../precompile_header/precompile_header.pri)
 include($$PWD/../ZhiNengTiKaCommon.pri)
 
@@ -52,7 +49,7 @@ SOURCES += \
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../ZhiNengTiKaCore/release/ -lZhiNengTiKaCore
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../ZhiNengTiKaCore/debug/ -lZhiNengTiKaCore
-else:unix: LIBS += -L$$OUT_PWD/../ZhiNengTiKaCore/ -lZhiNengTiKaCore
+else:unix: LIBS += -L$$OUT_PWD/../ZhiNengTiKaCore/ -lZhiNengTiKaCore_$${QT_ARCH}
 
 INCLUDEPATH += $$PWD/../ZhiNengTiKaCore
 DEPENDPATH += $$PWD/../ZhiNengTiKaCore

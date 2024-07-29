@@ -21,7 +21,11 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts);
+#ifdef Q_OS_ANDROID
+    QtWebView::initialize();
+#else
     QtWebEngineQuick::initialize();
+#endif
     QApplication a(argc, argv);
 
     Global::initOnce();

@@ -1,7 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtWebEngine
 //import ImageProvider
 
 Item {
@@ -93,7 +92,7 @@ Item {
 //            }
 //            //transform: Scale { yScale: -1; origin.y: flick.height/2 }
 //        }
-        WebEngineView {
+        CompatibleWebView {
             id: templateDetailWebView
             Layout.fillHeight: true
             Layout.fillWidth: true

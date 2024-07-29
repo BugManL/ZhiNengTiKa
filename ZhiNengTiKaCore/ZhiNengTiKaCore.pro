@@ -1,16 +1,15 @@
-VERSION = 3.0.2
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
-
 include($$PWD/../precompile_header/precompile_header.pri)
 include($$PWD/../ZhiNengTiKaCommon.pri)
 
 TEMPLATE = lib
 
 QT += core network multimedia
+android: QT += core-private
 
 #DEFINES += LIMITED
 
 DEFINES += ZHINENGTIKACORE_LIBRARY
+DEFINES += ZHINENGTIKACORE
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -20,26 +19,6 @@ DEFINES += ZHINENGTIKACORE_LIBRARY
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-CONFIG(debug, debug|release) {
-    win32 {
-        LIBS += -L$$PWD/../3rd_build/build/qt_aes/Windows_MSVC2019_64bit/Debug -lqt_aes
-        LIBS += -L$$PWD/../3rd_build/build/zxing/Windows_MSVC2019_64bit/Debug -lzxing
-    }
-    android {
-        LIBS += -L$$PWD/../3rd_build/build/qt_aes/Android_arm64_v8a/Debug -lqt_aes_arm64-v8a
-        LIBS += -L$$PWD/../3rd_build/build/zxing/Android_arm64_v8a/Debug -lzxing_arm64-v8a
-    }
-} else {
-    win32 {
-        LIBS += -L$$PWD/../3rd_build/build/qt_aes/Windows_MSVC2019_64bit/Release -lqt_aes
-        LIBS += -L$$PWD/../3rd_build/build/zxing/Windows_MSVC2019_64bit/Release -lzxing
-    }
-    android {
-        LIBS += -L$$PWD/../3rd_build/build/qt_aes/Android_arm64_v8a/Release -lqt_aes_arm64-v8a
-        LIBS += -L$$PWD/../3rd_build/build/zxing/Android_arm64_v8a/Release -lzxing_arm64-v8a
-    }
-}
 
 INCLUDEPATH += $$PWD/../3rd/zxing-cpp/core/src
 
@@ -113,7 +92,7 @@ RESOURCES += \
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../3rd_build/Qt-AES/release/ -lqt_aes
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../3rd_build/Qt-AES/debug/ -lqt_aes
-else:unix: LIBS += -L$$OUT_PWD/../3rd_build/Qt-AES/ -lqt_aes
+else:unix: LIBS += -L$$OUT_PWD/../3rd_build/Qt-AES/ -lqt_aes_$${QT_ARCH}
 
 INCLUDEPATH += $$PWD/../3rd_build/Qt-AES
 DEPENDPATH += $$PWD/../3rd_build/Qt-AES
@@ -122,11 +101,11 @@ win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_bui
 else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/Qt-AES/debug/libqt_aes.a
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/Qt-AES/release/qt_aes.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/Qt-AES/debug/qt_aes.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/Qt-AES/libqt_aes.a
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/Qt-AES/libqt_aes_$${QT_ARCH}.a
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../3rd_build/zxing-cpp/release/ -lzxing
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../3rd_build/zxing-cpp/debug/ -lzxing
-else:unix: LIBS += -L$$OUT_PWD/../3rd_build/zxing-cpp/ -lzxing
+else:unix: LIBS += -L$$OUT_PWD/../3rd_build/zxing-cpp/ -lzxing_$${QT_ARCH}
 
 INCLUDEPATH += $$PWD/../3rd_build/zxing-cpp
 DEPENDPATH += $$PWD/../3rd_build/zxing-cpp
@@ -135,4 +114,4 @@ win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_bui
 else:win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/zxing-cpp/debug/libzxing.a
 else:win32:!win32-g++:CONFIG(release, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/zxing-cpp/release/zxing.lib
 else:win32:!win32-g++:CONFIG(debug, debug|release): PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/zxing-cpp/debug/zxing.lib
-else:unix: PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/zxing-cpp/libzxing.a
+else:unix: PRE_TARGETDEPS += $$OUT_PWD/../3rd_build/zxing-cpp/libzxing_$${QT_ARCH}.a

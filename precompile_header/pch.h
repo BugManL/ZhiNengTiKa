@@ -51,14 +51,20 @@
 #ifdef ZHINENGTIKAQML
 #include <QAccelerometer>
 #include <QQuickStyle>
+#ifdef Q_OS_ANDROID
+#include <QtWebView>
+#else // Q_OS_ANDROID
 #include <QtWebEngineQuick>
-#endif
+#endif // Q_OS_ANDROID
+#endif // ZHINENGTIKAQML
 
 #ifdef ZHINENGTIKAWIDGETS
 #include <QVideoWidget>
 #include <QWebEngineView>
-#endif
+#endif // ZHINENGTIKAWIDGETS
 
+#ifdef ZHINENGTIKACORE
 #ifdef Q_OS_ANDROID
 #include <QtCore/private/qandroidextras_p.h>
-#endif
+#endif // Q_OS_ANDROID
+#endif // ZHINENGTIKACORE
