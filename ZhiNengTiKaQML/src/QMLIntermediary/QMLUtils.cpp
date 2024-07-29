@@ -2,6 +2,10 @@
 
 #include "src/StaticClass/Global.h"
 
+#ifdef Q_OS_ANDROID
+#include "src/StaticClass/CallAndroidNativeComponent.h"
+#endif
+
 QMLUtils::QMLUtils(QObject *parent)
     : QObject{ parent }
 {
@@ -33,4 +37,12 @@ QString QMLUtils::getResourceFilePath()
 bool QMLUtils::openLocalFile(const QString &path)
 {
     return QDesktopServices::openUrl(QUrl::fromLocalFile(path));
+}
+
+bool QMLUtils::requestCameraPermission()
+{
+#ifdef Q_OS_ANDROID
+    return CallAndroidNativeComponent::requestCameraPermission();
+#endif
+    return true;
 }

@@ -175,7 +175,10 @@ ApplicationWindow {
                         iconSource: "qrc:/svg/icon/qrcode.svg"
                         buttonText: "扫码"
                         backgroundColor: QMLUtils.generateRandomBrightColor()
-                        onClickedLeft: stackView.push(qrCodeScannerWidgetComponent)
+                        onClickedLeft: {
+                            QMLUtils.requestCameraPermission()
+                            stackView.push(qrCodeScannerWidgetComponent)
+                        }
                     }
                     RowLayout {
                         Layout.fillHeight: true

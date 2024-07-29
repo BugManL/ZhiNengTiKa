@@ -92,4 +92,11 @@ void CallAndroidNativeComponent::showToast(const QString &message, int duration)
         jint(duration));
 }
 
+bool CallAndroidNativeComponent::requestCameraPermission()
+{
+    auto result(QtAndroidPrivate::requestPermission(QStringLiteral("android.permission.CAMERA")));
+    result.waitForFinished();
+    return result.result() == QtAndroidPrivate::PermissionResult::Authorized;
+}
+
 #endif // Q_OS_ANDROID

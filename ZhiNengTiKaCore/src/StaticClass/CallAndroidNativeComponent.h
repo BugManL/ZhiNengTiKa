@@ -7,14 +7,15 @@
 
 namespace CallAndroidNativeComponent
 {
-void ZHINENGTIKACORE_EXPORT openUrl(const QString &url);
-void ZHINENGTIKACORE_EXPORT toSelfSetting();
-QString ZHINENGTIKACORE_EXPORT getCacheDir();
-QString ZHINENGTIKACORE_EXPORT getAndroidId();
-QString ZHINENGTIKACORE_EXPORT getDeviceName();
-int ZHINENGTIKACORE_EXPORT getNetworkState();
-void ZHINENGTIKACORE_EXPORT showToast(const QString &message);
-void ZHINENGTIKACORE_EXPORT showToast(const QString &message, int duration);
+extern void ZHINENGTIKACORE_EXPORT openUrl(const QString &url);
+extern void ZHINENGTIKACORE_EXPORT toSelfSetting();
+extern QString ZHINENGTIKACORE_EXPORT getCacheDir();
+extern QString ZHINENGTIKACORE_EXPORT getAndroidId();
+extern QString ZHINENGTIKACORE_EXPORT getDeviceName();
+extern int ZHINENGTIKACORE_EXPORT getNetworkState();
+extern void ZHINENGTIKACORE_EXPORT showToast(const QString &message);
+extern void ZHINENGTIKACORE_EXPORT showToast(const QString &message, int duration);
+extern bool ZHINENGTIKACORE_EXPORT requestCameraPermission();
 }; // namespace CallAndroidNativeComponent
 
 #endif // Q_OS_ANDROID

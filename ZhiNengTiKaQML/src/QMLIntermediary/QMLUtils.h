@@ -11,6 +11,7 @@ public:
     Q_INVOKABLE QColor generateRandomBrightColor();
     Q_INVOKABLE QString getResourceFilePath();
     Q_INVOKABLE bool openLocalFile(const QString &path);
+    Q_INVOKABLE bool requestCameraPermission();
 public slots:
 signals:
 };
