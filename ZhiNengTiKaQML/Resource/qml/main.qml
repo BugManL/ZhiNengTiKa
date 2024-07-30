@@ -5,7 +5,6 @@ import QtQuick.Dialogs
 import TemplateFetcher
 import MultipleSubjectsTemplateListModelList
 import QMLUtils
-import ZAccelerationToOpacityConverter
 import AnimeImageProvider
 
 ApplicationWindow {
@@ -56,7 +55,7 @@ ApplicationWindow {
             anchors.verticalCenter: parent.verticalCenter
         }
         Component.onCompleted: {
-            console.log(background.color.hslLightness)
+            console.log("ToolBar background color Lightness: " + background.color.hslLightness)
             if(background.color.hslLightness > 0.5)
                 pageDescription.color = "black"
             else
@@ -155,111 +154,131 @@ ApplicationWindow {
                 id: buttonsItem
                 anchors.fill: parent
                 opacity: 0.5
-                NumberAnimation {
-                    id: buttonsItemOpacityAnimation
-                    target: buttonsItem
-                    property: "opacity"
-                    duration: converter.interval > 10 ? (converter.interval / 10 * 9) : 250
-                    easing.type: Easing.InOutQuad
+                property int mode: 0
+                IconButton {
+                    id: qrCodeScannerWidgetButton
+                    anchors.top: parent.top
+                    anchors.left: parent.left
+                    width: buttonsItem.mode > 0 ? buttonsItem.width : (buttonsItem.mode < 0 ? height : buttonsItem.width * 2 / 3)
+                    height: buttonsItem.mode > 0 ? width : (buttonsItem.mode < 0 ? buttonsItem.height : buttonsItem.height * 2 / 3)
+                    radius: 45
+                    widgetSizeRatio: 0.5
+                    iconSource: "qrc:/svg/icon/qrcode.svg"
+                    buttonText: "扫码"
+                    backgroundColor: QMLUtils.generateRandomPastelColor()
+                    onClickedLeft: {
+                        QMLUtils.requestCameraPermission()
+                        stackView.push(qrCodeScannerWidgetComponent)
+                    }
                 }
-                ColumnLayout {
-                    anchors.centerIn: parent
-                    height: parent.height - 10
-                    width: parent.width - 10
-                    IconButton {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: parent.height * 0.67
-                        radius: 45
-                        widgetSizeRatio: 0.5
-                        iconSource: "qrc:/svg/icon/qrcode.svg"
-                        buttonText: "扫码"
-                        backgroundColor: QMLUtils.generateRandomPastelColor()
-                        onClickedLeft: {
-                            QMLUtils.requestCameraPermission()
-                            stackView.push(qrCodeScannerWidgetComponent)
-                        }
+                IconButton {
+                    id: selectWidgetButton
+                    anchors.top: buttonsItem.mode > 0 ? qrCodeScannerWidgetButton.bottom : buttonsItem.top
+                    anchors.left: buttonsItem.mode > 0 ? buttonsItem.left : qrCodeScannerWidgetButton.right
+                    width: buttonsItem.mode > 0 ? buttonsItem.width / 3 : (buttonsItem.mode < 0 ? (buttonsItem.width - qrCodeScannerWidgetButton.width) / 2 : buttonsItem.width / 3)
+                    height: buttonsItem.mode > 0 ? (buttonsItem.height - qrCodeScannerWidgetButton.height) / 2 : (buttonsItem.mode < 0 ? buttonsItem.height / 3 : buttonsItem.height / 3)
+                    radius: 45
+                    widgetSizeRatio: 0.5
+                    iconSource: "qrc:/svg/icon/list.svg"
+                    buttonText: "列表"
+                    backgroundColor: QMLUtils.generateRandomPastelColor()
+                    onClickedLeft: {
+                        stackView.push(selectWidgetComponent)
                     }
-                    RowLayout {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: parent.height * 0.33
-                        IconButton {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            radius: 45
-                            widgetSizeRatio: 0.5
-                            iconSource: "qrc:/svg/icon/list.svg"
-                            buttonText: "列表"
-                            backgroundColor: QMLUtils.generateRandomPastelColor()
-                            onClickedLeft: {
-                                stackView.push(selectWidgetComponent)
-                            }
-                        }
-                        IconButton {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            radius: 45
-                            widgetSizeRatio: 0.5
-                            iconSource: "qrc:/svg/icon/document.svg"
-                            buttonText: "资源"
-                            backgroundColor: QMLUtils.generateRandomPastelColor()
-                            onClickedLeft: stackView.push(downloadResourceFileWidget)
-                        }
-                        IconButton {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            radius: 45
-                            widgetSizeRatio: 0.5
-                            iconSource: "qrc:/svg/icon/search.svg"
-                            buttonText: "搜素"
-                            backgroundColor: QMLUtils.generateRandomPastelColor()
-                            onClickedLeft: {
-                                stackView.push(searchWidgetComponent)
-                            }
-                        }
-                        IconButton {
-                            Rectangle {
-                                id: unreadStateRectangle
-                                anchors {right: parent.right; top: parent.top}
-                                width: 10
-                                height: width
-                                radius: 90
-                                visible: false
-                                color: "red"
-                            }
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            radius: 45
-                            widgetSizeRatio: 0.5
-                            iconSource: "qrc:/svg/icon/megaphone.svg"
-                            buttonText: "公告"
-                            backgroundColor: QMLUtils.generateRandomPastelColor()
-                            onClickedLeft: {
-                                stackView.push(announcementListView)
-                            }
-                        }
-                        IconButton {
-                            Layout.fillHeight: true
-                            Layout.fillWidth: true
-                            radius: 45
-                            widgetSizeRatio: 0.5
-                            iconSource: "qrc:/svg/icon/settings.svg"
-                            buttonText: "设置"
-                            backgroundColor: QMLUtils.generateRandomPastelColor()
-                            onClickedLeft: {
-                                enabled = false
-                                stackView.push("qrc:/qml/SettingWidget.qml", {builtInStyles: applicationWindow.builtInStyles})
-                                enabled = true
-                            }
-                        }
+                }
+                IconButton {
+                    id: downloadResourceWidgetFileButton
+                    anchors.top: buttonsItem.mode > 0 ? qrCodeScannerWidgetButton.bottom : selectWidgetButton.bottom
+                    anchors.left: buttonsItem.mode > 0 ? selectWidgetButton.right : qrCodeScannerWidgetButton.right
+                    width: selectWidgetButton.width
+                    height: selectWidgetButton.height
+                    radius: 45
+                    widgetSizeRatio: 0.5
+                    iconSource: "qrc:/svg/icon/document.svg"
+                    buttonText: "资源"
+                    backgroundColor: QMLUtils.generateRandomPastelColor()
+                    onClickedLeft: stackView.push(downloadResourceFileWidget)
+                }
+                IconButton {
+                    id: searchWidgetButton
+                    anchors.top: buttonsItem.mode > 0 ? qrCodeScannerWidgetButton.bottom : downloadResourceWidgetFileButton.bottom
+                    anchors.left: buttonsItem.mode > 0 ? downloadResourceWidgetFileButton.right : qrCodeScannerWidgetButton.right
+                    width: selectWidgetButton.width
+                    height: selectWidgetButton.height
+                    radius: 45
+                    widgetSizeRatio: 0.5
+                    iconSource: "qrc:/svg/icon/search.svg"
+                    buttonText: "搜素"
+                    backgroundColor: QMLUtils.generateRandomPastelColor()
+                    onClickedLeft: {
+                        stackView.push(searchWidgetComponent)
                     }
+                }
+                IconButton {
+                    id: announcementListViewButton
+                    anchors.top: buttonsItem.mode > 0 ? selectWidgetButton.bottom : (buttonsItem.mode < 0 ? buttonsItem.top : qrCodeScannerWidgetButton.bottom)
+                    anchors.left: buttonsItem.mode < 0 ? selectWidgetButton.right : buttonsItem.left
+                    width: buttonsItem.mode > 0 ? buttonsItem.width / 2 : (buttonsItem.mode < 0 ? (buttonsItem.width - qrCodeScannerWidgetButton.width) / 2 : buttonsItem.width / 3)
+                    height: buttonsItem.mode > 0 ? (buttonsItem.height - qrCodeScannerWidgetButton.height) / 2 : (buttonsItem.mode < 0 ? buttonsItem.height / 2 : buttonsItem.height / 3)
+                    Rectangle {
+                        id: unreadStateRectangle
+                        anchors {right: parent.right; top: parent.top}
+                        width: 10
+                        height: width
+                        radius: 90
+                        visible: false
+                        color: "red"
+                    }
+                    Layout.fillHeight: true
+                    Layout.fillWidth: true
+                    radius: 45
+                    widgetSizeRatio: 0.5
+                    iconSource: "qrc:/svg/icon/megaphone.svg"
+                    buttonText: "公告"
+                    backgroundColor: QMLUtils.generateRandomPastelColor()
+                    onClickedLeft: {
+                        stackView.push(announcementListView)
+                    }
+                }
+                IconButton {
+                    id: settingWidgetButton
+                    anchors.top: buttonsItem.mode > 0 ? selectWidgetButton.bottom : (buttonsItem.mode < 0 ? announcementListViewButton.bottom : qrCodeScannerWidgetButton.bottom)
+                    anchors.left: buttonsItem.mode < 0 ? selectWidgetButton.right : announcementListViewButton.right
+                    width: announcementListViewButton.width
+                    height: announcementListViewButton.height
+                    radius: 45
+                    widgetSizeRatio: 0.5
+                    iconSource: "qrc:/svg/icon/settings.svg"
+                    buttonText: "设置"
+                    backgroundColor: QMLUtils.generateRandomPastelColor()
+                    onClickedLeft: {
+                        enabled = false
+                        stackView.push("qrc:/qml/SettingWidget.qml", {builtInStyles: applicationWindow.builtInStyles})
+                        enabled = true
+                    }
+                }
+                onHeightChanged: {
+                    resetMode()
+                }
+                onWidthChanged: {
+                    resetMode()
+                }
+                function resetMode() {
+                    if (height / width > 1.5)
+                        mode = 1
+                    else if (width / height > 1.5)
+                        mode = -1
+                    else
+                        mode = 0
                 }
             }
             onHeightChanged: {
-                backgroundImageRepeater.getCurrentBackgroundImage().rotated = (height > width && backgroundImageRepeater.getCurrentBackgroundImage().paintedHeight < backgroundImageRepeater.getCurrentBackgroundImage().paintedWidth) || (height < width && backgroundImageRepeater.getCurrentBackgroundImage().paintedHeight > backgroundImageRepeater.getCurrentBackgroundImage().paintedWidth)
+                autoRotateImage()
             }
             onWidthChanged: {
+                autoRotateImage()
+            }
+            function autoRotateImage() {
                 backgroundImageRepeater.getCurrentBackgroundImage().rotated = (height > width && backgroundImageRepeater.getCurrentBackgroundImage().paintedHeight < backgroundImageRepeater.getCurrentBackgroundImage().paintedWidth) || (height < width && backgroundImageRepeater.getCurrentBackgroundImage().paintedHeight > backgroundImageRepeater.getCurrentBackgroundImage().paintedWidth)
             }
         }
@@ -272,12 +291,10 @@ ApplicationWindow {
                     refreshImage()
                     imageRefreshTimer.start()
                 }
-                converter.start()
             }
             else(stackView.depth === 2)
             {
                     headerToolBar.height = headerToolBar.implicitHeight
-                    converter.stop()
                 }
         }
     }
@@ -327,14 +344,6 @@ ApplicationWindow {
         target: AnimeImageProvider
         function onCacheProgress(current, total) {
             console.log("AnimeImageProvider:" + current + "/" + total)
-        }
-    }
-
-    ZAccelerationToOpacityConverter {
-        id: converter
-        onOpacityChanged: function(newOpacity) {
-            buttonsItemOpacityAnimation.to = newOpacity
-            buttonsItemOpacityAnimation.restart()
         }
     }
 
@@ -439,14 +448,6 @@ ApplicationWindow {
                 templateFetcher.handleTemplateRequestByCode(templateCode)
             }
         }
-    }
-
-    Component.onCompleted: {
-        converter.start()
-    }
-    Component.onDestruction: {
-        converter.stop()
-        converter.wait()
     }
 
     function stackViewPopAll() {

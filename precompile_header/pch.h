@@ -49,7 +49,6 @@
 #endif
 
 #ifdef ZHINENGTIKAQML
-#include <QAccelerometer>
 #include <QQuickStyle>
 #ifdef Q_OS_ANDROID
 #include <QtWebView>

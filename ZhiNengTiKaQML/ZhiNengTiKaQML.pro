@@ -1,7 +1,7 @@
 include($$PWD/../precompile_header/precompile_header.pri)
 include($$PWD/../ZhiNengTiKaCommon.pri)
 
-QT += widgets gui quick quickcontrols2 sensors
+QT += widgets gui quick quickcontrols2
 
 android: QT += webview
 else: QT += webenginequick
@@ -15,14 +15,12 @@ HEADERS += \
     $$PWD/src/QMLIntermediary/MultipleSubjectsTemplateListModelListSingleton.h \
     $$PWD/src/QMLIntermediary/QMLUtils.h \
     $$PWD/src/QMLIntermediary/SettingOperator.h \
-    $$PWD/src/QMLIntermediary/ZAccelerationToOpacityConverter.h
 
 SOURCES += \
     $$PWD/src/QMLIntermediary/AnimeImageProvider.cpp \
     $$PWD/src/QMLIntermediary/MultipleSubjectsTemplateListModelListSingleton.cpp \
     $$PWD/src/QMLIntermediary/QMLUtils.cpp \
     $$PWD/src/QMLIntermediary/SettingOperator.cpp \
-    $$PWD/src/QMLIntermediary/ZAccelerationToOpacityConverter.cpp \
     $$PWD/src/mainQML.cpp
 
 RESOURCES += \
