@@ -6,6 +6,7 @@ class Settings;
 class SettingWidget : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit SettingWidget(QWidget *parent = nullptr);
 
@@ -28,7 +29,6 @@ private:
     QPushButton *usedSourceButton;
     QPushButton *openSourceLicenseButton;
     QLabel *currentVersionLabel;
-    QPushButton *checkNewVersionButton;
     QVBoxLayout *layout;
     QPushButton *cleanTempButton;
     QLabel *showTempSize;

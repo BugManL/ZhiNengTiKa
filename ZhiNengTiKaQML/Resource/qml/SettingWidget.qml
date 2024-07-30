@@ -426,7 +426,7 @@ Item {
                         onClicked: messageDialog.show("<p>使用 Qt 框架的跨平台软件,支持 Windows, Android, Linux</p>" +
                                                       "<p>本软件使用<strong>GNU Affero General Public License v3.0</strong>协议开源</p>" +
                                                       "<p>作者:LFWQSP2641( <a href=\"https://github.com/LFWQSP2641\">https://github.com/LFWQSP2641</a> )</p>" +
-                                                      "<p>Copyright © 2022 - 2023 LFWQSP2641.All Rights Reserved.</p>" +
+                                                      "<p>Copyright © 2022 - 2024 LFWQSP2641.All Rights Reserved.</p>" +
                                                       "<p>项目地址: <a href=\"https://github.com/LFWQSP2641/ZhiNengTiKa\">https://github.com/LFWQSP2641/ZhiNengTiKa</a></p>")
                     }
                     Button {

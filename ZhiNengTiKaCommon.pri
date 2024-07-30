@@ -15,7 +15,7 @@ RC_ICONS = $$PWD/ZhiNengTiKaCore/Resource/img/xinjiaoyuico.ico
 
 QMAKE_TARGET_PRODUCT = "ZhiNengTiKa"
 
-QMAKE_TARGET_COPYRIGHT = "Copyright © 2022 - 2023 LFWQSP2641.All Rights Reserved."
+QMAKE_TARGET_COPYRIGHT = "Copyright © 2022 - 2024 LFWQSP2641.All Rights Reserved."
 
 RC_LANG = 0x0004
 
