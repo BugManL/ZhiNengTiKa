@@ -204,7 +204,7 @@ ApplicationWindow {
                             iconSource: "qrc:/svg/icon/document.svg"
                             buttonText: "资源"
                             backgroundColor: QMLUtils.generateRandomPastelColor()
-                            onClickedLeft: stackView.push(resourceFileWidgetComponent)
+                            onClickedLeft: stackView.push(downloadResourceFileWidget)
                         }
                         IconButton {
                             Layout.fillHeight: true
@@ -276,9 +276,9 @@ ApplicationWindow {
             }
             else(stackView.depth === 2)
             {
-                headerToolBar.height = headerToolBar.implicitHeight
-                converter.stop()
-            }
+                    headerToolBar.height = headerToolBar.implicitHeight
+                    converter.stop()
+                }
         }
     }
 
@@ -410,46 +410,8 @@ ApplicationWindow {
     }
 
     Component {
-        id: resourceFileWidgetComponent
-        Item {
-            ColumnLayout {
-                anchors.fill: parent
-                IconButton {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    widgetSizeRatio: 0.5
-                    iconSource: "qrc:/svg/icon/disk.svg"
-                    buttonText: "本地"
-                    onClickedLeft: stackView.push(fileTreeListComponent, {"rootPath": QMLUtils.getResourceFilePath()})
-                }
-                IconButton {
-                    Layout.fillHeight: true
-                    Layout.fillWidth: true
-                    widgetSizeRatio: 0.5
-                    iconSource: "qrc:/svg/icon/download.svg"
-                    buttonText: "下载"
-                    onClickedLeft: stackView.push(downloadResourceFileWidget)
-                }
-            }
-        }
-    }
-
-    Component {
         id: downloadResourceFileWidget
         DownloadResourceFileWidget {
-            onDownloadFinished: function(path) {
-                stackView.push(fileTreeListComponent, {"rootPath": path})
-            }
-        }
-    }
-
-    Component {
-        id: fileTreeListComponent
-        FileTreeList {
-            onFileClicked: function(filePath) {
-                console.log(filePath)
-                QMLUtils.openLocalFile(filePath)
-            }
         }
     }
 
@@ -471,10 +433,6 @@ ApplicationWindow {
         id: qrCodeScannerWidgetComponent
         QRCodeScannerWidget {
             id: qrCodeScannerWidget
-            Component.onCompleted: {
-            }
-            Component.onDestruction: {
-            }
             onScanFinished: function(templateCode){
                 waitingForTemplateDetailWidget = true
                 stackView.pop()

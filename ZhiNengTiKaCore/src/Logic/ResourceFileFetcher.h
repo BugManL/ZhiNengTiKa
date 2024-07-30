@@ -28,14 +28,9 @@ public slots:
     void downloadResourceFile(int index, const QString &subject, const QString &edition, const QString &module);
 
 protected:
-    static const QString resourcePath;
     static QString getResourcePath();
     static QNetworkRequest setRequest(const QUrl &url);
     static QString generateRandomString(qsizetype size = 1);
-#if 0
-    static QString findCommonPath(const QStringList &pathList);
-#endif
-
     QJsonObject catalogDetail;
 
     ResourceFileModel *model;
@@ -60,6 +55,8 @@ signals:
     void resetModelFinished();
     void continueLoadModelFinished();
     void downloadResourceFileFinished(const QString &path);
+
+    void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
 
 private:
     Q_PROPERTY(ResourceFileModel *model READ getModel CONSTANT FINAL)

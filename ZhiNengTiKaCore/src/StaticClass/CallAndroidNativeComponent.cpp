@@ -99,4 +99,11 @@ bool CallAndroidNativeComponent::requestCameraPermission()
     return result.result() == QtAndroidPrivate::PermissionResult::Authorized;
 }
 
+bool CallAndroidNativeComponent::requestStoragePermission()
+{
+    auto result(QtAndroidPrivate::requestPermission(QStringLiteral("android.permission.WRITE_EXTERNAL_STORAGE")));
+    result.waitForFinished();
+    return result.result() == QtAndroidPrivate::PermissionResult::Authorized;
+}
+
 #endif // Q_OS_ANDROID

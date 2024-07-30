@@ -4,7 +4,6 @@
 #include "QMLIntermediary/SettingOperator.h"
 #include "QMLIntermediary/ZAccelerationToOpacityConverter.h"
 #include "src/Logic/AnnouncementManager.h"
-#include "src/Logic/FileTreeModel.h"
 #include "src/Logic/ImageProvider.h"
 #include "src/Logic/QRCodeScanner.h"
 #include "src/Logic/ResourceFileFetcher.h"
@@ -29,8 +28,6 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     Global::initOnce();
-    // 删除图片缓存
-    Global::deleteDir(Global::dataPath().append(QStringLiteral("/Image")));
 
     a.setWindowIcon(QIcon(QStringLiteral(":/ico/xinjiaoyuico.png")));
     a.setApplicationDisplayName(QStringLiteral("智能题卡"));
@@ -85,7 +82,6 @@ int main(int argc, char *argv[])
     qmlRegisterType<ZAccelerationToOpacityConverter>("ZAccelerationToOpacityConverter", 1, 0, "ZAccelerationToOpacityConverter");
     qmlRegisterType<AnnouncementManager>("AnnouncementManager", 1, 0, "AnnouncementManager");
     qmlRegisterType<ResourceFileFetcher>("ResourceFileFetcher", 1, 0, "ResourceFileFetcher");
-    qmlRegisterType<FileTreeModel>("FileTreeModel", 1, 0, "FileTreeModel");
     QQmlApplicationEngine engine;
     engine.addImageProvider(QStringLiteral("AnimeImageProvider"), animeImageProvider);
 

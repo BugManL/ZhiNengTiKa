@@ -3,6 +3,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import Qt.labs.platform
 import ResourceFileFetcher
+import QMLUtils
 
 Item {
     signal downloadFinished(string path)
@@ -30,16 +31,38 @@ Item {
         }
 
         onDownloadResourceFileFinished: function(path) {
+            notification.show("下载完成, 保存在 " + path)
+            resourceFileDownloadProgress.visible = false
             busyIndicator.running = false
             settingItemsLayout.enabled = true
             downloadFinished(path)
         }
+
+        onDownloadProgress: function(bytesReceived, bytesTotal) {
+            resourceFileDownloadProgress.to = bytesTotal
+            resourceFileDownloadProgress.value = bytesReceived
+        }
+    }
+
+    Notification {
+        id: notification
+        maxWidth: parent.width * 2 / 3
+        anchors.centerIn: parent
     }
 
     BusyIndicator {
         id: busyIndicator
         running: true
         anchors.centerIn: parent
+    }
+
+    ProgressBar {
+        id: resourceFileDownloadProgress
+        width: parent.width * 2 / 3
+        visible: false
+        anchors.horizontalCenter: busyIndicator.horizontalCenter
+        anchors.top: busyIndicator.bottom
+        anchors.topMargin: 5
     }
 
     ColumnLayout {
@@ -116,6 +139,8 @@ Item {
                     {
                         settingItemsLayout.enabled = false
                         busyIndicator.running = true
+                        resourceFileDownloadProgress.visible = true
+                        QMLUtils.requestStoragePermission()
                         resourceFileFetcher.downloadResourceFile(index, subjectsTabBar.currentItem.text, editionTabBar.currentItem.text, moduleTabBar.currentItem.text)
                     }
                     resourceFileListView.currentIndex = index
@@ -144,6 +169,8 @@ Item {
             }
         }
     }
+
+
 
     Component.onCompleted: {
         resourceFileFetcher.init()

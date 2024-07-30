@@ -20,12 +20,16 @@ void Global::initOnce()
     dir.mkpath(Global::configPath());
     dir.mkpath(Global::dataPath());
     dir.mkpath(Global::dataPath().append(QStringLiteral("/TemplateFile")));
-    dir.mkpath(Global::dataPath().append(QStringLiteral("/Resource")));
     dir.mkpath(Global::tempPath());
 
     QFile fileUserHistory(Global::dataPath().append(QStringLiteral("/templateList_undefined")));
     if (fileUserHistory.exists())
         fileUserHistory.rename(QStringLiteral("templateList_UserHistory"));
+
+    // 删除图片缓存
+    Global::deleteDir(Global::dataPath().append(QStringLiteral("/Image")));
+    // 删除资源文件
+    Global::deleteDir(Global::dataPath().append(QStringLiteral("/Resource")));
 }
 
 QString Global::configPath()

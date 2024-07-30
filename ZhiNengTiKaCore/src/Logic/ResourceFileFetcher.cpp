@@ -1,10 +1,7 @@
 #include "ResourceFileFetcher.h"
 
 #include "src/Singleton/Network.h"
-#include "src/StaticClass/Global.h"
 #include "src/StaticClass/XinjiaoyuEncryptioner.h"
-
-const QString ResourceFileFetcher::resourcePath = Global::dataPath().append(QStringLiteral("/Resource"));
 
 ResourceFileFetcher::ResourceFileFetcher(QObject *parent)
     : QObject{ parent },
@@ -123,14 +120,21 @@ void ResourceFileFetcher::downloadResourceFile(int index, const QString &subject
     qDebug() << Q_FUNC_INFO;
     const auto object(model->records.at(index).toObject());
     const auto url(object.value(QStringLiteral("resourceUrl")).toString());
+    const auto lastSlashIndex = url.lastIndexOf('/');
+    const QString fileName = url.mid(lastSlashIndex + 1);
     auto reply(Network::getGlobalNetworkManager()->get(QNetworkRequest(url)));
     connect(reply, &QNetworkReply::finished, this, &ResourceFileFetcher::onDownloadFinished);
-    fileNameHash.insert(reply, QStringList() << subject << edition << module);
+    connect(reply, &QNetworkReply::downloadProgress, this, &ResourceFileFetcher::downloadProgress);
+    fileNameHash.insert(reply, QStringList() << subject << edition << module << fileName);
 }
 
 QString ResourceFileFetcher::getResourcePath()
 {
-    return Global::dataPath().append(QStringLiteral("/Resource"));
+#ifdef Q_OS_ANDROID
+    return QStringLiteral("/storage/emulated/0/Download/ZhiNengTiKa");
+#else
+    return QStandardPaths::writableLocation(QStandardPaths::DownloadLocation).append(QStringLiteral("/ZhiNengTiKa"));
+#endif
 }
 
 QNetworkRequest ResourceFileFetcher::setRequest(const QUrl &url)
@@ -173,69 +177,6 @@ QString ResourceFileFetcher::generateRandomString(qsizetype size)
     }
     return randomString;
 }
-
-#if 0
-QString ResourceFileFetcher::findCommonPath(const QStringList &pathList)
-{
-    if (pathList.isEmpty())
-    {
-        // 如果路径列表为空，返回空字符串或其他适当的默认值
-        return getResourcePath();
-    }
-    const auto firstPath(pathList.first());
-    if(pathList.size() == 1)
-    {
-        const auto index(firstPath.lastIndexOf(QStringLiteral("/")));
-        if(index == -1)
-            return getResourcePath();
-        return firstPath.left(index);
-    }
-
-    // 将第一个路径分割为部分
-    QStringList firstPathParts = firstPath.split(QStringLiteral("/"), Qt::SkipEmptyParts);
-
-    // 初始化最终路径
-    QString commonPath;
-
-    // 遍历每个路径部分
-    for (int i = 0; i < firstPathParts.size(); ++i)
-    {
-        QString currentPart = firstPathParts.at(i);
-
-        // 检查其他路径是否具有相同的部分
-        bool allHaveSamePart = true;
-        for (int j = 1; j < pathList.size(); ++j)
-        {
-            QStringList parts = pathList.at(j).split(QStringLiteral("/"), Qt::SkipEmptyParts);
-            if (i >= parts.size() || parts.at(i) != currentPart)
-            {
-                allHaveSamePart = false;
-                break;
-            }
-        }
-
-        if (allHaveSamePart)
-        {
-            // 如果所有路径都有相同的部分，则更新最终路径
-            if (!commonPath.isEmpty())
-            {
-                commonPath.append(QStringLiteral("/"));
-            }
-            commonPath.append(currentPart);
-        }
-        else
-        {
-            // 如果找到第一个不同的部分，退出循环
-            break;
-        }
-    }
-
-    if(firstPath.startsWith(QStringLiteral("/")))
-        commonPath.prepend(QStringLiteral("/"));
-
-    return commonPath;
-}
-#endif
 
 ResourceFileModel *ResourceFileFetcher::getModel() const
 {
@@ -480,7 +421,9 @@ void ResourceFileFetcher::onDownloadFinished()
     }
 
     auto savePath(getResourcePath());
-    for (const auto &i : fileNameHash.take(reply))
+    auto filePath(fileNameHash.take(reply));
+    const auto fileName(filePath.takeLast());
+    for (const auto &i : filePath)
     {
         if (!i.isEmpty())
         {
@@ -488,10 +431,13 @@ void ResourceFileFetcher::onDownloadFinished()
             savePath.append(i);
         }
     }
-    savePath.append(QStringLiteral(".zip"));
+    QDir().mkpath(savePath);
+    savePath.append(QStringLiteral("/"));
+    savePath.append(fileName);
     QFile file(savePath);
     file.open(QFile::WriteOnly);
-    file.write(rawData);
+    if (file.write(rawData) == -1)
+        emit error(QStringLiteral("写入文件失败"));
     file.close();
 
     emit downloadResourceFileFinished(savePath);

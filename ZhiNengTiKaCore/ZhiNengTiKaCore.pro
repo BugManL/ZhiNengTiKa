@@ -27,8 +27,6 @@ HEADERS += \
     $$PWD/src/Logic/AnnouncementManager.h \
     $$PWD/src/Logic/AnnouncementModel.h \
     $$PWD/src/Logic/AnswerDetailData.hpp \
-    $$PWD/src/Logic/FileTreeItem.h \
-    $$PWD/src/Logic/FileTreeModel.h \
     $$PWD/src/Logic/ImageProvider.h \
     $$PWD/src/Logic/MultipleSubjectsTemplateListModelList.h \
     $$PWD/src/Logic/NetworkAccessManagerBlockable.h \
@@ -58,8 +56,6 @@ SOURCES += \
     $$PWD/src/Logic/AccountManager.cpp \
     $$PWD/src/Logic/AnnouncementManager.cpp \
     $$PWD/src/Logic/AnnouncementModel.cpp \
-    $$PWD/src/Logic/FileTreeItem.cpp \
-    $$PWD/src/Logic/FileTreeModel.cpp \
     $$PWD/src/Logic/ImageProvider.cpp \
     $$PWD/src/Logic/QRCodeReader.cpp \
     $$PWD/src/Logic/QRCodeScanner.cpp \
