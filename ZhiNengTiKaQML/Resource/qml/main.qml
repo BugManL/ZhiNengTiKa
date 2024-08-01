@@ -351,11 +351,6 @@ ApplicationWindow {
         id: messageDialog
     }
 
-    NormalMessageDialog {
-        id: applicationWindowQuitDialog
-        onAboutToHide: Qt.exit(1)
-    }
-
     TemplateFetcher {
         id: templateFetcher
         onError: function(msg) {

@@ -2,5 +2,6 @@
     <qresource prefix="/ico">
         <file>img/xinjiaoyuico.ico</file>
         <file>img/xinjiaoyuico.png</file>
+        <file>img/loading.svg</file>
     </qresource>
 </RCC>

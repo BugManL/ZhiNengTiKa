@@ -15,8 +15,6 @@
         <file>qml/SingleBlinkingDot.qml</file>
         <file>qml/DownloadResourceFileWidget.qml</file>
         <file>qml/NormalMessageDialog.qml</file>
-        <file>qml/+android/CompatibleWebView.qml</file>
-        <file>qml/CompatibleWebView.qml</file>
         <file>qml/Notification.qml</file>
     </qresource>
     <qresource prefix="/svg">

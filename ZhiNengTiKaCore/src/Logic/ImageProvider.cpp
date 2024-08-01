@@ -8,27 +8,20 @@ ImageProvider::ImageProvider(QObject *parent)
 {
 }
 
-QString ImageProvider::loadHtml(QString html)
+QString ImageProvider::loadHtml(const QString &html)
 {
-    html = html.replace(QStringLiteral("src = '"), QStringLiteral("src='"));
+    currentUuid = QUuid::createUuid();
+    resetCount();
+    rawData = html;
+    rawData.replace(QStringLiteral("\""), QStringLiteral("'"));
+    rawData.replace(QStringLiteral("src = '"), QStringLiteral("src='"));
     const QStringList imageSuffix({ QStringLiteral(".jpg"),
                                     QStringLiteral(".png"),
                                     QStringLiteral(".jpeg") });
-    for (auto i{ html.indexOf(QStringLiteral("http")) }; i != -1; i = html.indexOf(QStringLiteral("http"), i + 1))
+    for (auto i{ rawData.indexOf(QStringLiteral("http")) }; i != -1; i = rawData.indexOf(QStringLiteral("http"), i + 1))
     {
-        // NOTE 因为不知道用的是单引号还是双引号
-        // NOTE 并且一定有单引号或双引号
-        qsizetype endIndex;
-        for (auto j{ i + 10 };; ++j)
-        {
-            auto str{ html.at(j) };
-            if (str == QString(QStringLiteral("'")) || str == QString(QStringLiteral("\"")))
-            {
-                endIndex = j - 1;
-                break;
-            }
-        }
-        const auto imageUrl(html.sliced(i, endIndex - i + 1));
+        const auto endIndex(rawData.indexOf(QStringLiteral("'"), i + 10) - 1);
+        const auto imageUrl(rawData.sliced(i, endIndex - i + 1));
         const auto pointIndex(imageUrl.lastIndexOf("."));
         if (pointIndex == -1)
         {
@@ -41,13 +34,35 @@ QString ImageProvider::loadHtml(QString html)
         }
         const QString imageName(QCryptographicHash::hash(imageUrl.toUtf8(), QCryptographicHash::Sha1).toHex() + suffix);
         const QString imagePath(Global::dataPath().append(QStringLiteral("/Image/")).append(imageName));
+        const auto placeholderName(QStringLiteral("qrc:/ico/img/loading.svg?PLACEHOLDERNAMEBEGIN").append(QUuid::createUuid().toString(QUuid::WithoutBraces)).append(QStringLiteral("PLACEHOLDERNAMEEND")));
+        auto info = new ImageFileInfo{ currentUuid, imagePath, placeholderName };
         auto reply(Network::getGlobalNetworkManager()->getByStrUrl(imageUrl));
+        pathHash.insert(reply, info);
         connect(reply, &QNetworkReply::finished, this, &ImageProvider::saveFile);
         ++totalCount;
-        pathHash.insert(reply, imagePath);
-        html.replace(i, endIndex - i + 1, QStringLiteral("file:///").append(imagePath));
+        if (placeholder)
+        {
+            rawData.replace(i, endIndex - i + 1, placeholderName);
+        }
+        else
+        {
+            rawData.replace(i, endIndex - i + 1, QStringLiteral("file:///").append(imagePath));
+        }
     }
-    return html;
+    return rawData;
+}
+
+bool ImageProvider::getPlaceholder() const
+{
+    return placeholder;
+}
+
+void ImageProvider::setPlaceholder(bool newPlaceholder)
+{
+    if (placeholder == newPlaceholder)
+        return;
+    placeholder = newPlaceholder;
+    emit placeholderChanged();
 }
 
 void ImageProvider::resetCount()
@@ -59,14 +74,14 @@ void ImageProvider::resetCount()
 void ImageProvider::saveFile()
 {
     auto reply(qobject_cast<QNetworkReply *>(sender()));
-    const auto filePath(pathHash.take(reply));
+    const auto info(pathHash.take(reply));
     if (reply->error() == QNetworkReply::NoError)
     {
         const auto data(reply->readAll());
         reply->deleteLater();
 
-        QFile file(filePath);
-        if ((!file.open(QFile::ReadOnly)) || (QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5) != QCryptographicHash::hash(data, QCryptographicHash::Md5)))
+        QFile file(info->imagePath);
+        if (!(file.open(QFile::ReadOnly) && (QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5) == QCryptographicHash::hash(data, QCryptographicHash::Md5))))
         {
             file.close();
             file.open(QFile::WriteOnly);
@@ -74,6 +89,18 @@ void ImageProvider::saveFile()
         }
         file.close();
     }
+    if (currentUuid != info->batch)
+    {
+        delete info;
+        return;
+    }
+    if (placeholder)
+    {
+        // TODO 优化, 多次查找, 过于耗时
+        rawData.replace(info->placeholderName, QStringLiteral("file:///").append(info->imagePath));
+        emit textUpdated(rawData);
+    }
+    delete info;
     ++finishedCount;
     emit progress(finishedCount, totalCount);
     if (finishedCount == totalCount)

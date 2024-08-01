@@ -9,6 +9,16 @@ Item {
 
     ImageProvider {
         id: imageProvider
+        placeholder: true
+        onProgress: function(finished, total) {
+            progressLayout.visible = (finished !== total)
+            progressBar.to = total
+            progressBar.value = finished
+            progressText.text = finished + "/" + total
+        }
+        onTextUpdated: function(html) {
+            templateDetailText.setHtmlDirectly(html)
+        }
     }
 
     ColumnLayout {
@@ -34,7 +44,7 @@ Item {
             Layout.fillWidth: true
             Text {
                 id: switchAllButton
-                Layout.preferredWidth: 60
+                Layout.preferredWidth: textMetrics.width
                 horizontalAlignment: Text.AlignHCenter
                 visible: questionsCountsListView.currentIndex !== -1
                 text: "All"
@@ -42,6 +52,11 @@ Item {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     onClicked: questionsCountsListView.currentIndex = -1
+                }
+                TextMetrics {
+                    id: textMetrics
+                    font: switchAllButton.font
+                    text: switchAllButton.text
                 }
             }
 
@@ -60,10 +75,10 @@ Item {
                     }
                 }
                 onCurrentItemChanged: getHtml()
-            }
-            FontMetrics {
-                id: fm
-                font: Qt.application.font
+                FontMetrics {
+                    id: fm
+                    font: Qt.application.font
+                }
             }
         }
 
@@ -78,18 +93,44 @@ Item {
                 width: parent.width
                 wrapMode: Text.Wrap
 
+                property var processedHtml
+
                 Rectangle {
                     z: parent.z - 1
                     anchors.fill: parent
                     color: "white"
                 }
 
-                function setHtml(html) {
-                    templateDetailText.text = imageProvider.loadHtml(html)
-                    flick.contentY = 0
+                function setHtmlAndFlickToTop(html) {
+                    templateDetailText.processedHtml = imageProvider.loadHtml(html)
+                    reload()
+                }
+
+                function setHtmlDirectly(html) {
+                    templateDetailText.text = ""
+                    templateDetailText.text = html
+                }
+
+                function reload() {
+                    templateDetailText.text = ""
+                    templateDetailText.text = templateDetailText.processedHtml
                 }
             }
         }
+
+        RowLayout {
+            id: progressLayout
+            Layout.fillWidth: true
+            visible: false
+            ProgressBar {
+                id: progressBar
+                Layout.fillWidth: true
+            }
+            Text {
+                id: progressText
+            }
+        }
+
     }
 
     Component.onCompleted: {
@@ -99,7 +140,7 @@ Item {
         }
         else
         {
-            templateDetailText.setHtml("<h1>error</h1>")
+            templateDetailText.setHtmlAndFlickToTop("<h1>error</h1>")
         }
     }
     Component.onDestruction: {
@@ -119,15 +160,15 @@ Item {
 
         if(tabBar.currentIndex === 0)
         {
-            templateDetailText.setHtml(templateAnalysisPointer.getAnswerAndAnalysisHtml(questionsCountsListView.currentIndex))
+            templateDetailText.setHtmlAndFlickToTop(templateAnalysisPointer.getAnswerAndAnalysisHtml(questionsCountsListView.currentIndex))
         }
         else if(tabBar.currentIndex === 1)
         {
-            templateDetailText.setHtml(templateAnalysisPointer.getAnswerHtml(questionsCountsListView.currentIndex))
+            templateDetailText.setHtmlAndFlickToTop(templateAnalysisPointer.getAnswerHtml(questionsCountsListView.currentIndex))
         }
         else if(tabBar.currentIndex === 2)
         {
-            templateDetailText.setHtml(templateAnalysisPointer.getQuestionHtml(questionsCountsListView.currentIndex))
+            templateDetailText.setHtmlAndFlickToTop(templateAnalysisPointer.getQuestionHtml(questionsCountsListView.currentIndex))
         }
     }
 }
