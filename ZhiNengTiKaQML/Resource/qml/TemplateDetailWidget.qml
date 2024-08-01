@@ -9,7 +9,6 @@ Item {
 
     ImageProvider {
         id: imageProvider
-        cacheMode: true
     }
 
     ColumnLayout {

@@ -15,11 +15,14 @@ public:
         QPalette palette;
         palette.setColor(QPalette::Window, Qt::white);
         this->setPalette(QPalette());
+        connect(&imageProvider, &ImageProvider::progress, this, &WebView::reload);
+        connect(&imageProvider, &ImageProvider::progress, this, &WebView::progress);
     }
     void setHtml(const QString &html)
     {
         this->html = html;
-        this->QTextBrowser::setHtml(imageProvider.loadHtml(this->html));
+        this->processedHtml = imageProvider.loadHtml(this->html);
+        this->QTextBrowser::setHtml(processedHtml);
     }
     QString getHtml() const
     {
@@ -28,7 +31,21 @@ public:
 
 protected:
     QString html;
+    QString processedHtml;
     ImageProvider imageProvider;
+protected slots:
+    void reload() override
+    {
+        qDebug() << Q_FUNC_INFO;
+        const auto horizontalScrollBarValue(this->horizontalScrollBar()->value());
+        const auto verticalScrollBarValue(this->verticalScrollBar()->value());
+        this->setHtml(processedHtml);
+        this->horizontalScrollBar()->setValue(horizontalScrollBarValue);
+        this->verticalScrollBar()->setValue(verticalScrollBarValue);
+    }
+
+signals:
+    void progress(int finished, int total);
 };
 
 class WebViewWidget : public QWidget
@@ -46,6 +63,8 @@ protected:
     QGridLayout *mainLayout;
     WebView *webView;
     QListWidget *pagesSwitch;
+
+    QProgressBar *progressBar;
 
     QPushButton *openBrowserButton;
 
@@ -65,6 +84,10 @@ public slots:
 protected slots:
     void analysis();
     void switchPage(QListWidgetItem *item);
+
+    void openByBrowser();
+
+    void onWebViewProgress(int finished, int total);
 
 signals:
 

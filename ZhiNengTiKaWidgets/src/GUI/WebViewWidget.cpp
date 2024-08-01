@@ -1,19 +1,16 @@
 #include "WebViewWidget.h"
+
 #include "src/StaticClass/Global.h"
 
 WebViewWidget::WebViewWidget(const TemplateAnalysis &templateAnalysis, QWidget *parent)
-    : QWidget{parent}, templateAnalysis(templateAnalysis)
+    : QWidget{ parent }, templateAnalysis(templateAnalysis)
 {
     mainLayout = new QGridLayout(this);
     webView = new WebView(this);
     pagesSwitch = new QListWidget(this);
+    progressBar = new QProgressBar(this);
+    progressBar->setVisible(false);
     openBrowserButton = new QPushButton("使用浏览器打开", this);
-    connect(openBrowserButton, &QPushButton::clicked, [this]
-    {
-        const QString path{Global::tempPath().append(QStringLiteral("/")).append(QStringLiteral("temp.html"))};
-        saveToFile(path);
-        QDesktopServices::openUrl(QUrl(path, QUrl::TolerantMode));
-    });
 
     pagesSwitch->setFixedHeight(pagesSwitch->fontMetrics().height() * 3 / 2);
     pagesSwitch->setFlow(QListView::LeftToRight);
@@ -28,8 +25,11 @@ WebViewWidget::WebViewWidget(const TemplateAnalysis &templateAnalysis, QWidget *
 #endif // LIMITED
     mainLayout->addWidget(pagesSwitch, 1, 0, 1, 2);
     mainLayout->addWidget(webView, 2, 0, 1, 2);
+    mainLayout->addWidget(progressBar, 3, 0, 1, 2);
 
     connect(pagesSwitch, &QListWidget::itemPressed, this, &WebViewWidget::switchPage);
+    connect(openBrowserButton, &QPushButton::clicked, this, &WebViewWidget::openByBrowser);
+    connect(webView, &WebView::progress, this, &WebViewWidget::onWebViewProgress);
 
     this->templateAnalysisStateChanged = true;
 }
@@ -50,7 +50,7 @@ void WebViewWidget::setTemplateAnalysis(const TemplateAnalysis &newTemplateAnaly
 
 void WebViewWidget::showEvent(QShowEvent *event)
 {
-    if(templateAnalysisStateChanged)
+    if (templateAnalysisStateChanged)
     {
         analysis();
         templateAnalysisStateChanged = false;
@@ -60,9 +60,9 @@ void WebViewWidget::showEvent(QShowEvent *event)
 
 void WebViewWidget::keyPressEvent(QKeyEvent *event)
 {
-    if(event->matches(QKeySequence::Copy))
+    if (event->matches(QKeySequence::Copy))
     {
-        const QString path{Global::tempPath().append(QStringLiteral("/")).append(templateAnalysis.getTemplateName()).append(QStringLiteral(".html"))};
+        const QString path{ Global::tempPath().append(QStringLiteral("/")).append(templateAnalysis.getTemplateName()).append(QStringLiteral(".html")) };
         saveToFile(path);
 
         QList<QUrl> copyfile;
@@ -79,7 +79,7 @@ void WebViewWidget::keyPressEvent(QKeyEvent *event)
 
 void WebViewWidget::analysis()
 {
-    if(!this->templateAnalysis.getValid())
+    if (!this->templateAnalysis.getValid())
     {
         return;
     }
@@ -88,12 +88,12 @@ void WebViewWidget::analysis()
     pagesSwitch->clear();
     pagesSwitch->horizontalScrollBar()->setSliderPosition(0);
     pagesSwitch->verticalScrollBar()->setSliderPosition(0);
-    const auto allItem{new QListWidgetItem(QStringLiteral("ALL"), pagesSwitch)};
+    const auto allItem{ new QListWidgetItem(QStringLiteral("ALL"), pagesSwitch) };
     allItem->setSelected(true);
-    const auto pageStrList{templateAnalysis.getQuestionsCountsStrList()};
+    const auto pageStrList{ templateAnalysis.getQuestionsCountsStrList() };
     pagesSwitch->addItems(pageStrList);
     pageHash.insert(QStringLiteral("ALL"), -1);
-    for(auto i{0}; i < pageStrList.size(); ++i)
+    for (auto i{ 0 }; i < pageStrList.size(); ++i)
     {
         pageHash.insert(pageStrList.at(i), i);
     }
@@ -102,12 +102,11 @@ void WebViewWidget::analysis()
 
 void WebViewWidget::saveToFile(const QString &pathName)
 {
-    if(!this->templateAnalysis.getValid() || pathName.isEmpty())
+    if (!this->templateAnalysis.getValid() || pathName.isEmpty())
     {
         return;
     }
-    const auto fileData
-    {
+    const auto fileData{
         QStringLiteral(
             "<!DOCTYPE html><html><head><meta charset=\"utf-8\">"
             "<title>%0</title>"
@@ -116,9 +115,10 @@ void WebViewWidget::saveToFile(const QString &pathName)
             "<p>本文件由 ZhiNengTiKa 自动生成</p>"
             "<p>软件仓库: <a href=\"%2\">%2</a>.</p>"
             "</footer></body></html>")
-        .arg(templateAnalysis.getTemplateName(),
-             getAnalyzedHtml(currentPageIndex),
-             QStringLiteral("https://github.com/LFWQSP2641/ZhiNengTiKa"))};
+            .arg(templateAnalysis.getTemplateName(),
+                 getAnalyzedHtml(currentPageIndex),
+                 QStringLiteral("https://github.com/LFWQSP2641/ZhiNengTiKa"))
+    };
     QFile file(pathName);
     file.open(QFile::WriteOnly);
     file.write(fileData.toUtf8());
@@ -129,4 +129,18 @@ void WebViewWidget::switchPage(QListWidgetItem *item)
 {
     currentPageIndex = pageHash.value(item->text());
     webView->setHtml(getAnalyzedHtml(currentPageIndex));
+}
+
+void WebViewWidget::openByBrowser()
+{
+    const QString path{ Global::tempPath().append(QStringLiteral("/")).append(this->templateAnalysis.getTemplateName().toHtmlEscaped()).append(QStringLiteral(".html")) };
+    saveToFile(path);
+    QDesktopServices::openUrl(QUrl(path, QUrl::TolerantMode));
+}
+
+void WebViewWidget::onWebViewProgress(int finished, int total)
+{
+    progressBar->setVisible(finished != total);
+    progressBar->setMaximum(total);
+    progressBar->setValue(finished);
 }

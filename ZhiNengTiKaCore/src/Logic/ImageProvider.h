@@ -12,21 +12,18 @@ class ZHINENGTIKACORE_EXPORT ImageProvider : public QObject
 public:
     explicit ImageProvider(QObject *parent = nullptr);
     Q_INVOKABLE QString loadHtml(QString html);
-    bool getCacheMode() const;
-    void setCacheMode(bool newCacheMode);
-    void resetCacheMode();
+public slots:
+    void resetCount();
 
 protected:
-    int runningCount = 0;
-    bool cacheMode = true;
+    int totalCount = 0;
+    int finishedCount = 0;
+    QHash<QNetworkReply *, QString> pathHash;
 protected slots:
-    void saveFile(QNetworkReply *reply, QString *filePath);
+    void saveFile();
 signals:
+    void progress(int finished, int total);
     void finished();
-    void cacheModeChanged();
-
-private:
-    Q_PROPERTY(bool cacheMode READ getCacheMode WRITE setCacheMode RESET resetCacheMode NOTIFY cacheModeChanged)
 };
 
 #endif // IMAGEPROVIDER_H

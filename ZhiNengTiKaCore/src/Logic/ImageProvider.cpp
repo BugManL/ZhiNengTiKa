@@ -39,67 +39,44 @@ QString ImageProvider::loadHtml(QString html)
             continue;
         }
         const QString imageName(QCryptographicHash::hash(imageUrl.toUtf8(), QCryptographicHash::Sha1).toHex() + suffix);
-        auto imagePath(new QString(Global::dataPath().append(QStringLiteral("/Image/")).append(imageName)));
+        const QString imagePath(Global::dataPath().append(QStringLiteral("/Image/")).append(imageName));
         auto reply(Network::getGlobalNetworkManager()->getByStrUrl(imageUrl));
-        ++runningCount;
-        connect(reply, &QNetworkReply::finished, this, [this, imagePath, reply]
-                { saveFile(reply, imagePath); });
-        // 不是cacheMode, 则替换
-        // 否则, 若文件存在, 则替换
-        if ((!cacheMode) || QFile(*imagePath).exists())
-        {
-            html.replace(i, endIndex - i + 1, QStringLiteral("file:///").append(*imagePath));
-        }
+        connect(reply, &QNetworkReply::finished, this, &ImageProvider::saveFile);
+        ++totalCount;
+        pathHash.insert(reply, imagePath);
+        html.replace(i, endIndex - i + 1, QStringLiteral("file:///").append(imagePath));
     }
     return html;
 }
 
-bool ImageProvider::getCacheMode() const
+void ImageProvider::resetCount()
 {
-    return cacheMode;
+    totalCount = 0;
+    finishedCount = 0;
 }
 
-void ImageProvider::setCacheMode(bool newCacheMode)
+void ImageProvider::saveFile()
 {
-    if (cacheMode == newCacheMode)
-        return;
-    cacheMode = newCacheMode;
-    emit cacheModeChanged();
-}
-
-void ImageProvider::resetCacheMode()
-{
-    setCacheMode(false);
-}
-
-void ImageProvider::saveFile(QNetworkReply *reply, QString *filePath)
-{
-    if (reply->error() != QNetworkReply::NoError)
+    auto reply(qobject_cast<QNetworkReply *>(sender()));
+    const auto filePath(pathHash.take(reply));
+    if (reply->error() == QNetworkReply::NoError)
     {
-        --runningCount;
-        if (runningCount == 0)
+        const auto data(reply->readAll());
+        reply->deleteLater();
+
+        QFile file(filePath);
+        if ((!file.open(QFile::ReadOnly)) || (QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5) != QCryptographicHash::hash(data, QCryptographicHash::Md5)))
         {
-            emit finished();
+            file.close();
+            file.open(QFile::WriteOnly);
+            file.write(data);
         }
-        return;
-    }
-    auto hash([](QByteArrayView data)
-              { return QCryptographicHash::hash(data, QCryptographicHash::Md5); });
-
-    const auto data(reply->readAll());
-    reply->deleteLater();
-
-    QFile file(*filePath);
-    if ((!file.open(QFile::ReadOnly)) || (hash(file.readAll()) != hash(data)))
-    {
         file.close();
-        file.open(QFile::WriteOnly);
-        file.write(data);
     }
-    file.close();
-    delete filePath;
-    --runningCount;
-    if (runningCount == 0)
+    ++finishedCount;
+    emit progress(finishedCount, totalCount);
+    qDebug() << Q_FUNC_INFO << finishedCount << totalCount;
+    if (finishedCount == totalCount)
     {
         emit finished();
     }
