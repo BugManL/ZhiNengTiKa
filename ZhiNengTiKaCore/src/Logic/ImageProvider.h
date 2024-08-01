@@ -31,7 +31,7 @@ protected:
     QHash<QNetworkReply *, ImageFileInfo *> pathHash;
     QString rawData;
 protected slots:
-    void saveFile();
+    void onReplyFinished();
     void resetCount();
 signals:
     void progress(int finished, int total);

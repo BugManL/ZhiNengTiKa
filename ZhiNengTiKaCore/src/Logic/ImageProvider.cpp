@@ -38,9 +38,9 @@ QString ImageProvider::loadHtml(const QString &html)
         auto info = new ImageFileInfo{ currentUuid, imagePath, placeholderName };
         auto reply(Network::getGlobalNetworkManager()->getByStrUrl(imageUrl));
         pathHash.insert(reply, info);
-        connect(reply, &QNetworkReply::finished, this, &ImageProvider::saveFile);
+        connect(reply, &QNetworkReply::finished, this, &ImageProvider::onReplyFinished);
         ++totalCount;
-        if (placeholder)
+        if (placeholder && QFile(info->imagePath).exists())
         {
             rawData.replace(i, endIndex - i + 1, placeholderName);
         }
@@ -71,38 +71,59 @@ void ImageProvider::resetCount()
     finishedCount = 0;
 }
 
-void ImageProvider::saveFile()
+void ImageProvider::onReplyFinished()
 {
-    auto reply(qobject_cast<QNetworkReply *>(sender()));
-    const auto info(pathHash.take(reply));
+    // 获取发送信号的QNetworkReply对象
+    auto reply = qobject_cast<QNetworkReply *>(sender());
+
+    // 从哈希表中获取对应的信息
+    const auto info = pathHash.take(reply);
+    bool needReplacePlaceholder = false;
+
+    // 检查网络请求是否成功
     if (reply->error() == QNetworkReply::NoError)
     {
-        const auto data(reply->readAll());
+        // 读取返回的数据
+        const auto data = reply->readAll();
         reply->deleteLater();
 
         QFile file(info->imagePath);
-        if (!(file.open(QFile::ReadOnly) && (QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5) == QCryptographicHash::hash(data, QCryptographicHash::Md5))))
+        needReplacePlaceholder = file.exists() && placeholder;
+
+        // 打开文件并检查哈希值是否匹配
+        if (!(file.open(QFile::ReadOnly) &&
+              (QCryptographicHash::hash(file.readAll(), QCryptographicHash::Md5) ==
+               QCryptographicHash::hash(data, QCryptographicHash::Md5))))
         {
+            // 如果哈希值不匹配，重写文件
             file.close();
             file.open(QFile::WriteOnly);
             file.write(data);
         }
         file.close();
     }
+
+    // 如果当前处理的UUID与批次信息不一致，删除info对象并返回
     if (currentUuid != info->batch)
     {
         delete info;
         return;
     }
-    if (placeholder)
+
+    // 替换占位符并更新文本
+    if (needReplacePlaceholder)
     {
         // TODO 优化, 多次查找, 过于耗时
         rawData.replace(info->placeholderName, QStringLiteral("file:///").append(info->imagePath));
         emit textUpdated(rawData);
     }
+
+    // 删除info对象并更新进度
     delete info;
     ++finishedCount;
     emit progress(finishedCount, totalCount);
+
+    // 如果所有任务完成，发出finished信号
     if (finishedCount == totalCount)
     {
         emit finished();

@@ -14,7 +14,7 @@ public:
     {
         QPalette palette;
         palette.setColor(QPalette::Window, Qt::white);
-        this->setPalette(QPalette());
+        this->setPalette(palette);
         connect(&imageProvider, &ImageProvider::progress, this, &WebView::reload);
         connect(&imageProvider, &ImageProvider::progress, this, &WebView::progress);
     }
