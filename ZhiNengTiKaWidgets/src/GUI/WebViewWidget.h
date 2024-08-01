@@ -36,7 +36,6 @@ protected:
 protected slots:
     void reload() override
     {
-        qDebug() << Q_FUNC_INFO;
         const auto horizontalScrollBarValue(this->horizontalScrollBar()->value());
         const auto verticalScrollBarValue(this->verticalScrollBar()->value());
         this->setHtml(processedHtml);

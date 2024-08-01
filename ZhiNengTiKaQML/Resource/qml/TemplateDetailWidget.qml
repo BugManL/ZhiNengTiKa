@@ -99,7 +99,7 @@ Item {
         }
         else
         {
-            templateDetailText.text = "<h1>error</h1>"
+            templateDetailText.setHtml("<h1>error</h1>")
         }
     }
     Component.onDestruction: {
@@ -119,15 +119,15 @@ Item {
 
         if(tabBar.currentIndex === 0)
         {
-            templateDetailText.text = templateAnalysisPointer.getAnswerAndAnalysisHtml(questionsCountsListView.currentIndex)
+            templateDetailText.setHtml(templateAnalysisPointer.getAnswerAndAnalysisHtml(questionsCountsListView.currentIndex))
         }
         else if(tabBar.currentIndex === 1)
         {
-            templateDetailText.text = templateAnalysisPointer.getAnswerHtml(questionsCountsListView.currentIndex)
+            templateDetailText.setHtml(templateAnalysisPointer.getAnswerHtml(questionsCountsListView.currentIndex))
         }
         else if(tabBar.currentIndex === 2)
         {
-            templateDetailText.text = templateAnalysisPointer.getQuestionHtml(questionsCountsListView.currentIndex)
+            templateDetailText.setHtml(templateAnalysisPointer.getQuestionHtml(questionsCountsListView.currentIndex))
         }
     }
 }

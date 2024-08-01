@@ -135,7 +135,7 @@ void WebViewWidget::openByBrowser()
 {
     const QString path{ Global::tempPath().append(QStringLiteral("/")).append(this->templateAnalysis.getTemplateName().toHtmlEscaped()).append(QStringLiteral(".html")) };
     saveToFile(path);
-    QDesktopServices::openUrl(QUrl(path, QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl::fromLocalFile(path));
 }
 
 void WebViewWidget::onWebViewProgress(int finished, int total)

@@ -10,6 +10,7 @@ ImageProvider::ImageProvider(QObject *parent)
 
 QString ImageProvider::loadHtml(QString html)
 {
+    html = html.replace(QStringLiteral("src = '"), QStringLiteral("src='"));
     const QStringList imageSuffix({ QStringLiteral(".jpg"),
                                     QStringLiteral(".png"),
                                     QStringLiteral(".jpeg") });
@@ -75,7 +76,6 @@ void ImageProvider::saveFile()
     }
     ++finishedCount;
     emit progress(finishedCount, totalCount);
-    qDebug() << Q_FUNC_INFO << finishedCount << totalCount;
     if (finishedCount == totalCount)
     {
         emit finished();
