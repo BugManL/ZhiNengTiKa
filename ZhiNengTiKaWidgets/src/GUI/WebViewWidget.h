@@ -12,9 +12,6 @@ public:
     explicit WebView(QWidget *parent = nullptr)
         : QTextBrowser{ parent }
     {
-        QPalette palette;
-        palette.setColor(QPalette::Window, Qt::white);
-        this->setPalette(palette);
         connect(&imageProvider, &ImageProvider::progress, this, &WebView::reload);
         connect(&imageProvider, &ImageProvider::progress, this, &WebView::progress);
     }
