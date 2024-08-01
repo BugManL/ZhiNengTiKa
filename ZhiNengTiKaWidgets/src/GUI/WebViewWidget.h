@@ -38,7 +38,7 @@ protected slots:
     {
         const auto horizontalScrollBarValue(this->horizontalScrollBar()->value());
         const auto verticalScrollBarValue(this->verticalScrollBar()->value());
-        this->setHtml(processedHtml);
+        this->QTextBrowser::setHtml(processedHtml);
         this->horizontalScrollBar()->setValue(horizontalScrollBarValue);
         this->verticalScrollBar()->setValue(verticalScrollBarValue);
     }
