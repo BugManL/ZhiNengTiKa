@@ -50,16 +50,10 @@
 
 #ifdef ZHINENGTIKAQML
 #include <QQuickStyle>
-#ifdef Q_OS_ANDROID
-#include <QtWebView>
-#else // Q_OS_ANDROID
-#include <QtWebEngineQuick>
-#endif // Q_OS_ANDROID
 #endif // ZHINENGTIKAQML
 
 #ifdef ZHINENGTIKAWIDGETS
 #include <QVideoWidget>
-#include <QWebEngineView>
 #endif // ZHINENGTIKAWIDGETS
 
 #ifdef ZHINENGTIKACORE

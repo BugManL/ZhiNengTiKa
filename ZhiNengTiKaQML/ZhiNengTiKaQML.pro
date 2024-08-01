@@ -3,9 +3,6 @@ include($$PWD/../ZhiNengTiKaCommon.pri)
 
 QT += widgets gui quick quickcontrols2
 
-android: QT += webview
-else: QT += webenginequick
-
 TEMPLATE = app
 
 DEFINES += ZHINENGTIKAQML

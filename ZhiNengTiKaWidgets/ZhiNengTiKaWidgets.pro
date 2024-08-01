@@ -1,7 +1,7 @@
 include($$PWD/../precompile_header/precompile_header.pri)
 include($$PWD/../ZhiNengTiKaCommon.pri)
 
-QT       += widgets gui multimedia multimediawidgets webenginewidgets
+QT       += widgets gui multimedia multimediawidgets
 
 TEMPLATE = app
 

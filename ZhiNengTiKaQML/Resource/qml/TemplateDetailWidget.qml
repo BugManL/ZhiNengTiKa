@@ -1,16 +1,16 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-//import ImageProvider
+import ImageProvider
 
 Item {
     property var templateAnalysisPointer: null
     property bool initFinish: false
 
-//    ImageProvider {
-//        id: imageProvider
-//        cacheMode: true
-//    }
+    ImageProvider {
+        id: imageProvider
+        cacheMode: true
+    }
 
     ColumnLayout {
         id: mainColumnLayout
@@ -68,34 +68,28 @@ Item {
             }
         }
 
-//        Flickable {
-//            id: flick
-//            Layout.fillHeight: true
-//            Layout.fillWidth: true
-//            contentHeight: templateDetailText.height
-//            clip: true
-//            Text {
-//                id: templateDetailText
-//                width: parent.width
-//                wrapMode: Text.Wrap
-
-//                function setHtml(html) {
-//                    console.log("setHtml")
-//                    console.log(html)
-//                    templateDetailText.text = imageProvider.loadHtml(html)
-//                    flick.contentY = 0
-//                }
-//                // https://stackoverflow.com/questions/5395106/qml-text-scroll
-//                // transform不知道是干嘛的
-//                // 注释了
-//                //transform: Scale { yScale: -1; origin.y: templateDetailText.height/2 }
-//            }
-//            //transform: Scale { yScale: -1; origin.y: flick.height/2 }
-//        }
-        CompatibleWebView {
-            id: templateDetailWebView
+        Flickable {
+            id: flick
             Layout.fillHeight: true
             Layout.fillWidth: true
+            contentHeight: templateDetailText.height
+            clip: true
+            Text {
+                id: templateDetailText
+                width: parent.width
+                wrapMode: Text.Wrap
+
+                Rectangle {
+                    z: parent.z - 1
+                    anchors.fill: parent
+                    color: "white"
+                }
+
+                function setHtml(html) {
+                    templateDetailText.text = imageProvider.loadHtml(html)
+                    flick.contentY = 0
+                }
+            }
         }
     }
 
@@ -106,7 +100,7 @@ Item {
         }
         else
         {
-            templateDetailWebView.loadHtml("<h1>error</h1>")
+            templateDetailText.text = "<h1>error</h1>"
         }
     }
     Component.onDestruction: {
@@ -126,15 +120,15 @@ Item {
 
         if(tabBar.currentIndex === 0)
         {
-            templateDetailWebView.loadHtml(templateAnalysisPointer.getAnswerAndAnalysisHtml(questionsCountsListView.currentIndex))
+            templateDetailText.text = templateAnalysisPointer.getAnswerAndAnalysisHtml(questionsCountsListView.currentIndex)
         }
         else if(tabBar.currentIndex === 1)
         {
-            templateDetailWebView.loadHtml(templateAnalysisPointer.getAnswerHtml(questionsCountsListView.currentIndex))
+            templateDetailText.text = templateAnalysisPointer.getAnswerHtml(questionsCountsListView.currentIndex)
         }
         else if(tabBar.currentIndex === 2)
         {
-            templateDetailWebView.loadHtml(templateAnalysisPointer.getQuestionHtml(questionsCountsListView.currentIndex))
+            templateDetailText.text = templateAnalysisPointer.getQuestionHtml(questionsCountsListView.currentIndex)
         }
     }
 }

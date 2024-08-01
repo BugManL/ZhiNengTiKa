@@ -18,6 +18,7 @@ SettingWidget::SettingWidget(QWidget *parent)
     QGroupBox *problemGroupBox = new QGroupBox(QStringLiteral("问题"), this);
     QVBoxLayout *problemLayout = new QVBoxLayout(problemGroupBox);
     QGroupBox *versionGroupBox = new QGroupBox(QStringLiteral("版本"), this);
+    QVBoxLayout *versionLayout = new QVBoxLayout(versionGroupBox);
     QGroupBox *aboutGroupBox = new QGroupBox(QStringLiteral("关于"), this);
     QVBoxLayout *aboutLayout = new QVBoxLayout(aboutGroupBox);
 
@@ -68,6 +69,7 @@ SettingWidget::SettingWidget(QWidget *parent)
     templateListLayout->addLayout(addTwoWidgetToHBoxLayout(schoolNameComboBox, levelComboBox));
     cacheLayout->addLayout(addTwoWidgetToHBoxLayout(showTempSize, cleanTempButton));
     problemLayout->addLayout(addTwoWidgetToHBoxLayout(commonProblemButton, knownProblemButton));
+    versionLayout->addWidget(currentVersionLabel);
     aboutLayout->addLayout(addTwoWidgetToHBoxLayout(aboutButton, aboutQtButton));
     aboutLayout->addLayout(addTwoWidgetToHBoxLayout(usedSourceButton, openSourceLicenseButton));
 

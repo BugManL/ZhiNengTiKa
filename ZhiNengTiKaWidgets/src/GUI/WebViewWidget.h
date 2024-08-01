@@ -1,29 +1,40 @@
 #ifndef WEBVIEWWIDGET_H
 #define WEBVIEWWIDGET_H
 
+#include "src/Logic/ImageProvider.h"
 #include "src/Logic/TemplateAnalysis.h"
 
-class WebView: public QWebEngineView
+class WebView : public QTextBrowser
 {
     Q_OBJECT
+
 public:
-    using QWebEngineView::QWebEngineView;
+    explicit WebView(QWidget *parent = nullptr)
+        : QTextBrowser{ parent }
+    {
+        QPalette palette;
+        palette.setColor(QPalette::Window, Qt::white);
+        this->setPalette(QPalette());
+    }
     void setHtml(const QString &html)
     {
         this->html = html;
-        this->QWebEngineView::setHtml(this->html);
+        this->QTextBrowser::setHtml(imageProvider.loadHtml(this->html));
     }
     QString getHtml() const
     {
         return this->html;
     }
+
 protected:
     QString html;
+    ImageProvider imageProvider;
 };
 
 class WebViewWidget : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit WebViewWidget(const TemplateAnalysis &templateAnalysis, QWidget *parent = nullptr);
     virtual QString getAnalyzedHtml(const qsizetype index = -1) = 0;
@@ -58,6 +69,7 @@ protected slots:
 signals:
 
     void templateAnalysisChanged();
+
 private:
     Q_PROPERTY(TemplateAnalysis templateAnalysis READ getTemplateAnalysis WRITE setTemplateAnalysis NOTIFY templateAnalysisChanged FINAL)
 };

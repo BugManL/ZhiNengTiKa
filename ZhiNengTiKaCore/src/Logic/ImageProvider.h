@@ -18,7 +18,7 @@ public:
 
 protected:
     int runningCount = 0;
-    bool cacheMode = false;
+    bool cacheMode = true;
 protected slots:
     void saveFile(QNetworkReply *reply, QString *filePath);
 signals:
