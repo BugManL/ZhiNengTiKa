@@ -40,13 +40,13 @@ QString ImageProvider::loadHtml(const QString &html)
         pathHash.insert(reply, info);
         connect(reply, &QNetworkReply::finished, this, &ImageProvider::onReplyFinished);
         ++totalCount;
-        if (placeholder && QFile(info->imagePath).exists())
+        if ((!placeholder) || QFile(info->imagePath).exists())
         {
-            rawData.replace(i, endIndex - i + 1, placeholderName);
+            rawData.replace(i, endIndex - i + 1, QStringLiteral("file:///").append(imagePath));
         }
         else
         {
-            rawData.replace(i, endIndex - i + 1, QStringLiteral("file:///").append(imagePath));
+            rawData.replace(i, endIndex - i + 1, placeholderName);
         }
     }
     return rawData;
@@ -88,7 +88,7 @@ void ImageProvider::onReplyFinished()
         reply->deleteLater();
 
         QFile file(info->imagePath);
-        needReplacePlaceholder = file.exists() && placeholder;
+        needReplacePlaceholder = placeholder && (!file.exists());
 
         // 打开文件并检查哈希值是否匹配
         if (!(file.open(QFile::ReadOnly) &&
