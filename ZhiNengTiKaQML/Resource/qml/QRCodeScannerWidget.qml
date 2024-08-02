@@ -32,10 +32,13 @@ Item {
         videoOutput: videoOutput
     }
 
-    NormalMessageDialog {
+    Notification {
         id: scanFailedDialog
+        maxWidth: parent.width * 2 / 3
+        anchors.centerIn: parent
+        modal: true
     }
-
+    
     QRCodeScanner {
         id: qrCodeScanner
         videoSink: videoOutput.videoSink
