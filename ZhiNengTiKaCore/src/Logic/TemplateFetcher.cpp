@@ -80,11 +80,12 @@ void TemplateFetcher::onHandleTemplateReplyFinished()
     }
     else if (!rawData.startsWith("{\"code\":200,"))
     {
-        qDebug() << QString(rawData);
+        const QString rawDataStr(rawData);
+        qDebug() << rawDataStr;
         emit error(QStringLiteral("服务器报错\n"
                                   "请尝试在设置中登陆你所在学校, 同一学年的账号\n"
-                                  "返回结果:\n\n%1")
-                       .arg(rawData));
+                                  "返回结果:\n\n")
+                       .append(rawDataStr));
         return;
     }
     auto templateData(XinjiaoyuNetwork::decodeTemplateReply(rawData));

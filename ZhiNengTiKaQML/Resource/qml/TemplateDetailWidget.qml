@@ -99,13 +99,22 @@ Item {
                     color: "white"
                 }
 
-                function setHtm(html) {
+                function setHtmlAndFlickToTop(html) {
+                    templateDetailText.text = ""
                     imageProvider.loadHtml(html)
                 }
 
                 function setHtmlDirectly(html) {
+                    let pContentX = flick.contentX
+                    let pContentY = flick.contentY
+                    let pHorizontalVelocity = flick.horizontalVelocity
+                    let pVerticalVelocity = flick.verticalVelocity
+                    flick.cancelFlick()
                     templateDetailText.text = ""
                     templateDetailText.text = html
+                    flick.contentX = pContentX
+                    flick.contentY = pContentY
+                    flick.flick(-pHorizontalVelocity, -pVerticalVelocity)
                 }
             }
         }
@@ -132,7 +141,7 @@ Item {
         }
         else
         {
-            templateDetailText.setHtm("<h1>error</h1>")
+            templateDetailText.setHtmlAndFlickToTop("<h1>error</h1>")
         }
     }
     Component.onDestruction: {
@@ -152,15 +161,15 @@ Item {
 
         if(tabBar.currentIndex === 0)
         {
-            templateDetailText.setHtm(templateAnalysisPointer.getAnswerAndAnalysisHtml(questionsCountsListView.currentIndex))
+            templateDetailText.setHtmlAndFlickToTop(templateAnalysisPointer.getAnswerAndAnalysisHtml(questionsCountsListView.currentIndex))
         }
         else if(tabBar.currentIndex === 1)
         {
-            templateDetailText.setHtm(templateAnalysisPointer.getAnswerHtml(questionsCountsListView.currentIndex))
+            templateDetailText.setHtmlAndFlickToTop(templateAnalysisPointer.getAnswerHtml(questionsCountsListView.currentIndex))
         }
         else if(tabBar.currentIndex === 2)
         {
-            templateDetailText.setHtm(templateAnalysisPointer.getQuestionHtml(questionsCountsListView.currentIndex))
+            templateDetailText.setHtmlAndFlickToTop(templateAnalysisPointer.getQuestionHtml(questionsCountsListView.currentIndex))
         }
     }
 }
