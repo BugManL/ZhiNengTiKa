@@ -12,14 +12,14 @@ public:
     explicit WebView(QWidget *parent = nullptr)
         : QTextBrowser{ parent }
     {
-        connect(&imageProvider, &ImageProvider::progress, this, &WebView::reload);
+        imageProvider.setPlaceholder(true);
+        connect(&imageProvider, &ImageProvider::textUpdated, this, &WebView::onTextUpdated);
         connect(&imageProvider, &ImageProvider::progress, this, &WebView::progress);
     }
     void setHtml(const QString &html)
     {
         this->html = html;
-        this->processedHtml = imageProvider.loadHtml(this->html);
-        this->QTextBrowser::setHtml(processedHtml);
+        this->QTextBrowser::setHtml(imageProvider.loadHtml(html));
     }
     QString getHtml() const
     {
@@ -28,14 +28,13 @@ public:
 
 protected:
     QString html;
-    QString processedHtml;
     ImageProvider imageProvider;
 protected slots:
-    void reload() override
+    void onTextUpdated(const QString &str)
     {
         const auto horizontalScrollBarValue(this->horizontalScrollBar()->value());
         const auto verticalScrollBarValue(this->verticalScrollBar()->value());
-        this->QTextBrowser::setHtml(processedHtml);
+        this->QTextBrowser::setHtml(str);
         this->horizontalScrollBar()->setValue(horizontalScrollBarValue);
         this->verticalScrollBar()->setValue(verticalScrollBarValue);
     }

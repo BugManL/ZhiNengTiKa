@@ -115,13 +115,14 @@ void ImageProvider::onReplyFinished()
     {
         // TODO 优化, 多次查找, 过于耗时
         rawData.replace(info->placeholderName, QStringLiteral("file:///").append(info->imagePath));
-        emit textUpdated(rawData);
     }
 
     // 删除info对象并更新进度
     delete info;
     ++finishedCount;
     emit progress(finishedCount, totalCount);
+
+    emit textUpdated(rawData);
 
     // 如果所有任务完成，发出finished信号
     if (finishedCount == totalCount)
