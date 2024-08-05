@@ -33,7 +33,7 @@ QString ImageProvider::loadHtml(const QString &html)
             continue;
         }
         const QString imageName(QCryptographicHash::hash(imageUrl.toUtf8(), QCryptographicHash::Sha1).toHex() + suffix);
-        const QString imagePath(Global::dataPath().append(QStringLiteral("/Image/")).append(imageName));
+        const QString imagePath(Global::tempPath().append(QStringLiteral("/Image/")).append(imageName));
         const auto placeholderName(QStringLiteral("qrc:/ico/img/loading.svg?PLACEHOLDERNAMEBEGIN").append(QUuid::createUuid().toString(QUuid::WithoutBraces)).append(QStringLiteral("PLACEHOLDERNAMEEND")));
         auto info = new ImageFileInfo{ currentUuid, imagePath, placeholderName };
         auto reply(Network::getGlobalNetworkManager()->getByStrUrl(imageUrl));

@@ -20,7 +20,7 @@ void Global::initOnce()
     dir.mkpath(Global::configPath());
     dir.mkpath(Global::dataPath());
     dir.mkpath(Global::dataPath().append(QStringLiteral("/TemplateFile")));
-    dir.mkpath(Global::dataPath().append(QStringLiteral("/Image")));
+    dir.mkpath(Global::tempPath().append(QStringLiteral("/Image")));
     dir.mkpath(Global::tempPath());
 
     QFile fileUserHistory(Global::dataPath().append(QStringLiteral("/templateList_undefined")));
@@ -29,6 +29,7 @@ void Global::initOnce()
 
     // 删除资源文件
     Global::deleteDir(Global::dataPath().append(QStringLiteral("/Resource")));
+    Global::deleteDir(Global::dataPath().append(QStringLiteral("/Image")));
 }
 
 QString Global::configPath()
