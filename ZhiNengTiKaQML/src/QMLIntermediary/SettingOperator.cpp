@@ -1,6 +1,6 @@
 #include "SettingOperator.h"
 
-#include "MultipleSubjectsTemplateListModelListSingleton.h"
+#include "src/Singleton/MultipleSubjectsTemplateListModelListSingleton.h"
 #include "src/Singleton/Settings.h"
 #include "src/StaticClass/Global.h"
 

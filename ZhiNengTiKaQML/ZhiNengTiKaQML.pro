@@ -9,13 +9,11 @@ DEFINES += ZHINENGTIKAQML
 
 HEADERS += \
     $$PWD/src/QMLIntermediary/AnimeImageProvider.h \
-    $$PWD/src/QMLIntermediary/MultipleSubjectsTemplateListModelListSingleton.h \
     $$PWD/src/QMLIntermediary/QMLUtils.h \
     $$PWD/src/QMLIntermediary/SettingOperator.h \
 
 SOURCES += \
     $$PWD/src/QMLIntermediary/AnimeImageProvider.cpp \
-    $$PWD/src/QMLIntermediary/MultipleSubjectsTemplateListModelListSingleton.cpp \
     $$PWD/src/QMLIntermediary/QMLUtils.cpp \
     $$PWD/src/QMLIntermediary/SettingOperator.cpp \
     $$PWD/src/mainQML.cpp

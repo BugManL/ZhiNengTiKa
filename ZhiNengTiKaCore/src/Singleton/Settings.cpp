@@ -1,7 +1,6 @@
 #include "Settings.h"
 
 #include "src/Logic/UserData.h"
-#include "src/StaticClass/CallAndroidNativeComponent.h"
 #include "src/StaticClass/Global.h"
 
 Q_GLOBAL_STATIC(Settings, singletonSettings)

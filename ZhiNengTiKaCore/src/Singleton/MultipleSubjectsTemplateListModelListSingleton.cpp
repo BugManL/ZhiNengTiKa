@@ -1,0 +1,8 @@
+#include "MultipleSubjectsTemplateListModelListSingleton.h"
+
+Q_GLOBAL_STATIC(MultipleSubjectsTemplateListModelList, multipleSubjectsTemplateListModelList)
+
+MultipleSubjectsTemplateListModelList *MultipleSubjectsTemplateListModelListSingleton::getMultipleSubjectsTemplateListModelList()
+{
+    return multipleSubjectsTemplateListModelList;
+}

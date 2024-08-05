@@ -1,5 +1,4 @@
 #include "QMLIntermediary/AnimeImageProvider.h"
-#include "QMLIntermediary/MultipleSubjectsTemplateListModelListSingleton.h"
 #include "QMLIntermediary/QMLUtils.h"
 #include "QMLIntermediary/SettingOperator.h"
 #include "src/Logic/AnnouncementManager.h"
@@ -12,6 +11,7 @@
 #include "src/Logic/TemplateSearcher.h"
 #include "src/Logic/TemplateSummary.h"
 #include "src/Logic/UserData.h"
+#include "src/Singleton/MultipleSubjectsTemplateListModelListSingleton.h"
 #include "src/Singleton/Network.h"
 #include "src/Singleton/Settings.h"
 #include "src/StaticClass/Global.h"
@@ -27,7 +27,6 @@ int main(int argc, char *argv[])
 
     Network::initOnce();
     auto settings(Settings::getSingletonSettings());
-    MultipleSubjectsTemplateListModelListSingleton::initOnce();
 
     QFont appFont;
     if (settings->getFontPointSize() < 1 || settings->getFont().isEmpty())

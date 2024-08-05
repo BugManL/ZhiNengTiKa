@@ -1,0 +1,12 @@
+#ifndef MULTIPLESUBJECTSTEMPLATELISTMODELLISTSINGLETON_H
+#define MULTIPLESUBJECTSTEMPLATELISTMODELLISTSINGLETON_H
+
+#include "src/Logic/MultipleSubjectsTemplateListModelList.h"
+#include "src/ZhiNengTiKaCore_global.h"
+
+namespace MultipleSubjectsTemplateListModelListSingleton
+{
+extern MultipleSubjectsTemplateListModelList ZHINENGTIKACORE_EXPORT *getMultipleSubjectsTemplateListModelList();
+}; // namespace MultipleSubjectsTemplateListModelListSingleton
+
+#endif // MULTIPLESUBJECTSTEMPLATELISTMODELLISTSINGLETON_H

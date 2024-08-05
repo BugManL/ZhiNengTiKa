@@ -41,6 +41,7 @@ HEADERS += \
     $$PWD/src/Logic/TemplateSummary.h \
     $$PWD/src/Logic/UserData.h \
     $$PWD/src/Logic/Version.h \
+    $$PWD/src/Singleton/MultipleSubjectsTemplateListModelListSingleton.h \
     $$PWD/src/Singleton/Network.h \
     $$PWD/src/Singleton/Settings.h \
     $$PWD/src/StaticClass/CallAndroidNativeComponent.h \
@@ -70,6 +71,7 @@ SOURCES += \
     $$PWD/src/Logic/TemplateSummary.cpp \
     $$PWD/src/Logic/UserData.cpp \
     $$PWD/src/Logic/Version.cpp \
+    $$PWD/src/Singleton/MultipleSubjectsTemplateListModelListSingleton.cpp \
     $$PWD/src/Singleton/Network.cpp \
     $$PWD/src/Singleton/Settings.cpp \
     $$PWD/src/StaticClass/CallAndroidNativeComponent.cpp \
