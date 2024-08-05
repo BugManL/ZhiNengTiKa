@@ -1,3 +1,14 @@
+# 版本:v4.2.1
+## Performance Improvements
+- 图片缓存迁移至tempPath目录 (Commit: 5193f10)
+- 部分通知信息使用Notification (Commit: fb3e53e)
+## Bug Fixes
+- 修复MultipleSubjectsTemplateListModelList单例不运行析构函数的问题 (Commit: edb24c6)
+- 修复特定情况下不发送textUpdated信号的问题 (Commit: 4221cc4)
+- 修复图片缓存机制的逻辑错误 (Commit: 09ba512)
+## New Features
+- Notification支持模态 (Commit: b7858bb)
+
 # 版本:v4.2.0
 - 使用富文本控件代替WebView, 减少内存占用, 发布包大小
 
