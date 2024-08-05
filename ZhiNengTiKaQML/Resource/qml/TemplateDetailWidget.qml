@@ -1,13 +1,13 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import ImageProvider
+import ImageProviderMultiThreading
 
 Item {
     property var templateAnalysisPointer: null
     property bool initFinish: false
 
-    ImageProvider {
+    ImageProviderMultiThreading {
         id: imageProvider
         placeholder: true
         onProgress: function(finished, total) {
@@ -93,27 +93,19 @@ Item {
                 width: parent.width
                 wrapMode: Text.Wrap
 
-                property var processedHtml
-
                 Rectangle {
                     z: parent.z - 1
                     anchors.fill: parent
                     color: "white"
                 }
 
-                function setHtmlAndFlickToTop(html) {
-                    templateDetailText.processedHtml = imageProvider.loadHtml(html)
-                    reload()
+                function setHtm(html) {
+                    imageProvider.loadHtml(html)
                 }
 
                 function setHtmlDirectly(html) {
                     templateDetailText.text = ""
                     templateDetailText.text = html
-                }
-
-                function reload() {
-                    templateDetailText.text = ""
-                    templateDetailText.text = templateDetailText.processedHtml
                 }
             }
         }
@@ -140,7 +132,7 @@ Item {
         }
         else
         {
-            templateDetailText.setHtmlAndFlickToTop("<h1>error</h1>")
+            templateDetailText.setHtm("<h1>error</h1>")
         }
     }
     Component.onDestruction: {
@@ -160,15 +152,15 @@ Item {
 
         if(tabBar.currentIndex === 0)
         {
-            templateDetailText.setHtmlAndFlickToTop(templateAnalysisPointer.getAnswerAndAnalysisHtml(questionsCountsListView.currentIndex))
+            templateDetailText.setHtm(templateAnalysisPointer.getAnswerAndAnalysisHtml(questionsCountsListView.currentIndex))
         }
         else if(tabBar.currentIndex === 1)
         {
-            templateDetailText.setHtmlAndFlickToTop(templateAnalysisPointer.getAnswerHtml(questionsCountsListView.currentIndex))
+            templateDetailText.setHtm(templateAnalysisPointer.getAnswerHtml(questionsCountsListView.currentIndex))
         }
         else if(tabBar.currentIndex === 2)
         {
-            templateDetailText.setHtmlAndFlickToTop(templateAnalysisPointer.getQuestionHtml(questionsCountsListView.currentIndex))
+            templateDetailText.setHtm(templateAnalysisPointer.getQuestionHtml(questionsCountsListView.currentIndex))
         }
     }
 }

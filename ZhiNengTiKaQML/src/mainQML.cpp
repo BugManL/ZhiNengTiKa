@@ -2,7 +2,7 @@
 #include "QMLIntermediary/QMLUtils.h"
 #include "QMLIntermediary/SettingOperator.h"
 #include "src/Logic/AnnouncementManager.h"
-#include "src/Logic/ImageProvider.h"
+#include "src/Logic/ImageProviderMultiThreading.h"
 #include "src/Logic/QRCodeScanner.h"
 #include "src/Logic/ResourceFileFetcher.h"
 #include "src/Logic/TemplateAnalysis.h"
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<TemplateListModel>("TemplateListModel", 1, 0, "TemplateListModel");
     qmlRegisterType<SettingOperator>("SettingOperator", 1, 0, "SettingOperator");
     qmlRegisterType<QRCodeScanner>("QRCodeScanner", 1, 0, "QRCodeScanner");
-    qmlRegisterType<ImageProvider>("ImageProvider", 1, 0, "ImageProvider");
+    qmlRegisterType<ImageProviderMultiThreading>("ImageProviderMultiThreading", 1, 0, "ImageProviderMultiThreading");
     qmlRegisterType<AnnouncementManager>("AnnouncementManager", 1, 0, "AnnouncementManager");
     qmlRegisterType<ResourceFileFetcher>("ResourceFileFetcher", 1, 0, "ResourceFileFetcher");
     QQmlApplicationEngine engine;

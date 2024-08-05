@@ -1,10 +1,10 @@
 #include "ImageProvider.h"
 
-#include "src/Singleton/Network.h"
 #include "src/StaticClass/Global.h"
 
 ImageProvider::ImageProvider(QObject *parent)
-    : QObject{ parent }
+    : QObject{ parent },
+      manager(new QNetworkAccessManager(this))
 {
 }
 
@@ -36,7 +36,7 @@ QString ImageProvider::loadHtml(const QString &html)
         const QString imagePath(Global::tempPath().append(QStringLiteral("/Image/")).append(imageUrlSha1Hex).append(suffix));
         const auto placeholderName(QStringLiteral("qrc:/ico/img/loading.svg?PLACEHOLDERNAMEBEGIN").append(imageUrlSha1Hex).append(QStringLiteral("PLACEHOLDERNAMEEND")));
         auto info = new ImageFileInfo{ currentUuid, imagePath, placeholderName };
-        auto reply(Network::getGlobalNetworkManager()->getByStrUrl(imageUrl));
+        auto reply(manager->get(QNetworkRequest(imageUrl)));
         pathHash.insert(reply, info);
         connect(reply, &QNetworkReply::finished, this, &ImageProvider::onReplyFinished);
         ++totalCount;
@@ -49,6 +49,7 @@ QString ImageProvider::loadHtml(const QString &html)
             rawData.replace(i, endIndex - i + 1, placeholderName);
         }
     }
+    emit textUpdated(rawData);
     return rawData;
 }
 

@@ -1,7 +1,7 @@
 #ifndef WEBVIEWWIDGET_H
 #define WEBVIEWWIDGET_H
 
-#include "src/Logic/ImageProvider.h"
+#include "src/Logic/ImageProviderMultiThreading.h"
 #include "src/Logic/TemplateAnalysis.h"
 
 class WebView : public QTextBrowser
@@ -13,13 +13,13 @@ public:
         : QTextBrowser{ parent }
     {
         imageProvider.setPlaceholder(true);
-        connect(&imageProvider, &ImageProvider::textUpdated, this, &WebView::onTextUpdated);
-        connect(&imageProvider, &ImageProvider::progress, this, &WebView::progress);
+        connect(&imageProvider, &ImageProviderMultiThreading::textUpdated, this, &WebView::onTextUpdated);
+        connect(&imageProvider, &ImageProviderMultiThreading::progress, this, &WebView::progress);
     }
     void setHtml(const QString &html)
     {
         this->html = html;
-        this->QTextBrowser::setHtml(imageProvider.loadHtml(html));
+        imageProvider.loadHtml(html);
     }
     QString getHtml() const
     {
@@ -28,7 +28,7 @@ public:
 
 protected:
     QString html;
-    ImageProvider imageProvider;
+    ImageProviderMultiThreading imageProvider;
 protected slots:
     void onTextUpdated(const QString &str)
     {

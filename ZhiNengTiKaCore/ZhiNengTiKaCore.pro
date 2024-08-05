@@ -28,6 +28,7 @@ HEADERS += \
     $$PWD/src/Logic/AnnouncementModel.h \
     $$PWD/src/Logic/AnswerDetailData.hpp \
     $$PWD/src/Logic/ImageProvider.h \
+    $$PWD/src/Logic/ImageProviderMultiThreading.h \
     $$PWD/src/Logic/MultipleSubjectsTemplateListModelList.h \
     $$PWD/src/Logic/NetworkAccessManagerBlockable.h \
     $$PWD/src/Logic/QRCodeReader.h \
@@ -58,6 +59,7 @@ SOURCES += \
     $$PWD/src/Logic/AnnouncementManager.cpp \
     $$PWD/src/Logic/AnnouncementModel.cpp \
     $$PWD/src/Logic/ImageProvider.cpp \
+    $$PWD/src/Logic/ImageProviderMultiThreading.cpp \
     $$PWD/src/Logic/QRCodeReader.cpp \
     $$PWD/src/Logic/QRCodeScanner.cpp \
     $$PWD/src/Logic/MultipleSubjectsTemplateListModelList.cpp \

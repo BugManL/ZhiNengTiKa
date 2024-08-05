@@ -30,6 +30,8 @@ protected:
     QUuid currentUuid;
     QHash<QNetworkReply *, ImageFileInfo *> pathHash;
     QString rawData;
+
+    QNetworkAccessManager *manager;
 protected slots:
     void onReplyFinished();
     void resetCount();
