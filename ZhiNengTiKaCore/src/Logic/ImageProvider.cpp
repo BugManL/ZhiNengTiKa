@@ -15,9 +15,9 @@ QString ImageProvider::loadHtml(const QString &html)
     rawData = html;
     rawData.replace(QStringLiteral("\""), QStringLiteral("'"));
     rawData.replace(QStringLiteral("src = '"), QStringLiteral("src='"));
-    const QStringList imageSuffix({ QStringLiteral(".jpg"),
-                                    QStringLiteral(".png"),
-                                    QStringLiteral(".jpeg") });
+    const QStringList imageSuffixs({ QStringLiteral(".jpg"),
+                                     QStringLiteral(".png"),
+                                     QStringLiteral(".jpeg") });
     for (auto i{ rawData.indexOf(QStringLiteral("http")) }; i != -1; i = rawData.indexOf(QStringLiteral("http"), i + 1))
     {
         const auto endIndex(rawData.indexOf(QStringLiteral("'"), i + 10) - 1);
@@ -28,19 +28,19 @@ QString ImageProvider::loadHtml(const QString &html)
             continue;
         }
         const auto suffix{ imageUrl.last(imageUrl.size() - pointIndex).toLower() };
-        if (!imageSuffix.contains(suffix))
+        if (!imageSuffixs.contains(suffix))
         {
             continue;
         }
-        const QString imageName(QCryptographicHash::hash(imageUrl.toUtf8(), QCryptographicHash::Sha1).toHex() + suffix);
-        const QString imagePath(Global::tempPath().append(QStringLiteral("/Image/")).append(imageName));
-        const auto placeholderName(QStringLiteral("qrc:/ico/img/loading.svg?PLACEHOLDERNAMEBEGIN").append(QUuid::createUuid().toString(QUuid::WithoutBraces)).append(QStringLiteral("PLACEHOLDERNAMEEND")));
+        const auto imageUrlSha1Hex(QCryptographicHash::hash(imageUrl.toUtf8(), QCryptographicHash::Sha1).toHex());
+        const QString imagePath(Global::tempPath().append(QStringLiteral("/Image/")).append(imageUrlSha1Hex).append(suffix));
+        const auto placeholderName(QStringLiteral("qrc:/ico/img/loading.svg?PLACEHOLDERNAMEBEGIN").append(imageUrlSha1Hex).append(QStringLiteral("PLACEHOLDERNAMEEND")));
         auto info = new ImageFileInfo{ currentUuid, imagePath, placeholderName };
         auto reply(Network::getGlobalNetworkManager()->getByStrUrl(imageUrl));
         pathHash.insert(reply, info);
         connect(reply, &QNetworkReply::finished, this, &ImageProvider::onReplyFinished);
         ++totalCount;
-        if ((!placeholder) || QFile(info->imagePath).exists())
+        if ((!placeholder) || QFile(imagePath).exists())
         {
             rawData.replace(i, endIndex - i + 1, QStringLiteral("file:///").append(imagePath));
         }
