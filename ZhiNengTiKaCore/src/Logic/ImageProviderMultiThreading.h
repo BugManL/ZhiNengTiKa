@@ -16,6 +16,9 @@ public:
     bool getPlaceholder() const;
     void setPlaceholder(bool newPlaceholder);
 
+    int getProgressCheckDelayMs() const;
+    void setProgressCheckDelayMs(int newProgressCheckDelayMs);
+
 public slots:
     void loadHtml(const QString &html);
 
@@ -25,6 +28,8 @@ protected:
 
     bool placeholder = false;
 
+    int progressCheckDelayMs = 500;
+
 signals:
     void progress(int finished, int total);
     void textUpdated(const QString &str);
@@ -32,8 +37,11 @@ signals:
     void placeholderChanged();
     void operateImageProvider(const QString &);
 
+    void progressCheckDelayMsChanged();
+
 private:
     Q_PROPERTY(bool placeholder READ getPlaceholder WRITE setPlaceholder NOTIFY placeholderChanged FINAL)
+    Q_PROPERTY(int progressCheckDelayMs READ getProgressCheckDelayMs WRITE setProgressCheckDelayMs NOTIFY progressCheckDelayMsChanged FINAL)
 };
 
 #endif // IMAGEPROVIDERMULTITHREADING_H

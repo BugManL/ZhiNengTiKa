@@ -4,8 +4,12 @@
 
 ImageProvider::ImageProvider(QObject *parent)
     : QObject{ parent },
-      manager(new QNetworkAccessManager(this))
+      manager(new QNetworkAccessManager(this)),
+      timer(new QTimer(this))
 {
+    timer->setSingleShot(false);
+    timer->setInterval(progressCheckDelayMs);
+    connect(timer, &QTimer::timeout, this, &ImageProvider::emitProgress);
 }
 
 QString ImageProvider::loadHtml(const QString &html)
@@ -49,6 +53,7 @@ QString ImageProvider::loadHtml(const QString &html)
             rawData.replace(i, endIndex - i + 1, placeholderName);
         }
     }
+    emit progress(finishedCount, totalCount);
     emit textUpdated(rawData);
     return rawData;
 }
@@ -64,6 +69,26 @@ void ImageProvider::setPlaceholder(bool newPlaceholder)
         return;
     placeholder = newPlaceholder;
     emit placeholderChanged();
+}
+
+int ImageProvider::getProgressCheckDelayMs() const
+{
+    return progressCheckDelayMs;
+}
+
+void ImageProvider::setProgressCheckDelayMs(int newProgressCheckDelayMs)
+{
+    if (progressCheckDelayMs == newProgressCheckDelayMs)
+        return;
+    progressCheckDelayMs = newProgressCheckDelayMs;
+    emit progressCheckDelayMsChanged();
+}
+
+void ImageProvider::emitProgress()
+{
+    qDebug() << Q_FUNC_INFO;
+    emit progress(finishedCount, totalCount);
+    emit textUpdated(rawData);
 }
 
 void ImageProvider::resetCount()
@@ -121,13 +146,16 @@ void ImageProvider::onReplyFinished()
     // 删除info对象并更新进度
     delete info;
     ++finishedCount;
-    emit progress(finishedCount, totalCount);
-
-    emit textUpdated(rawData);
 
     // 如果所有任务完成，发出finished信号
     if (finishedCount == totalCount)
     {
+        timer->stop();
+        emitProgress();
         emit finished();
+    }
+    else if (!timer->isActive())
+    {
+        timer->start();
     }
 }

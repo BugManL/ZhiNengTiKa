@@ -43,3 +43,17 @@ void ImageProviderMultiThreading::setPlaceholder(bool newPlaceholder)
     imageProvider->setPlaceholder(newPlaceholder);
     emit placeholderChanged();
 }
+
+int ImageProviderMultiThreading::getProgressCheckDelayMs() const
+{
+    return progressCheckDelayMs;
+}
+
+void ImageProviderMultiThreading::setProgressCheckDelayMs(int newProgressCheckDelayMs)
+{
+    if (progressCheckDelayMs == newProgressCheckDelayMs)
+        return;
+    progressCheckDelayMs = newProgressCheckDelayMs;
+    imageProvider->setProgressCheckDelayMs(newProgressCheckDelayMs);
+    emit progressCheckDelayMsChanged();
+}

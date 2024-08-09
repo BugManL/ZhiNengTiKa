@@ -16,6 +16,11 @@ public:
     bool getPlaceholder() const;
     void setPlaceholder(bool newPlaceholder);
 
+    int getProgressCheckDelayMs() const;
+    void setProgressCheckDelayMs(int newProgressCheckDelayMs);
+public slots:
+    void emitProgress();
+
 protected:
     struct ImageFileInfo
     {
@@ -27,22 +32,31 @@ protected:
     bool placeholder = false;
     int totalCount = 0;
     int finishedCount = 0;
+
+    int progressCheckDelayMs = 500;
+
     QUuid currentUuid;
     QHash<QNetworkReply *, ImageFileInfo *> pathHash;
     QString rawData;
 
     QNetworkAccessManager *manager;
+    QTimer *timer;
+
 protected slots:
     void onReplyFinished();
     void resetCount();
+
 signals:
     void progress(int finished, int total);
     void textUpdated(const QString &str);
     void finished();
     void placeholderChanged();
 
+    void progressCheckDelayMsChanged();
+
 private:
     Q_PROPERTY(bool placeholder READ getPlaceholder WRITE setPlaceholder NOTIFY placeholderChanged FINAL)
+    Q_PROPERTY(int progressCheckDelayMs READ getProgressCheckDelayMs WRITE setProgressCheckDelayMs NOTIFY progressCheckDelayMsChanged FINAL)
 };
 
 #endif // IMAGEPROVIDER_H
