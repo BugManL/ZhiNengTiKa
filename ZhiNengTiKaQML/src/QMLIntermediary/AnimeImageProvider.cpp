@@ -23,7 +23,7 @@ QImage AnimeImageProvider::requestImage(const QString &id, QSize *size, const QS
             emit cacheProgress(currentCacheSize, totalCacheSize);
             image = cacheList.at(i).first;
             cacheList[i].second = false;
-            fillCache(i);
+            QMetaObject::invokeMethod(this, std::bind(&AnimeImageProvider::fillCache, this, i));
             break;
         }
     }
@@ -40,46 +40,6 @@ QImage AnimeImageProvider::requestImage(const QString &id, QSize *size, const QS
     if (size)
         *size = QSize(width, height);
     return image;
-}
-
-void AnimeImageProvider::fillCache(int index)
-{
-    // TODO: 只要QImage在子线程构造, 必报错:
-    // Cannot create children for a parent that is in a different thread.
-    // (Parent is NetworkAccessManagerBlockable(0x***********), parent's thread is QThread(0x***********), current thread is QQuickPixmapReader(0x***********)
-    // 无论是copy还是啥的, 都无法避免
-#if 1
-    const auto url(replaceRandomNumbers(Settings::getSingletonSettings()->getAnimeImageUrl()));
-    if (url.isEmpty())
-    {
-        return;
-    }
-    else if (url == QStringLiteral("^SpecialRule-kkloli^"))
-    {
-        auto reply(Network::getGlobalNetworkManager()->getByStrUrl(QStringLiteral("https://www.ttloli.com/2nd-love.html")));
-        fillCacheHash.insert(reply, index);
-        connect(reply, &QNetworkReply::finished, this, &AnimeImageProvider::onttloliPageReplyFinished, Qt::QueuedConnection);
-    }
-    else
-    {
-        auto reply(Network::getGlobalNetworkManager()->getByStrUrl(url));
-        fillCacheHash.insert(reply, index);
-        connect(reply, &QNetworkReply::finished, this, &AnimeImageProvider::onFillCacheReplyFinished, Qt::QueuedConnection);
-    }
-#else
-    cacheList[index].first = QImage("D:/Downloads/736f354a405b251541368b560cd1f665.jpg");
-    cacheList[index].second = true;
-#endif
-}
-
-void AnimeImageProvider::fillCacheList()
-{
-    for (auto i(0); i < cacheList.size(); ++i)
-    {
-        if (cacheList.at(i).second)
-            continue;
-        fillCache(i);
-    }
 }
 
 void AnimeImageProvider::onFillCacheReplyFinished()
@@ -133,6 +93,37 @@ void AnimeImageProvider::setTotalCacheSize(int newTotalCacheSize)
         return;
     totalCacheSize = newTotalCacheSize;
     emit totalCacheSizeChanged();
+}
+
+void AnimeImageProvider::fillCache(int index)
+{
+    const auto url(replaceRandomNumbers(Settings::getSingletonSettings()->getAnimeImageUrl()));
+    if (url.isEmpty())
+    {
+        return;
+    }
+    else if (url == QStringLiteral("^SpecialRule-kkloli^"))
+    {
+        auto reply(Network::getGlobalNetworkManager()->getByStrUrl(QStringLiteral("https://www.ttloli.com/2nd-love.html")));
+        fillCacheHash.insert(reply, index);
+        connect(reply, &QNetworkReply::finished, this, &AnimeImageProvider::onttloliPageReplyFinished, Qt::QueuedConnection);
+    }
+    else
+    {
+        auto reply(Network::getGlobalNetworkManager()->getByStrUrl(url));
+        fillCacheHash.insert(reply, index);
+        connect(reply, &QNetworkReply::finished, this, &AnimeImageProvider::onFillCacheReplyFinished, Qt::QueuedConnection);
+    }
+}
+
+void AnimeImageProvider::fillCacheList()
+{
+    for (auto i(0); i < cacheList.size(); ++i)
+    {
+        if (cacheList.at(i).second)
+            continue;
+        fillCache(i);
+    }
 }
 
 QString AnimeImageProvider::replaceRandomNumbers(const QString &input)

@@ -9,12 +9,14 @@ public:
     AnimeImageProvider();
     QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize) override;
 
-    void fillCache(int index);
-    void fillCacheList();
     int getTotalCacheSize() const;
     void setTotalCacheSize(int newTotalCacheSize);
 
     int getCurrentCacheSize() const;
+
+public slots:
+    void fillCache(int index);
+    void fillCacheList();
 
 signals:
     void totalCacheSizeChanged();
