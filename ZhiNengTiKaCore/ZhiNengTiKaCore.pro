@@ -40,6 +40,8 @@ HEADERS += \
     $$PWD/src/Logic/TemplateHandle/TemplateSummary.h \
     $$PWD/src/Logic/TemplateHandle/ListModel/MultipleSubjectsTemplateListModelList.h \
     $$PWD/src/Logic/TemplateHandle/ListModel/TemplateListModel.h \
+    $$PWD/src/Logic/TemplateHandle/UploadModel/TemplateAnswerData.h \
+    $$PWD/src/Logic/TemplateHandle/UploadModel/TemplateAnswerTreeModel.h \
     $$PWD/src/Logic/TemplateSearcher.h \
     $$PWD/src/Logic/UserData.h \
     $$PWD/src/Logic/Version.h \
@@ -53,8 +55,7 @@ HEADERS += \
     $$PWD/src/ZhiNengTiKaCore_global.h \
     $$PWD/src/ZxingCpp/ZXingPosition.h \
     $$PWD/src/ZxingCpp/ZXingReader.h \
-    $$PWD/src/ZxingCpp/ZXingResult.h \
-    src/Logic/TemplateHandle/UploadModel/TemplateAnswerData.h
+    $$PWD/src/ZxingCpp/ZXingResult.h
 
 SOURCES += \
     $$PWD/src/Logic/AccountManager.cpp \
@@ -73,6 +74,8 @@ SOURCES += \
     $$PWD/src/Logic/TemplateHandle/TemplateSummary.cpp \
     $$PWD/src/Logic/TemplateHandle/ListModel/MultipleSubjectsTemplateListModelList.cpp \
     $$PWD/src/Logic/TemplateHandle/ListModel/TemplateListModel.cpp \
+    src/Logic/TemplateHandle/UploadModel/TemplateAnswerData.cpp \
+    src/Logic/TemplateHandle/UploadModel/TemplateAnswerTreeModel.cpp \
     $$PWD/src/Logic/TemplateSearcher.cpp \
     $$PWD/src/Logic/UserData.cpp \
     $$PWD/src/Logic/Version.cpp \
@@ -85,8 +88,7 @@ SOURCES += \
     $$PWD/src/StaticClass/XinjiaoyuNetwork.cpp \
     $$PWD/src/ZxingCpp/ZXingPosition.cpp \
     $$PWD/src/ZxingCpp/ZXingReader.cpp \
-    $$PWD/src/ZxingCpp/ZXingResult.cpp \
-    src/Logic/TemplateHandle/UploadModel/TemplateAnswerData.cpp
+    $$PWD/src/ZxingCpp/ZXingResult.cpp
 
 RESOURCES += \
     $$PWD/Resource/Resource.qrc \

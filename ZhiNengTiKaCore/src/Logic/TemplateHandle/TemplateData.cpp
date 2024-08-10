@@ -96,16 +96,9 @@ TemplateAnswerData TemplateData::getCountAndAnswer() const
         data.questionId = questionId.toUtf8();
         if (!options.isEmpty())
         {
-            const auto optionsCount{ options.size() };
-            QBitArray answer(optionsCount);
-            auto answerStr{ answerContent };
-            for (auto j{ 0 }; j < optionsCount; ++j)
-            {
-                auto option{ QString(QByteArray::fromHex(QString::number(41 + j).toUtf8())) };
-                answer.setBit(j, answerStr.contains(option));
-            }
             data.choiceQuestion = true;
-            data.answer = answer;
+            data.choiceQuestionCount = options.size();
+            data.answer = answerContent;
         }
         else
         {
@@ -113,7 +106,7 @@ TemplateAnswerData TemplateData::getCountAndAnswer() const
         }
     }
     for (const auto &i : childQuestionList)
-        data.childQuestionList.append(i.getCountAndAnswer());
+        data.addChild(i.getCountAndAnswer());
     return data;
 }
 

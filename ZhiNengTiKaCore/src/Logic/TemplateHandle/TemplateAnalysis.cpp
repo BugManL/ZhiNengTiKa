@@ -55,7 +55,7 @@ TemplateAnswerData TemplateAnalysis::getCountAndAnswer(const qsizetype index) co
     {
         TemplateAnswerData answerData;
         for (const auto &i : templateDataList)
-            answerData.childQuestionList.append(i.getCountAndAnswer());
+            answerData.addChild(i.getCountAndAnswer());
         return answerData;
     }
     else

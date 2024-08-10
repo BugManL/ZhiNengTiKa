@@ -13,11 +13,9 @@ class ZHINENGTIKACORE_EXPORT TemplateAnswerData
     friend TemplateAnalysis;
 
 public:
-    TemplateAnswerData() = default;
-    TemplateAnswerData(const QString &count, const QByteArray &questionId, const bool isAChoiceQuestion, const QBitArray &answer = QBitArray());
-    TemplateAnswerData(const TemplateAnswerData &others);
-
-    TemplateAnswerData operator=(const TemplateAnswerData &others) const;
+    explicit TemplateAnswerData(TemplateAnswerData *parentItem = nullptr);
+    TemplateAnswerData(const QString &count, const QByteArray &questionId, const bool isAChoiceQuestion, int choiceQuestionCount = 0, QString &&answer = {}, TemplateAnswerData *parentItem = nullptr);
+    // TemplateAnswerData &operator=(TemplateAnswerData &&);
 
     QString getCount() const;
 
@@ -25,28 +23,41 @@ public:
 
     bool isChoiceQuestion() const;
 
-    QBitArray getAnswer() const;
-
     bool isMultipleChoiceQuestion() const;
 
-    QList<TemplateAnswerData> getChildQuestionList() const;
+    QList<TemplateAnswerData *> getChildQuestionList() const;
+
+    int getChoiceQuestionCount() const;
+
+    QString getAnswer() const;
+
+    int childCount() const;
+    int row() const;
+    TemplateAnswerData *child(int row) const;
+    void addChild(TemplateAnswerData &&child);
+
+    TemplateAnswerData *getParentItem() const;
 
 protected:
     QString count;
     QByteArray questionId;
     bool choiceQuestion;
-    QBitArray answer;
     bool multipleChoiceQuestion = false;
+    int choiceQuestionCount;
+    QString answer;
 
-    QList<TemplateAnswerData> childQuestionList;
+    TemplateAnswerData *parentItem;
+    QList<TemplateAnswerData *> childQuestionList;
 
 private:
     Q_PROPERTY(QString count READ getCount CONSTANT FINAL)
     Q_PROPERTY(QByteArray questionId READ getQuestionId CONSTANT FINAL)
     Q_PROPERTY(bool choiceQuestion READ isChoiceQuestion CONSTANT FINAL)
-    Q_PROPERTY(QBitArray answer READ getAnswer CONSTANT FINAL)
     Q_PROPERTY(bool multipleChoiceQuestion READ isMultipleChoiceQuestion CONSTANT FINAL)
-    Q_PROPERTY(QList<TemplateAnswerData> childQuestionList READ getChildQuestionList CONSTANT FINAL)
+    Q_PROPERTY(QList<TemplateAnswerData *> childQuestionList READ getChildQuestionList CONSTANT FINAL)
+    Q_PROPERTY(int choiceQuestionCount READ getChoiceQuestionCount CONSTANT FINAL)
+    Q_PROPERTY(QString answer READ getAnswer CONSTANT FINAL)
+    Q_PROPERTY(TemplateAnswerData *parentItem READ getParentItem CONSTANT FINAL)
 };
 
 #endif // TEMPLATEANSWERDATA_H
