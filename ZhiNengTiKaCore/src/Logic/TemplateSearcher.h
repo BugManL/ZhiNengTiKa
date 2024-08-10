@@ -1,7 +1,7 @@
 #ifndef TEMPLATESEARCHER_H
 #define TEMPLATESEARCHER_H
 
-#include "TemplateSummary.h"
+#include "src/Logic/TemplateHandle/TemplateSummary.h"
 #include "src/ZhiNengTiKaCore_global.h"
 
 class ZHINENGTIKACORE_EXPORT TemplateSearcher : public QThread

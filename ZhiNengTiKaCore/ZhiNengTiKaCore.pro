@@ -29,17 +29,18 @@ HEADERS += \
     $$PWD/src/Logic/AnswerDetailData.hpp \
     $$PWD/src/Logic/ImageProvider.h \
     $$PWD/src/Logic/ImageProviderMultiThreading.h \
-    $$PWD/src/Logic/MultipleSubjectsTemplateListModelList.h \
     $$PWD/src/Logic/NetworkAccessManagerBlockable.h \
     $$PWD/src/Logic/QRCodeReader.h \
     $$PWD/src/Logic/QRCodeScanner.h \
     $$PWD/src/Logic/ResourceFileFetcher.h \
     $$PWD/src/Logic/ResourceFileModel.h \
-    $$PWD/src/Logic/TemplateAnalysis.h \
-    $$PWD/src/Logic/TemplateFetcher.h \
-    $$PWD/src/Logic/TemplateListModel.h \
+    $$PWD/src/Logic/TemplateHandle/TemplateAnalysis.h \
+    $$PWD/src/Logic/TemplateHandle/TemplateData.h \
+    $$PWD/src/Logic/TemplateHandle/TemplateFetcher.h \
+    $$PWD/src/Logic/TemplateHandle/TemplateSummary.h \
+    $$PWD/src/Logic/TemplateHandle/ListModel/MultipleSubjectsTemplateListModelList.h \
+    $$PWD/src/Logic/TemplateHandle/ListModel/TemplateListModel.h \
     $$PWD/src/Logic/TemplateSearcher.h \
-    $$PWD/src/Logic/TemplateSummary.h \
     $$PWD/src/Logic/UserData.h \
     $$PWD/src/Logic/Version.h \
     $$PWD/src/Singleton/MultipleSubjectsTemplateListModelListSingleton.h \
@@ -52,7 +53,8 @@ HEADERS += \
     $$PWD/src/ZhiNengTiKaCore_global.h \
     $$PWD/src/ZxingCpp/ZXingPosition.h \
     $$PWD/src/ZxingCpp/ZXingReader.h \
-    $$PWD/src/ZxingCpp/ZXingResult.h
+    $$PWD/src/ZxingCpp/ZXingResult.h \
+    src/Logic/TemplateHandle/UploadModel/TemplateAnswerData.h
 
 SOURCES += \
     $$PWD/src/Logic/AccountManager.cpp \
@@ -62,15 +64,16 @@ SOURCES += \
     $$PWD/src/Logic/ImageProviderMultiThreading.cpp \
     $$PWD/src/Logic/QRCodeReader.cpp \
     $$PWD/src/Logic/QRCodeScanner.cpp \
-    $$PWD/src/Logic/MultipleSubjectsTemplateListModelList.cpp \
     $$PWD/src/Logic/NetworkAccessManagerBlockable.cpp \
     $$PWD/src/Logic/ResourceFileFetcher.cpp \
     $$PWD/src/Logic/ResourceFileModel.cpp \
-    $$PWD/src/Logic/TemplateAnalysis.cpp \
-    $$PWD/src/Logic/TemplateFetcher.cpp \
-    $$PWD/src/Logic/TemplateListModel.cpp \
+    $$PWD/src/Logic/TemplateHandle/TemplateAnalysis.cpp \
+    $$PWD/src/Logic/TemplateHandle/TemplateData.cpp \
+    $$PWD/src/Logic/TemplateHandle/TemplateFetcher.cpp \
+    $$PWD/src/Logic/TemplateHandle/TemplateSummary.cpp \
+    $$PWD/src/Logic/TemplateHandle/ListModel/MultipleSubjectsTemplateListModelList.cpp \
+    $$PWD/src/Logic/TemplateHandle/ListModel/TemplateListModel.cpp \
     $$PWD/src/Logic/TemplateSearcher.cpp \
-    $$PWD/src/Logic/TemplateSummary.cpp \
     $$PWD/src/Logic/UserData.cpp \
     $$PWD/src/Logic/Version.cpp \
     $$PWD/src/Singleton/MultipleSubjectsTemplateListModelListSingleton.cpp \
@@ -82,7 +85,8 @@ SOURCES += \
     $$PWD/src/StaticClass/XinjiaoyuNetwork.cpp \
     $$PWD/src/ZxingCpp/ZXingPosition.cpp \
     $$PWD/src/ZxingCpp/ZXingReader.cpp \
-    $$PWD/src/ZxingCpp/ZXingResult.cpp
+    $$PWD/src/ZxingCpp/ZXingResult.cpp \
+    src/Logic/TemplateHandle/UploadModel/TemplateAnswerData.cpp
 
 RESOURCES += \
     $$PWD/Resource/Resource.qrc \

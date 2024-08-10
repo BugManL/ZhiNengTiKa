@@ -1,6 +1,6 @@
 #include "TemplateListView.h"
 
-#include "src/Logic/TemplateListModel.h"
+#include "src/Logic/TemplateHandle/ListModel/TemplateListModel.h"
 
 TemplateListView::TemplateListView(QWidget *parent)
     : QListView{ parent }

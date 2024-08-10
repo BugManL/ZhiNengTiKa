@@ -1,7 +1,7 @@
 #ifndef MULTIPLESUBJECTSTEMPLATELISTMODELLISTSINGLETON_H
 #define MULTIPLESUBJECTSTEMPLATELISTMODELLISTSINGLETON_H
 
-#include "src/Logic/MultipleSubjectsTemplateListModelList.h"
+#include "src/Logic/TemplateHandle/ListModel/MultipleSubjectsTemplateListModelList.h"
 #include "src/ZhiNengTiKaCore_global.h"
 
 namespace MultipleSubjectsTemplateListModelListSingleton

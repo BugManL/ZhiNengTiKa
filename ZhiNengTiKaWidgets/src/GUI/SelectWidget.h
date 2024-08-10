@@ -1,12 +1,13 @@
 #ifndef SEARCHDIALOG_H
 #define SEARCHDIALOG_H
 
-#include "src/Logic/TemplateAnalysis.h"
+#include "src/Logic/TemplateHandle/TemplateAnalysis.h"
 class MultipleSubjectsTemplateListView;
 
 class SelectWidget : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit SelectWidget(QWidget *parent = nullptr);
 

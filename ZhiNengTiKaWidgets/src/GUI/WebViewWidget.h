@@ -2,7 +2,7 @@
 #define WEBVIEWWIDGET_H
 
 #include "src/Logic/ImageProviderMultiThreading.h"
-#include "src/Logic/TemplateAnalysis.h"
+#include "src/Logic/TemplateHandle/TemplateAnalysis.h"
 
 class WebView : public QTextBrowser
 {

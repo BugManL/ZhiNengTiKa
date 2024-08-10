@@ -1,9 +1,10 @@
 #include "SearchWidget.h"
+
 #include "TemplateListView.h"
-#include "src/Logic/TemplateListModel.h"
+#include "src/Logic/TemplateHandle/ListModel/TemplateListModel.h"
 
 SearchWidget::SearchWidget(QWidget *parent)
-    : QWidget{parent},
+    : QWidget{ parent },
       mainLayout(new QVBoxLayout(this)),
       searchLineEdit(new QLineEdit(this)),
       stateShowLabel(new QLabel(this)),
@@ -20,7 +21,7 @@ SearchWidget::SearchWidget(QWidget *parent)
     OKButton->setEnabled(false);
     searchResultTemplateListView->setTemplateListModel(this->searchResultTemplateListModel);
 
-    auto tempHBoxLayout{new QHBoxLayout};
+    auto tempHBoxLayout{ new QHBoxLayout };
     tempHBoxLayout->addWidget(searchLineEdit);
     tempHBoxLayout->addWidget(searchStartButton);
     tempHBoxLayout->addWidget(searchStopButton);
@@ -33,9 +34,7 @@ SearchWidget::SearchWidget(QWidget *parent)
     connect(this->searchStopButton, &QPushButton::clicked, this, &SearchWidget::searchStopButtonPush);
     connect(this->OKButton, &QPushButton::clicked, this, &SearchWidget::OKButtonPush);
     connect(this->searchResultTemplateListView, &TemplateListView::templateNameClicked, [this]
-    {
-        this->OKButton->setEnabled(true);
-    });
+            { this->OKButton->setEnabled(true); });
     connect(&this->templateSearcher, &TemplateSearcher::searchResult, this, &SearchWidget::addToSearchResultListWidget);
     connect(&this->templateSearcher, &TemplateSearcher::searchFinished, this, &SearchWidget::templateSearcherSearchFinish);
 }
@@ -49,7 +48,7 @@ void SearchWidget::setSearchingState(bool searching)
 
 void SearchWidget::closeEvent(QCloseEvent *event)
 {
-    if(this->templateSearcher.isRunning())
+    if (this->templateSearcher.isRunning())
     {
         this->templateSearcher.stop();
     }
@@ -84,7 +83,7 @@ void SearchWidget::templateSearcherSearchStop()
 
 void SearchWidget::templateSearcherSearchFinish(bool success)
 {
-    if(success)
+    if (success)
     {
         this->stateShowLabel->setText(QStringLiteral("搜索完成"));
         this->setSearchingState(false);

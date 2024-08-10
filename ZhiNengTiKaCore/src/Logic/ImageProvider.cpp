@@ -86,7 +86,6 @@ void ImageProvider::setProgressCheckDelayMs(int newProgressCheckDelayMs)
 
 void ImageProvider::emitProgress()
 {
-    qDebug() << Q_FUNC_INFO;
     emit progress(finishedCount, totalCount);
     emit textUpdated(rawData);
 }

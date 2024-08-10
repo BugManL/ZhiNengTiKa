@@ -1,7 +1,7 @@
 #ifndef MULTIPLESUBJECTSTEMPLATELISTVIEW_H
 #define MULTIPLESUBJECTSTEMPLATELISTVIEW_H
 
-#include "src/Logic/TemplateSummary.h"
+#include "src/Logic/TemplateHandle/TemplateSummary.h"
 
 class TemplateListView;
 

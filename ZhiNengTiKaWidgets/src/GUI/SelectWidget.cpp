@@ -5,7 +5,7 @@
 #include "src/GUI/SearchWidget.h"
 #include "src/GUI/TemplateDetailWidget.h"
 #include "src/GUI/TemplateListView.h"
-#include "src/Logic/TemplateFetcher.h"
+#include "src/Logic/TemplateHandle/TemplateFetcher.h"
 #include "src/ZXingCpp/ZXingResult.h"
 
 SelectWidget::SelectWidget(QWidget *parent)

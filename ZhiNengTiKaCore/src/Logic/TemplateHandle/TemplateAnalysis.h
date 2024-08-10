@@ -1,8 +1,9 @@
 #ifndef TEMPLATEANALYSIS_H
 #define TEMPLATEANALYSIS_H
 
-#include "AnswerDetailData.hpp"
 #include "TemplateSummary.h"
+#include "src/Logic/TemplateHandle/TemplateData.h"
+#include "src/Logic/TemplateHandle/UploadModel/TemplateAnswerData.h"
 #include "src/ZhiNengTiKaCore_global.h"
 
 class ZHINENGTIKACORE_EXPORT TemplateAnalysis : public TemplateSummary
@@ -16,7 +17,7 @@ public:
     Q_INVOKABLE QString getAnswerAndAnalysisHtml(const qsizetype index = -1) const;
     Q_INVOKABLE QString getAnswerHtml(const qsizetype index = -1) const;
     Q_INVOKABLE QString getQuestionHtml(const qsizetype index = -1) const;
-    QList<AnswerDetailData> getCountAndAnswer(const qsizetype index = -1) const;
+    TemplateAnswerData getCountAndAnswer(const qsizetype index = -1) const;
 
     Q_INVOKABLE QStringList getQuestionsCountsStrList() const
     {
@@ -33,22 +34,19 @@ public:
 
     bool getValid() const;
 
+public slots:
     void analyze(const QByteArray &rawData);
+    TemplateData createTemplateData(const QJsonObject &object, const QString &globalQuestionNumber, const QString &questionNumber = {});
 
 protected:
     QStringList questionsCountsStrList;
-    QJsonArray answerDataList;
+    QList<TemplateData> templateDataList;
 
     bool local = false;
     bool network = false;
     bool valid = false;
 
 private:
-    template <typename f>
-    static void callFunc(const QJsonArray &jsonArray, const qsizetype index, f func);
-
-    template <typename f1, typename f2>
-    static void callFunc(const QJsonArray &jsonArray, const qsizetype index, f1 func1, f2 func2);
     Q_PROPERTY(bool local READ getLocal CONSTANT FINAL)
     Q_PROPERTY(bool network READ getNetwork CONSTANT FINAL)
     Q_PROPERTY(bool valid READ getValid CONSTANT FINAL)

@@ -23,8 +23,6 @@ HEADERS += \
     $$PWD/src/GUI/SettingWidget.h \
     $$PWD/src/GUI/TemplateDetailWidget.h \
     $$PWD/src/GUI/TemplateListView.h \
-    $$PWD/src/GUI/UploadChildWidget.h \
-    $$PWD/src/GUI/UploadWidget.h \
     $$PWD/src/GUI/WebViewWidget.h
 
 SOURCES += \
@@ -42,8 +40,6 @@ SOURCES += \
     $$PWD/src/GUI/SettingWidget.cpp \
     $$PWD/src/GUI/TemplateDetailWidget.cpp \
     $$PWD/src/GUI/TemplateListView.cpp \
-    $$PWD/src/GUI/UploadChildWidget.cpp \
-    $$PWD/src/GUI/UploadWidget.cpp \
     $$PWD/src/GUI/WebViewWidget.cpp \
     $$PWD/src/main.cpp
 
