@@ -12,6 +12,8 @@ public:
     explicit TemplateAnswerTreeModel(QObject *parent = nullptr);
     TemplateAnswerTreeModel(TemplateAnswerData &&rootItem, QObject *parent = nullptr);
 
+    void setRootItem(TemplateAnswerData &&rootItem);
+
     enum DataRoles
     {
         QuestionNumber = Qt::UserRole + 1,
@@ -29,9 +31,6 @@ public:
     QModelIndex parent(const QModelIndex &index) const override;
     int rowCount(const QModelIndex &parent = {}) const override;
     int columnCount(const QModelIndex &parent = {}) const override;
-
-public slots:
-    void setRootItem(const TemplateAnswerData &rootItem);
 
 protected:
     std::unique_ptr<TemplateAnswerData> rootItem;

@@ -10,6 +10,11 @@ TemplateAnswerTreeModel::TemplateAnswerTreeModel(TemplateAnswerData &&rootItem, 
 {
 }
 
+void TemplateAnswerTreeModel::setRootItem(TemplateAnswerData &&rootItem)
+{
+    this->rootItem = std::make_unique<TemplateAnswerData>(rootItem);
+}
+
 QVariant TemplateAnswerTreeModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
@@ -99,11 +104,6 @@ int TemplateAnswerTreeModel::rowCount(const QModelIndex &parent) const
 int TemplateAnswerTreeModel::columnCount([[maybe_unused]] const QModelIndex &parent) const
 {
     return 1;
-}
-
-void TemplateAnswerTreeModel::setRootItem(const TemplateAnswerData &rootItem)
-{
-    this->rootItem = std::make_unique<TemplateAnswerData>(rootItem);
 }
 
 QHash<int, QByteArray> TemplateAnswerTreeModel::roleNames() const

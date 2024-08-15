@@ -19,6 +19,12 @@ TemplateAnswerData::TemplateAnswerData(const QString &count, const QByteArray &q
     }
 }
 
+TemplateAnswerData::~TemplateAnswerData()
+{
+    for (auto i : childQuestionList)
+        delete i;
+}
+
 QString TemplateAnswerData::getCount() const
 {
     return count;

@@ -15,7 +15,7 @@ class ZHINENGTIKACORE_EXPORT TemplateAnswerData
 public:
     explicit TemplateAnswerData(TemplateAnswerData *parentItem = nullptr);
     TemplateAnswerData(const QString &count, const QByteArray &questionId, const bool isAChoiceQuestion, int choiceQuestionCount = 0, QString &&answer = {}, TemplateAnswerData *parentItem = nullptr);
-    // TemplateAnswerData &operator=(TemplateAnswerData &&);
+    ~TemplateAnswerData();
 
     QString getCount() const;
 
