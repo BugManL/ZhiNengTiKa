@@ -12,9 +12,9 @@
 
 ## 可参考的代码
 
-新教育加密、鉴权部分：[XinjiaoyuEncryptioner](https://github.com/LFWQSP2641/ZhiNengTiKa/blob/dev/ZhiNengTiKaCore/src/StaticClass/XinjiaoyuEncryptioner.h)
+新教育加密部分：[XinjiaoyuEncryptioner](https://github.com/LFWQSP2641/ZhiNengTiKa/blob/dev/ZhiNengTiKaCore/src/StaticClass/XinjiaoyuEncryptioner.cpp)
 
-新教育API：[XinjiaoyuNetwork](https://github.com/LFWQSP2641/ZhiNengTiKa/blob/dev/ZhiNengTiKaCore/src/StaticClass/XinjiaoyuNetwork.h)
+新教育API、鉴权部分：[XinjiaoyuNetwork](https://github.com/LFWQSP2641/ZhiNengTiKa/blob/dev/ZhiNengTiKaCore/src/StaticClass/XinjiaoyuNetwork.cpp)
 
 ---
 
